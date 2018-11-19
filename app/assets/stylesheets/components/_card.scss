@@ -25,7 +25,7 @@
   }
 }
 
-// repurchase cards 
+// repurchase card
 .card-repurchase {
   border: 1px solid #eee;
   margin-top: 15px;
@@ -43,4 +43,28 @@
   position: absolute;
   right: 30px;
   bottom: 20px;
+}
+
+// stretch card
+.card-stretch {
+  // height: 220px;
+  margin: 5px;
+  box-shadow: 0 0 1px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-stretch-img {
+  min-height: 150px;
+  min-width: 150px;
+  background-position: center;
+  background-size: cover;
+  // background-repeat: no-repeat;
+  box-shadow: 0 0 1px rgba(0,0,0,0.2)
+}
+.card-stretch-content {
+  // padding: 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
