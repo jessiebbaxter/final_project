@@ -7,16 +7,7 @@
 
     <a href="/" class="navbar-wagon-item navbar-wagon-link">Dashboard</a>
     <a href="#" class="navbar-wagon-item navbar-wagon-link">Add a product</a>
-    <a href="#" id="popoverCart" class="navbar-wagon-item" data-container="body"
-    data-html="true"
-    data-trigger="hover focus"
-    data-toggle="popover"
-    data-placement="bottom"
-    data-title="Your Cart"
-    data-content='<%= link_to("Cart",order_path(current_user.find_or_create_pending_order), class: "btn btn-primary"); %>'>
-
-   <i class="fas fa-shopping-cart"></i>
-  </a>
+    <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order) %>
 
     <!-- Profile picture with dropdown list -->
     <div class="navbar-wagon-item">
