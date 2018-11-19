@@ -3,7 +3,7 @@ class OrderItemsController < ApplicationController
 
   def create
     if !@order
-      @order = Order.create(user_id: current_user, status: "pending")
+      @order = Order.create(user_id: current_user, state: "pending")
     end
     if @order.order_items.find_by(product_id: params[:product_id])
       set_order_item
@@ -15,8 +15,6 @@ class OrderItemsController < ApplicationController
     @order.save
     flash[:notice] = "This item has been saved to your cart"
     redirect_to request.referrer
-  end
-
   end
 
   def update
