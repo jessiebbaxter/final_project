@@ -1,4 +1,9 @@
 module ApplicationHelper
+
+  def resource_class
+    User
+  end
+
   def resource_name
     :user
   end
