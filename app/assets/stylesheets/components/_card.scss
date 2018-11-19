@@ -1,9 +1,9 @@
-.card {
+.card-polaroid {
   height: 320px;
   margin: 10px;
   box-shadow: 0 0 1px rgba(0,0,0,0.2)
 }
-.card-img {
+.card-polaroid-img {
   min-height: 240px;
   width: 100%;
   background-position: center;
@@ -11,13 +11,13 @@
   background-repeat: no-repeat;
   box-shadow: 0 0 1px rgba(0,0,0,0.2)
 }
-.card-content {
+.card-polaroid-content {
   padding: 15px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.content-header {
+.content-polaroid-header {
   width: 200px;
   overflow: hidden;
   h5 {
@@ -47,8 +47,7 @@
 
 // stretch card
 .card-stretch {
-  // height: 220px;
-  margin: 5px;
+  margin: 5px 0px;
   box-shadow: 0 0 1px rgba(0,0,0,0.2);
   display: flex;
   justify-content: space-between;
@@ -59,12 +58,26 @@
   min-width: 150px;
   background-position: center;
   background-size: cover;
-  // background-repeat: no-repeat;
   box-shadow: 0 0 1px rgba(0,0,0,0.2)
 }
 .card-stretch-content {
-  // padding: 15px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding-left: 10px;
+  position: relative;
+  width: 100%;
+  p {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+}
+.content-stretch-header {
+  position: absolute;
+  top: 5px;
+  overflow: hidden;
+  h5 {
+    margin-bottom: 0px;
+  }
+}
+.content-stretch-footer {
+  position: absolute;
+  bottom: 5px;
 }

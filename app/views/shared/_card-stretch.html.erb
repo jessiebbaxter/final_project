@@ -5,11 +5,12 @@
 	  		</div>
 		<% end %>
 	  	<div class="card-stretch-content">
-	    	<div class="content-header">
-	      		<h5><%= product.name %></h5>
-	      		<p><strong>$ <%= product.price %></strong></p>
+	    	<div class="content-stretch-header">
+	    		<h5><%= product.brand %></h5>
+	      		<p><%= product.name %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
+		    	<p><strong>from $ <%= product.price %></strong></p>
 			    <% if current_user %>
 			      <%= link_to "Add to Cart", product_order_items_path(product), method: :post, class: "btn btn-primary btn-sm" %>
 			    <% end %>
