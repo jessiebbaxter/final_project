@@ -2,7 +2,21 @@ class OrderItemsController < ApplicationController
   before_action :set_order, only: [:create, :update]
 
   def create
-  
+    if !@order
+      @order = Order.create(user_id: current_user, status: "pending")
+    end
+    if @order.order_items.find_by(product_id: params[:product_id])
+      set_order_item
+      @order_item.qty += 1
+      @order_item.save
+    else
+      @order_item = OrderItem.create(product_id: params[:product_id], order_id: @order.id)
+    end
+    @order.save
+    flash[:notice] = "This item has been saved to your cart"
+    redirect_to request.referrer
+  end
+
   end
 
   def update
