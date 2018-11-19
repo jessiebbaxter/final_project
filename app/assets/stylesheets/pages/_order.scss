@@ -1,0 +1,31 @@
+.remove-submit-btn-style {
+  background: none;
+  border: none;
+  color: #43c0ac;
+  font-size: 13px;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.td-center {
+  text-align: center;
+}
+
+
+ #order_item_qty {
+    color:#43c0ac;
+    border: none;
+    font-size: 13px;
+    background: white;
+    font-weight: light;
+  }
+
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+
+.checkout-area {
+  text-align: right;
+}
