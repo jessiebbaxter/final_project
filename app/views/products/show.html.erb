@@ -19,14 +19,14 @@
 						<p><%= @product.description %></p>
 					</div>
 					<div class="product-actions">
-          <% if current_user %>
-            <div class="action-add">
-              <%= link_to "Add to Cart", product_order_items_path(@product), method: :post, class: "btn btn-primary" %>
-            </div>
-           <% else %>
-           <!-- Modal link -->
-            <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
-            <% end %>
+					  <% if current_user %>
+					    <div class="action-add">
+					      <%= link_to "Add to Cart", product_order_items_path(@product), method: :post, class: "btn btn-primary" %>
+					    </div>
+					   <% else %>
+					   <!-- Modal link -->
+					    <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
+					    <% end %>
 					</div>
 				</div>
 			</div>
