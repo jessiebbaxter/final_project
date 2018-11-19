@@ -1,0 +1,36 @@
+<div class="wrapper">
+	<div class="container">
+		<div class="product-container">
+			<%= link_to "<< Products", products_path %>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<div class="product-image">
+						<% if @product.photo.present? %>
+						<%= cl_image_tag @product.photo, height: 400, crop: :fill %>
+						<% else %>
+						<%= image_tag "coming-soon.png", height: 400, crop: :fill %>
+						<% end %>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="product-details">
+						<h3><%= @product.name %> </h3>
+						<h4>$ <%= @product.price %></h4>
+						<p><%= @product.description %></p>
+					</div>
+					<div class="product-actions">
+		              <% if current_user %>
+		                <div class="action-add">
+		                  <%= link_to "Add to Cart", product_order_items_path(@product), method: :post, class: "btn btn-primary" %>
+		                </div>
+		               <% else %>
+		               <!-- Modal link -->
+		                <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"}  %>
+		                <% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	    <!-- Modal -->
+	</div>
+</div>

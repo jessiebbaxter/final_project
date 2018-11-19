@@ -1,0 +1,46 @@
+.card {
+  height: 320px;
+  margin: 10px;
+  box-shadow: 0 0 1px rgba(0,0,0,0.2)
+}
+.card-img {
+  min-height: 240px;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 1px rgba(0,0,0,0.2)
+}
+.card-content {
+  padding: 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content-header {
+  width: 200px;
+  overflow: hidden;
+  h5 {
+    margin-bottom: 0px;
+  }
+}
+
+// repurchase cards 
+.card-repurchase {
+  border: 1px solid #eee;
+  margin-top: 15px;
+  box-shadow: 0 0 1px rgba(0,0,0,0.1);
+  display: relative;
+}
+.card-repurchase-img {
+  min-height: 220px;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.card-repurchase-action {
+  position: absolute;
+  right: 30px;
+  bottom: 20px;
+}

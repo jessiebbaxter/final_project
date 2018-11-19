@@ -1,0 +1,19 @@
+<div class="col-xs-12 col-sm-6 col-md-4">
+	<div class="card">
+		<%= link_to product_path(product) do %>
+		 	<div class="card-img" style="background-image: url('<%= cl_image_path product.photo, crop: :fill %>');">
+	  		</div>
+		<% end %>
+	  	<div class="card-content">
+	    	<div class="content-header">
+	      		<h5><%= product.name %></h5>
+	      		<p><strong>$ <%= product.price %></strong></p>
+	    	</div>
+		    <div class="content-footer">
+			    <% if current_user %>
+			      <%= link_to "Add to Cart", product_order_items_path(product), method: :post, class: "btn btn-primary btn-sm" %>
+			    <% end %>
+		    </div>
+		</div>
+	</div>
+</div>
