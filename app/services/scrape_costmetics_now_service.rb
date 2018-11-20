@@ -24,7 +24,6 @@ class ScrapeCosmeticsNowService
       html_doc = open_and_read_doc(url)
       products = data_grab(html_doc)
       gather_products_array(products)
-      # binding.pry
     end
   end
 
@@ -36,7 +35,6 @@ class ScrapeCosmeticsNowService
 
   def open_and_read_doc(url)
     html_file = open(url).read
-    # binding.pry
     html_data = Nokogiri::HTML(html_file)
     return html_data
   end
@@ -49,7 +47,6 @@ class ScrapeCosmeticsNowService
     else
       nil
     end
-    # binding.pry
   end
 
   def data_grab(html_doc)
