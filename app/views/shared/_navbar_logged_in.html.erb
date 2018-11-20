@@ -7,6 +7,7 @@
 
     <a href="/" class="navbar-wagon-item navbar-wagon-link">Dashboard</a>
     <a href="#" class="navbar-wagon-item navbar-wagon-link">Add a product</a>
+    <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order) %>
 
     <!-- Profile picture with dropdown list -->
     <div class="navbar-wagon-item">
@@ -28,6 +29,7 @@
       <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
         <li><a href="/">Dashboard</a></li>
         <li><a href="#">Add a product</a></li>
+        <li><%= link_to "Cart", order_path(current_user.find_or_create_pending_order) %></li>
       </ul>
     </div>
   </div>
