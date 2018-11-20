@@ -1,9 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-	has_many :orders
-	has_many :order_items, through: :orders
-	has_many :quick_buy_items
+	has_many :orders, dependent: :destroy
+	has_many :order_items, through: :orders, dependent: :destroy
+	has_many :quick_buy_items, dependent: :destroy
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
@@ -35,6 +35,6 @@ class User < ApplicationRecord
       user.save
     end
 
-  return user
+    return user
   end
 end
