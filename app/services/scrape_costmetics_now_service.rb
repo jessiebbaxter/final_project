@@ -7,8 +7,8 @@ require 'pry'
 class ScrapeCosmeticsNowService
 
   def initialize
-    # @url = "https://www.cosmeticsnow.com.au/s/all"
-    @url = "https://www.cosmeticsnow.com.au/s/living-proof"
+    @url = "https://www.cosmeticsnow.com.au/s/all"
+    # @url = "https://www.cosmeticsnow.com.au/s/living-proof"
     @html_doc = open_and_read_doc(@url)
     @products = data_grab(@html_doc)
     @products_array = []
