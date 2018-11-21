@@ -10,6 +10,7 @@ class ScrapeSephoraService
 		@brands = {}
 		@categories = {}
 		@products = []
+		@varients = []
 	end
 
 	def grab_brands
@@ -35,25 +36,25 @@ class ScrapeSephoraService
 	end
 
 	def grab_products(page)
-		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=500&page[number]=#{page}&sort=sales&include=variants,brand"
+		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=1&page[number]=#{page}&sort=sales&include=variants,brand"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
 
-		save_product(result)
-
-		p result["data"]
+		build_products_varients(result)
 	end
 
-	def save_product(result)
-		result["data"].each do |element|
+	def build_products_varients(result)
 
-			binding.pry 
+		result["data"].each do |element|
 			
 			product_categories = []
 
 			element["relationships"]["categories"]["data"].each do |category|
 				product_categories << @categories[category["id"]]
 			end
+
+			brand = @brands[element["relationships"]["brand"]["data"]["id"]].downcase
+			product_name = element["attributes"]["name"].downcase
 
 			@products << {
 				source_id: element["id"],
@@ -68,6 +69,11 @@ class ScrapeSephoraService
 				image_urls: element["attributes"]["image-urls"],
 				variants_count: element["attributes"]["variants-count"],
 			}
+
+			# clean_brand = brand.gsub(//)
+			# clean_name = 
+
+			p product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{brand.split.join("-")}-"+"#{product_name.split.join("-")}"+"?&include=variants,variants.ads,product_articles"
 		end
 	end
 
