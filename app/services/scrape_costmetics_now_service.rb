@@ -6,8 +6,9 @@ require 'pry'
 
 class ScrapeCosmeticsNowService
 
-  def initialize
-    @url = "https://www.cosmeticsnow.com.au/s/all"
+  def initialize(url, file_path)
+    @url = url
+    @file_path = file_path
     # @url = "https://www.cosmeticsnow.com.au/s/living-proof"
     @html_doc = open_and_read_doc(@url)
     @products = data_grab(@html_doc)
@@ -65,7 +66,7 @@ class ScrapeCosmeticsNowService
 
   def save_csv
     csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
-    file_path = 'app/data/cosmetics_now.csv'
+    file_path = @file_path
     CSV.open(file_path, 'wb', csv_options) do |csv|
       csv << ['source_id', 'brand', 'name', 'categories', 'price', 'web_url']
       @products_array.each do |prod|
@@ -77,19 +78,26 @@ class ScrapeCosmeticsNowService
   end
 
   def build_web_url(product_name)
-    clean_info = product_name.gsub('-', '%7C-')
+    product_info = product_name.gsub(' - ', ' ')
+    clean_info = product_info.gsub('-', '%7C-').gsub('&', 'and').gsub('#', 'no').delete('()').delete(',')
     hyphenate_info = clean_info.gsub(' ', '-')
-    return "https://www.cosmeticsnow.com.au/iteminfo/#{hyphenate_info}"
+    "https://www.cosmeticsnow.com.au/iteminfo/#{hyphenate_info}"
   end
 
   def clean_name(product_name, brand)
     name_without_brand = product_name.gsub(/#{brand}\s/, '')
     clean_name = name_without_brand.gsub(/(\(.*)\)\s/, '')
+    clean_name.strip
     return clean_name
   end
 end
 
-ScrapeCosmeticsNowService.new
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes", 'app/data/cosmetics_now_eyes.csv')
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/face", 'app/data/cosmetics_now_face.csv')
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/lips", 'app/data/cosmetics_now_lips.csv')
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/makeup-sets", 'app/data/cosmetics_now_makeup_sets.csv')
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/nails", 'app/data/cosmetics_now_nails.csv')
+
 
 
 
