@@ -12,9 +12,6 @@ class ScrapeTargetService
 		@variants = []
 	end
 
-	# "https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
-	# "https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505&page=1"
-
 	def get_product_pg_urls
 		categories_to_parse = [
 			# "https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid",
