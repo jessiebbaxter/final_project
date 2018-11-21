@@ -6,45 +6,39 @@ require 'pry'
 
 class ScrapeCosmeticsNowService
 
-  def initialize(url, file_path)
+  def initialize(url)
     @url = url
-    @file_path = file_path
     # @url = "https://www.cosmeticsnow.com.au/s/living-proof"
-    @html_doc = open_and_read_doc(@url)
-    @products = data_grab(@html_doc)
-    @products_array = []
-    gather_products_array(@products)
-    run(@html_doc)
-    save_csv
+    @google_analytics_commerce_products_array = []
+    @product_listings_array = []
+    @combined_products_array = []
+    run
   end
 
-  def run(html_doc)
-    until !set_link_path(html_doc)
-      path = set_link_path(html_doc)
-      url = set_url(path)
-      html_doc = open_and_read_doc(url)
-      products = data_grab(html_doc)
-      gather_products_array(products)
+  def run
+    open_and_read_doc(@url)
+    data_grab(@html_doc)
+    gather_products_array(@google_analytics_commerce_products)
+    build_product_hashes
+    additional_data_grab(@html_doc)
+    while !get_link_url(@html_doc)
+      @url = get_link_url(@html_doc)
+      run
     end
+    merge_product_arrays
   end
-
-  private
-
-  def set_url(path)
-    return "https://www.cosmeticsnow.com.au#{path}"
-  end
+  # Get data
 
   def open_and_read_doc(url)
     html_file = open(url).read
-    html_data = Nokogiri::HTML(html_file)
-    return html_data
+    @html_doc = Nokogiri::HTML(html_file)
   end
 
-  def set_link_path(html_doc)
+  def get_link_url(html_doc)
     link_element = html_doc.search('a[title*="Next"]')
     if link_element.any?
       path = link_element.attribute('href').value
-      return path
+      "https://www.cosmeticsnow.com.au#{path}"
     else
       nil
     end
@@ -53,51 +47,70 @@ class ScrapeCosmeticsNowService
   def data_grab(html_doc)
     # scraping google analytics ecommerce data
     json1 = /ecommerce': (.*)}\)/.match(html_doc)
-    products = JSON.parse(json1[1])
-
-    return products
+    @google_analytics_commerce_products = JSON.parse(json1[1])
   end
 
+  def additional_data_grab(html_doc)
+    product_info = html_doc.search('li[class*="productListing"]')
+    product_info.each do |prod|
+      @product_listings_array << {
+        price: prod.search('span .price').children.text.delete('$.'),
+        web_url: prod.children.search('a').attribute('href').value,
+        img_url: prod.children.search('a').children[0].attribute('src').value
+      }
+    end
+  end
+  # to get data you need to go through each page,
+  # this function locates the link to the next page
+
+  # merge data
+  # gather_products_array(products)
   def gather_products_array(products)
     products["impressions"].each do |product|
-      @products_array << product
+      @google_analytics_commerce_products_array << product
+    end
+  end
+  # build_product_hashes
+  def build_product_hashes
+    @google_analytics_commerce_products_array.each do |prod|
+    name_cleaned = clean_name(prod["name"], prod["brand"])
+    name_separated = name_cleaned.split(' - ')
+    @combined_products_array << {
+      brand: prod["brand"],
+      name: name_separated[0],
+      varient_name: name_separated[1],
+      category: create_category_array(prod["category"])
+    }
     end
   end
 
-  def save_csv
-    csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
-    file_path = @file_path
-    CSV.open(file_path, 'wb', csv_options) do |csv|
-      csv << ['source_id', 'brand', 'name', 'categories', 'price', 'web_url']
-      @products_array.each do |prod|
-        web_url = build_web_url(prod["name"])
-        name_cleaned = clean_name(prod["name"], prod["brand"])
-        csv << [prod["id"], prod["brand"], name_cleaned, prod["category"], prod["price"], web_url]
-      end
+  def merge_product_arrays
+    @product_listings_array.each_with_index do |prod, index|
+      @combined_products_array[index][:price] = prod[:price]
+      @combined_products_array[index][:web_url] = prod[:web_url]
+      @combined_products_array[index][:img_url] = prod[:img_url]
     end
   end
 
-  def build_web_url(product_name)
-    product_info = product_name.gsub(' - ', ' ')
-    clean_info = product_info.gsub('-', '%7C-').gsub('&', 'and').gsub('#', 'no').delete('()').delete(',')
-    hyphenate_info = clean_info.gsub(' ', '-')
-    "https://www.cosmeticsnow.com.au/iteminfo/#{hyphenate_info}"
-  end
+  # clean data
 
   def clean_name(product_name, brand)
     name_without_brand = product_name.gsub(/#{brand}\s/, '')
     clean_name = name_without_brand.gsub(/(\(.*)\)\s/, '')
     clean_name.strip
-    return clean_name
+  end
+
+  def create_category_array(category_string)
+    category_string.split(' >> ')
   end
 end
 
-ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes", 'app/data/cosmetics_now_eyes.csv')
-ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/face", 'app/data/cosmetics_now_face.csv')
-ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/lips", 'app/data/cosmetics_now_lips.csv')
-ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/makeup-sets", 'app/data/cosmetics_now_makeup_sets.csv')
-ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/nails", 'app/data/cosmetics_now_nails.csv')
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes")
 
-
+# ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes")
+# ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/face")
+# ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/lips")
+# ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/makeup-sets")
+# ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/nails")
 
 
