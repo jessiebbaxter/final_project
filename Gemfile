@@ -23,6 +23,9 @@ gem 'cloudinary'
 gem 'carrierwave', '~> 1.2'
 gem 'nokogiri'
 
+gem 'capybara'
+gem 'poltergeist'
+gem 'launchy'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
