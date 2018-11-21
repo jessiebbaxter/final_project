@@ -40,11 +40,15 @@ class ScrapeSephoraService
 		result = JSON.parse(json_file)
 
 		save_product(result)
+
+		p result["data"]
 	end
 
 	def save_product(result)
 		result["data"].each do |element|
 
+			binding.pry 
+			
 			product_categories = []
 
 			element["relationships"]["categories"]["data"].each do |category|
@@ -88,7 +92,7 @@ class ScrapeSephoraService
 			grab_products(page)
 			page += 1
 		end
-		csv_export
+		# csv_export
 	end
 
 end
