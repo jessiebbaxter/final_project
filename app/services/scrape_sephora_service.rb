@@ -10,7 +10,7 @@ class ScrapeSephoraService
 		@brands = {}
 		@categories = {}
 		@products = []
-		@varients = []
+		@variants = []
 	end
 
 	def grab_brands
@@ -40,10 +40,10 @@ class ScrapeSephoraService
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
 
-		build_products_varients(result)
+		build_products_variants(result)
 	end
 
-	def build_products_varients(result)
+	def build_products_variants(result)
 
 		result["data"].each do |element|
 			
@@ -53,41 +53,58 @@ class ScrapeSephoraService
 				product_categories << @categories[category["id"]]
 			end
 
-			brand = @brands[element["relationships"]["brand"]["data"]["id"]].downcase
-			product_name = element["attributes"]["name"].downcase
+			brand = @brands[element["relationships"]["brand"]["data"]["id"]]
+			product_name = element["attributes"]["name"]
 
 			@products << {
-				source_id: element["id"],
+				seller_product_id: element["id"],
 				brand: @brands[element["relationships"]["brand"]["data"]["id"]],
 				name: element["attributes"]["name"],
 				categories: product_categories,
 				rating: element["attributes"]["rating"],
 				review_count: element["attributes"]["reviews-count"],
-				original_price: element["attributes"]["original-price"],
-				price: element["attributes"]["price"],
 				web_url: element["attributes"]["web-url"],
-				image_urls: element["attributes"]["image-urls"],
 				variants_count: element["attributes"]["variants-count"],
 			}
 
-			# clean_brand = brand.gsub(//)
-			# clean_name = 
+			product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
+			product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
+			
+			json_file = open(product_api, "Accept-Language" => "en-AU").read
+			result = JSON.parse(json_file)
 
-			p product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{brand.split.join("-")}-"+"#{product_name.split.join("-")}"+"?&include=variants,variants.ads,product_articles"
+			result["included"].each do |element|
+
+				if !element["attributes"]["slug-url"]
+					variant_url = @products.last[:web_url]
+				else
+					variant_url = @products.last[:web_url]+'/v/'+element["attributes"]["slug-url"]
+				end
+
+				@variants << {
+					seller_product_id: @products.last[:source_id],
+					name: element["attributes"]["name"],
+					img_url: element["attributes"]["image-url"],
+					original_price: element["attributes"]["original-price"],
+					price: element["attributes"]["price"],
+					variant_url: variant_url
+				}
+			end
+
 		end
 	end
 
-	def csv_export
-		csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
-		filepath    = 'sephora.csv'
+	# def csv_export
+	# 	csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
+	# 	filepath    = 'sephora.csv'
 
-		CSV.open(filepath, 'wb', csv_options) do |csv|
-		  csv << ['source_id', 'brand', 'name', 'categories', 'price', 'rating', 'review_count', 'original_price', 'web_url', 'image_urls', 'variant_count']
-		  @products.each do |product|
-		  	csv << [product[:source_id], product[:brand], product[:name], product[:categories], product[:price], product[:rating], product[:review_count], product[:original_price], product[:web_url], product[:image_urls], product[:variants_count]]
-		  end
-		end
-	end
+	# 	CSV.open(filepath, 'wb', csv_options) do |csv|
+	# 	  csv << ['source_id', 'brand', 'name', 'categories', 'price', 'rating', 'review_count', 'original_price', 'web_url', 'image_urls', 'variant_count']
+	# 	  @products.each do |product|
+	# 	  	csv << [product[:source_id], product[:brand], product[:name], product[:categories], product[:price], product[:rating], product[:review_count], product[:original_price], product[:web_url], product[:image_urls], product[:variants_count]]
+	# 	  end
+	# 	end
+	# end
 
 	def run
 		grab_brands

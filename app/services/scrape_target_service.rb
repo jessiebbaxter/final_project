@@ -67,7 +67,7 @@ class ScrapeTargetService
 			html_doc = get_html_doc(url)
 			@product_data = JSON.parse(html_doc.search(".__react_initial_state__").text)
 			pull_product_info
-			pull_varient_info
+			pull_variant_info
 		end
 	end
 
@@ -84,19 +84,19 @@ class ScrapeTargetService
 
 		@products << {
 			brand: brand,
-			name: @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, "").downcase,
+			name: @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, ""),
 			categories: categories,
 			seller_product_id: @seller_product_id
 		}
 	end
 
-	def pull_varient_info
+	def pull_variant_info
 		variants_data = @product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"]
 
 		variants_data.each do |variant|
 			@variants << {
 				seller_product_id: @seller_product_id,
-				source_url: "https://www.target.com.au"+variant["url"],
+				variant_url: "https://www.target.com.au"+variant["url"],
 				name: variant["swatchColour"],
 				price: variant["price"]["value"],
 			  image_url: "https://www.target.com.au"+variant["images"][0]["url"]
