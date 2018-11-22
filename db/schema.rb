@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_21_031333) do
+ActiveRecord::Schema.define(version: 2018_11_21_235921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2018_11_21_031333) do
     t.bigint "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "photo"
     t.index ["seller_id"], name: "index_inventories_on_seller_id"
     t.index ["varient_id"], name: "index_inventories_on_varient_id"
   end
@@ -49,14 +50,10 @@ ActiveRecord::Schema.define(version: 2018_11_21_031333) do
 
   create_table "products", force: :cascade do |t|
     t.string "name"
-    t.string "description"
     t.string "category"
     t.string "brand"
-    t.string "sku"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "price_cents", default: 0, null: false
-    t.string "photo"
   end
 
   create_table "quick_buy_items", force: :cascade do |t|
@@ -82,13 +79,6 @@ ActiveRecord::Schema.define(version: 2018_11_21_031333) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "provider"
-    t.string "uid"
-    t.string "facebook_picture_url"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "token"
-    t.datetime "token_expiry"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -98,6 +88,7 @@ ActiveRecord::Schema.define(version: 2018_11_21_031333) do
     t.bigint "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "photo"
     t.index ["product_id"], name: "index_varients_on_product_id"
   end
 
