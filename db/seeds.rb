@@ -1,15 +1,84 @@
 require 'open-uri'
 require 'json'
+require 'pry'
 
 puts 'Cleaning database...'
 
-# Inventory.destroy_all
+Inventory.destroy_all
+puts 'Removed inventory'
+
+Seller.destroy_all
+puts 'Removed sellers'
+
 Varient.destroy_all
-# QuickBuyItem.destroy_all
-OrderItem.destroy_all
-Order.destroy_all
+puts 'Removed variants'
+
 Product.destroy_all
-# User.destroy_all
+puts 'Removed products'
+
+
+puts 'Creating sellers...'
+
+sellers = []
+seller_names = ["Mecca", "CosmeticsNow", "AdoreBeauty", "Sephora", "Target"]
+
+seller_names.each do |seller|
+	new_seller = Seller.create(domain: seller)
+	sellers << new_seller
+end
+
+puts 'Creating products...'
+
+data = JSON.load(open("http://makeup-api.herokuapp.com/api/v1/products.json"))
+
+data[0...100].each do |product|
+	# creating product
+	Product.create(brand: product["brand"].capitalize, name: product["name"], category: product["category"])
+	puts "Created product"
+	if product["product_colors"].empty?
+		# creating variant
+		product_id = Product.last.id
+		new_variant = Varient.new(product_id: product_id, name: "default")
+		begin 
+			new_variant.remote_photo_url = product["image_link"]
+			new_variant.save
+			puts "Created variant"
+			# creating inventory
+			variant_id = Varient.last.id
+			new_inventory = Inventory.new(price: product["price"], varient_id: variant_id, seller_id: sellers.sample.id)
+			new_inventory.remote_photo_url = product["image_link"]
+			new_inventory.save
+			puts "Created inventory"
+		rescue
+			Product.last.destroy
+			puts "Oops. Error with photo, product skipped"
+		end
+	else
+		product["product_colors"].each do |color|
+			# creating variant
+			product_id = Product.last.id
+			new_variant = Varient.new(product_id: product_id, name: color["colour_name"])
+			begin 
+				new_variant.remote_photo_url = product["image_link"]
+				new_variant.save
+				puts "Created variant"
+				# creating inventory
+				variant_id = Varient.last.id
+				new_inventory = Inventory.new(price: product["price"], varient_id: variant_id, seller_id: sellers.sample.id)
+				new_inventory.remote_photo_url = product["image_link"]
+				new_inventory.save
+				puts "Created inventory"
+			rescue
+				Product.last.destroy
+				puts "Oops. Error with photo, product skipped"
+			end
+		end
+	end
+end
+
+puts 'Finished!'
+
+# --------------------------
 
 # puts 'Creating master users...'
 
@@ -22,78 +91,6 @@ Product.destroy_all
 # 	caroline,
 # 	jessie
 # ]
-
-puts 'Creating products...'
-
-data = JSON.load(open("http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=foundation"))
-
-products = []
-variants = []
-
-data[0...20].each do |product|
-	new_product = Product.new(brand: product["brand"].capitalize, name: product["name"], category: product["category"])
-	new_product.save
-	products << new_product
-end
-
-puts 'Creating variants...'
-
-data[0...5].each do |product|
-
-	#TODO: Seed is breaking with 'default' below
-	product["product_colors"].each do |variant|
-		if variant == []
-			new_variant = Varient.new(name: "default", product_id: products.sample.id)
-			new_variant.save
-			variants << new_variant
-		else
-			new_variant = Varient.new(name: variant["colour_name"], product_id: products.sample.id)
-			new_variant.save
-			variants << new_variant
-		end
-	end
-
-	variants.each do |variant|
-		begin
-			variant.remote_photo_url = data.sample["image_link"]
-			variant.save
-			# binding.pry
-		rescue
-			puts "One product skipped due to image..."
-		end
-	end
-end
-
-# Variants: product_id, name, photo
-
-# --------------------------
-
-# random_price = [19, 25, 29, 35, 15, 21, 28, 32]
-
-# data[0...10].each do |product|
-# 	if product["price"].to_i < 10
-# 		product["price"] = random_price.sample
-# 		new_product = Product.new(brand: product["brand"].capitalize, name: product["name"], description: product["description"], price: product["price"].to_i, category: product["category"])
-# 		begin 
-# 			new_product.remote_photo_url = product["image_link"]
-# 			new_product.save
-# 			products << new_product
-# 		rescue
-# 			puts "One product skipped due to image..."
-# 		end
-# 	else
-# 		new_product = Product.new(brand: product["brand"].capitalize, name: product["name"], description: product["description"], price: product["price"].to_i, category: product["category"])
-# 		begin 
-# 			new_product.remote_photo_url = product["image_link"]
-# 			new_product.save
-# 			products << new_product
-# 		rescue
-# 			puts "One product skipped due to image..."
-# 		end
-# 	end
-# end
-
-# --------------------------
 
 # puts 'Creating orders...'
 
@@ -109,5 +106,3 @@ end
 # 30.times do 
 # 	OrderItem.create(product_id: products.sample.id, order_id: orders.sample.id, qty: rand(1...4))
 # end
-
-puts 'Finished!'

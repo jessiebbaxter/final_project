@@ -11,7 +11,7 @@
 				<div class="col-xs-12 col-sm-6">
 					<div class="product-details">
 						<h3><%= @product.name %> </h3>
-						<h4>$TODO</h4>
+						<hπ4>$TODO</h4>
 					</div>
 					<div class="product-actions">
 					  <% if current_user %>
@@ -23,8 +23,21 @@
 					    <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
 					    <% end %>
 					</div>
+					<div class="product-selector">
+						<%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
+							<%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
+					    <% end %>
+					</div>		
+					<div id="product-price-holder">
+						<div class="product-prices" id="product-prices">
+							<% @current_varient.inventories.each do |inventory| %>
+								<p><%= inventory.price %> | <%= inventory.seller.domain %></p>	
+							<% end %>
+						</div>
+					</div>
 				</div>
 			</div>
+			
 		</div>
 	    <!-- Modal -->
       <%= render 'shared/modal' %>
