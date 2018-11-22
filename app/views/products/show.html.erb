@@ -23,26 +23,21 @@
 					    <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
 					    <% end %>
 					</div>
+					<div class="product-selector">
+						<%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
+							<%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
+					    <% end %>
+					</div>		
+					<div id="product-price-holder">
+						<div class="product-prices" id="product-prices">
+							<% @current_varient.inventories.each do |inventory| %>
+								<p><%= inventory.price %> | <%= inventory.seller.domain %></p>		
+							<% end %>
+						</div>
+					</div>
 				</div>
 			</div>
-			<%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
-				<%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
-		    <% end %>
 			
-			<div class="row" id="product-price-holder">
-				<div class="product-prices" id="product-prices">
-					<% @varient_id %>
-					<% @current_varient.inventories.each do |inventory| %>
-						<%= inventory.id %>
-						<%= inventory.price %>
-					<% end %>
-					adsfasdf
-					asdfas
-					dfasdf
-					asdfas
-
-				</div>
-			</div>
 		</div>
 	    <!-- Modal -->
       <%= render 'shared/modal' %>
