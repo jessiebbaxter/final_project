@@ -1,13 +1,13 @@
 <div class="col-xs-12 col-sm-6 col-md-4">
 	<div class="card-polaroid">
 		<%= link_to product_path(product) do %>
-		 	<div class="card-polaroid-img" style="background-image: url('<%= cl_image_path product.photo, crop: :fill %>');">
+		 	<div class="card-polaroid-img" style="background-image: url('https://static1.squarespace.com/static/59384ae5cd0f684d39a6f485/t/5a7e329a0d9297f654feaef3/1518219930914/ComingSoon-613x388.png">
 	  		</div>
 		<% end %>
 	  	<div class="card-polaroid-content">
 	    	<div class="content-polaroid-header">
 	      		<h5><%= product.name %></h5>
-	      		<p><strong>$ <%= product.price %></strong></p>
+	      		<p><strong>$TODO</strong></p>
 	    	</div>
 		    <div class="content-polaroid-footer">
 			    <% if current_user %>

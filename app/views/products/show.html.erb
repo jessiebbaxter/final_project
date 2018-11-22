@@ -5,18 +5,13 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-6">
 					<div class="product-image">
-						<% if @product.photo.present? %>
-						<%= cl_image_tag @product.photo, height: 400, crop: :fill %>
-						<% else %>
 						<%= image_tag "coming-soon.png", height: 400, crop: :fill %>
-						<% end %>
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6">
 					<div class="product-details">
 						<h3><%= @product.name %> </h3>
-						<h4>$ <%= @product.price %></h4>
-						<p><%= @product.description %></p>
+						<h4>$TODO</h4>
 					</div>
 					<div class="product-actions">
 					  <% if current_user %>
