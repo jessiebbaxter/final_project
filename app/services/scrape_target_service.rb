@@ -10,12 +10,13 @@ class ScrapeTargetService
 		@products = []
 		@product_urls = []
 		@variants = []
+		run
 	end
 
 	def get_product_pg_urls
 		categories_to_parse = [
-			# "https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid",
-			# "https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505",
+			"https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid"
+			# "https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
 			# "https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
 			# "https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
 		]
@@ -28,7 +29,7 @@ class ScrapeTargetService
 			until final_page?(url)
 				get_product_urls(url)
 				count += 1
-				url = url+"&page=#{count}"
+				url = url[0...-1]+"#{count}"
 			end
 		end
 	end
@@ -44,12 +45,10 @@ class ScrapeTargetService
 
 	def final_page?(url)
 		 html_doc = get_html_doc(url)
-
 		 html_doc.search('.results-problem').text.include? "Unfortunately"
 	end
 
 	def get_product_urls(url)
-		# binding.pry
 		html_doc = get_html_doc(url)
 
 		product_results = html_doc.search(".name-heading a")
@@ -91,10 +90,17 @@ class ScrapeTargetService
 		variants_data = @product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"]
 
 		variants_data.each do |variant|
+
+			if variant["swatchColour"].nil?
+				name = "default"
+			else
+				name = variant["swatchColour"]
+			end
+
 			@variants << {
 				seller_product_id: @seller_product_id,
 				variant_url: "https://www.target.com.au"+variant["url"],
-				name: variant["swatchColour"],
+				name: name,
 				price: variant["price"]["value"],
 			  image_url: "https://www.target.com.au"+variant["images"][0]["url"]
 			}
@@ -104,8 +110,12 @@ class ScrapeTargetService
 	def run
 		get_product_pg_urls
 		parse_product_urls
+		@target_scrape = [
+			@products,
+			@variants
+		]
 	end
 
 end
 
-ScrapeTargetService.new.run
+ScrapeTargetService.new

@@ -11,9 +11,11 @@ class ScrapeSephoraService
 		@categories = {}
 		@products = []
 		@variants = []
+		run
 	end
 
 	def grab_brands
+		# size limit per page is 500
 		url = "https://www.sephora.com.au/api/v2.3/brands?page[size]=500&page[number]=1"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
@@ -21,7 +23,6 @@ class ScrapeSephoraService
 		result["data"].each do |element|
 			@brands[element["id"]] = element["attributes"]["name"]
 		end
-		return @brands
 	end
 
 	def grab_categories
@@ -36,7 +37,7 @@ class ScrapeSephoraService
 	end
 
 	def grab_products(page)
-		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=1&page[number]=#{page}&sort=sales&include=variants,brand"
+		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=2&page[number]=#{page}&sort=sales&include=variants,brand"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
 
@@ -82,7 +83,7 @@ class ScrapeSephoraService
 				end
 
 				@variants << {
-					seller_product_id: @products.last[:source_id],
+					seller_product_id: @products.last[:seller_product_id],
 					name: element["attributes"]["name"],
 					img_url: element["attributes"]["image-url"],
 					original_price: element["attributes"]["original-price"],
@@ -94,18 +95,6 @@ class ScrapeSephoraService
 		end
 	end
 
-	# def csv_export
-	# 	csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
-	# 	filepath    = 'sephora.csv'
-
-	# 	CSV.open(filepath, 'wb', csv_options) do |csv|
-	# 	  csv << ['source_id', 'brand', 'name', 'categories', 'price', 'rating', 'review_count', 'original_price', 'web_url', 'image_urls', 'variant_count']
-	# 	  @products.each do |product|
-	# 	  	csv << [product[:source_id], product[:brand], product[:name], product[:categories], product[:price], product[:rating], product[:review_count], product[:original_price], product[:web_url], product[:image_urls], product[:variants_count]]
-	# 	  end
-	# 	end
-	# end
-
 	def run
 		grab_brands
 		grab_categories
@@ -115,10 +104,26 @@ class ScrapeSephoraService
 			grab_products(page)
 			page += 1
 		end
-		# csv_export
+		@scrape = [
+			@products,
+			@variants
+		]
 	end
 
 end
 
-ScrapeSephoraService.new.run
+# ------------------------------
+
+# def csv_export
+# 	csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
+# 	filepath    = 'sephora.csv'
+
+# 	CSV.open(filepath, 'wb', csv_options) do |csv|
+# 	  csv << ['source_id', 'brand', 'name', 'categories', 'price', 'rating', 'review_count', 'original_price', 'web_url', 'image_urls', 'variant_count']
+# 	  @products.each do |product|
+# 	  	csv << [product[:source_id], product[:brand], product[:name], product[:categories], product[:price], product[:rating], product[:review_count], product[:original_price], product[:web_url], product[:image_urls], product[:variants_count]]
+# 	  end
+# 	end
+# end
+
 

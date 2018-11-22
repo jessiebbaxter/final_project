@@ -1,113 +1,41 @@
-require 'open-uri'
-require 'json'
+# puts 'Cleaning database...'
 
-puts 'Cleaning database...'
+# Varient.destroy_all
+# OrderItem.destroy_all
+# Order.destroy_all
+# Product.destroy_all
 
-# Inventory.destroy_all
-Varient.destroy_all
-# QuickBuyItem.destroy_all
-OrderItem.destroy_all
-Order.destroy_all
-Product.destroy_all
-# User.destroy_all
+puts 'Creating Sephora products and variants...'
 
-# puts 'Creating master users...'
+sephora_scrape = ScrapeSephoraService.new.run
+sephora_products = sephora_scrape[0]
+sephora_variants = sephora_scrape[1]
 
-# lisa = User.create(email: "lisa@beautynb.com.au", password: "password")
-# caroline = User.create(email: "caroline@beautynb.com.au", password: "password")
-# jessie = User.create(email: "jessie@beautynb.com.au", password: "password")
-
-# users = [
-# 	lisa,
-# 	caroline,
-# 	jessie
-# ]
-
-puts 'Creating products...'
-
-data = JSON.load(open("http://makeup-api.herokuapp.com/api/v1/products.json?brand=covergirl&product_type=foundation"))
-
-products = []
-variants = []
-
-data[0...20].each do |product|
-	new_product = Product.new(brand: product["brand"].capitalize, name: product["name"], category: product["category"])
-	new_product.save
-	products << new_product
-end
-
-puts 'Creating variants...'
-
-data[0...5].each do |product|
-
-	#TODO: Seed is breaking with 'default' below
-	product["product_colors"].each do |variant|
-		if variant == []
-			new_variant = Varient.new(name: "default", product_id: products.sample.id)
-			new_variant.save
-			variants << new_variant
-		else
-			new_variant = Varient.new(name: variant["colour_name"], product_id: products.sample.id)
-			new_variant.save
-			variants << new_variant
-		end
-	end
-
-	variants.each do |variant|
-		begin
-			variant.remote_photo_url = data.sample["image_link"]
-			variant.save
-			# binding.pry
-		rescue
-			puts "One product skipped due to image..."
-		end
+sephora_products.each do |product|
+	Product.create(brand: product[:brand], name: product[:name], category: product[:categories])
+	product_id = Product.last.id
+	seller_product_id = product[:seller_product_id]
+	binding.pry
+	product_variants = sephora_variants.select { |element| element[:seller_product_id] == seller_product_id }
+	product_variants.each do |variant|
+		new_variant = Varient.new(name: variant[:name], product_id: product_id)
+		binding.pry
+		new_variant.remote_photo_url = variant[:img_url]
+		new_variant.save
+		# create inventory items - can't remember how to do price
 	end
 end
-
-# Variants: product_id, name, photo
-
-# --------------------------
-
-# random_price = [19, 25, 29, 35, 15, 21, 28, 32]
-
-# data[0...10].each do |product|
-# 	if product["price"].to_i < 10
-# 		product["price"] = random_price.sample
-# 		new_product = Product.new(brand: product["brand"].capitalize, name: product["name"], description: product["description"], price: product["price"].to_i, category: product["category"])
-# 		begin 
-# 			new_product.remote_photo_url = product["image_link"]
-# 			new_product.save
-# 			products << new_product
-# 		rescue
-# 			puts "One product skipped due to image..."
-# 		end
-# 	else
-# 		new_product = Product.new(brand: product["brand"].capitalize, name: product["name"], description: product["description"], price: product["price"].to_i, category: product["category"])
-# 		begin 
-# 			new_product.remote_photo_url = product["image_link"]
-# 			new_product.save
-# 			products << new_product
-# 		rescue
-# 			puts "One product skipped due to image..."
-# 		end
-# 	end
-# end
-
-# --------------------------
-
-# puts 'Creating orders...'
-
-# orders = []
-
-# 20.times do
-# 	order = Order.create(user_id: users.sample.id, state: "complete")
-# 	orders << order
-# end
-
-# puts 'Adding items to orders...'
-
-# 30.times do 
-# 	OrderItem.create(product_id: products.sample.id, order_id: orders.sample.id, qty: rand(1...4))
-# end
 
 puts 'Finished!'
+
+# POTENTIAL BUGS
+# Seems to be creating multiple variants
+
+# t.string "source_url"
+# t.string "image_url"
+# t.integer "price_cents", default: 0, null: false
+# t.bigint "varient_id"
+# t.bigint "seller_id"
+# t.datetime "created_at", null: false
+# t.datetime "updated_at", null: false
+# t.string "photo"
