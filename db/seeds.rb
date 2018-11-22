@@ -40,6 +40,7 @@ puts 'Creating variants...'
 
 data[0...5].each do |product|
 
+	#TODO: Seed is breaking with 'default' below
 	product["product_colors"].each do |variant|
 		if variant == []
 			new_variant = Varient.new(name: "default", product_id: products.sample.id)
