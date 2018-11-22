@@ -71,7 +71,7 @@ class ScrapeTargetService
 		end
 	end
 
-	# FOR TESTING: pass in html_doc (not url) for final piece
+	# FOR SEED: pass in html_doc (not url) for final piece
 	def build_products_variants(url)
 		html_file = open(url, {
 			'User-Agent' => 'Mozilla',

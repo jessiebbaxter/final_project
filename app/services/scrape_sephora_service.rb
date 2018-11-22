@@ -37,14 +37,14 @@ class ScrapeSephoraService
 	end
 
 	def grab_products(page)
-		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=2&page[number]=#{page}&sort=sales&include=variants,brand"
+		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=500&page[number]=#{page}&sort=sales&include=variants,brand"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
 
-		build_products_variants(result)
+		build_products(result)
 	end
 
-	def build_products_variants(result)
+	def build_products(result)
 
 		result["data"].each do |element|
 			
@@ -71,28 +71,41 @@ class ScrapeSephoraService
 			product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
 			product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
 			
-			json_file = open(product_api, "Accept-Language" => "en-AU").read
+			build_variants(product_api)
+		end
+	end
+
+	def build_variants(api)
+		begin
+			json_file = open(api, "Accept-Language" => "en-AU").read
 			result = JSON.parse(json_file)
 
-			result["included"].each do |element|
+			if result["included"].nil?
+				@products.slice!(-1)
+				puts "Oops. No api result, product skipped"
+			else
+				result["included"].each do |element|
 
-				if !element["attributes"]["slug-url"]
-					variant_url = @products.last[:web_url]
-				else
-					variant_url = @products.last[:web_url]+'/v/'+element["attributes"]["slug-url"]
+					if !element["attributes"]["slug-url"]
+						variant_url = @products.last[:web_url]
+					else
+						variant_url = @products.last[:web_url]+'/v/'+element["attributes"]["slug-url"]
+					end
+
+					@variants << {
+						seller_product_id: @products.last[:seller_product_id],
+						name: element["attributes"]["name"],
+						img_url: element["attributes"]["image-url"],
+						original_price: element["attributes"]["original-price"],
+						price: element["attributes"]["price"],
+						variant_url: variant_url
+					}
 				end
-
-				@variants << {
-					seller_product_id: @products.last[:seller_product_id],
-					name: element["attributes"]["name"],
-					img_url: element["attributes"]["image-url"],
-					original_price: element["attributes"]["original-price"],
-					price: element["attributes"]["price"],
-					variant_url: variant_url
-				}
 			end
-
-		end
+		rescue OpenURI::HTTPError => ex
+			@products.slice!(-1)
+      puts "Oops. HTTP error, product skipped"
+    end 
 	end
 
 	def run
@@ -109,21 +122,4 @@ class ScrapeSephoraService
 			@variants
 		]
 	end
-
 end
-
-# ------------------------------
-
-# def csv_export
-# 	csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
-# 	filepath    = 'sephora.csv'
-
-# 	CSV.open(filepath, 'wb', csv_options) do |csv|
-# 	  csv << ['source_id', 'brand', 'name', 'categories', 'price', 'rating', 'review_count', 'original_price', 'web_url', 'image_urls', 'variant_count']
-# 	  @products.each do |product|
-# 	  	csv << [product[:source_id], product[:brand], product[:name], product[:categories], product[:price], product[:rating], product[:review_count], product[:original_price], product[:web_url], product[:image_urls], product[:variants_count]]
-# 	  end
-# 	end
-# end
-
-
