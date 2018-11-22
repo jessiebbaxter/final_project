@@ -25,18 +25,22 @@
 					</div>
 				</div>
 			</div>
-			<div class="variant-form">
-				<%= form_tag "", { method: :get, id: "search-form" } do %>
+			<%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
 				<%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
-					
-			      <%= submit_tag 'Search', class: "btn btn-primary btn-lg" %>
-			    <% end %>
-			</div>
-			<div class="row">
-				<div class="product-prices">
+		    <% end %>
+			
+			<div class="row" id="product-price-holder">
+				<div class="product-prices" id="product-prices">
+					<% @varient_id %>
 					<% @current_varient.inventories.each do |inventory| %>
+						<%= inventory.id %>
 						<%= inventory.price %>
 					<% end %>
+					adsfasdf
+					asdfas
+					dfasdf
+					asdfas
+
 				</div>
 			</div>
 		</div>
