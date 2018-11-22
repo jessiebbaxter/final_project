@@ -8,7 +8,6 @@ class ScrapeCosmeticsNowService
 
   def initialize(url)
     @url = url
-    # @url = "https://www.cosmeticsnow.com.au/s/living-proof"
     @google_analytics_commerce_products_array = []
     @product_listings_array = []
     @combined_products_array = []
@@ -87,8 +86,8 @@ class ScrapeCosmeticsNowService
   def merge_product_arrays
     @product_listings_array.each_with_index do |prod, index|
       @combined_products_array[index][:price] = prod[:price]
-      @combined_products_array[index][:web_url] = prod[:web_url]
-      @combined_products_array[index][:img_url] = prod[:img_url]
+      @combined_products_array[index][:web_url] = build_product_url(prod[:web_url])
+      @combined_products_array[index][:img_url] = "https:#{prod[:img_url]}"
     end
   end
 
@@ -103,14 +102,18 @@ class ScrapeCosmeticsNowService
   def create_category_array(category_string)
     category_string.split(' >> ')
   end
+
+  def build_product_url(web_url)
+    "https://www.cosmeticsnow.com.au#{web_url}"
+  end
 end
 
-ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes")
+# below are links you can run this code on, you can also
+# go grab additional links like hair care if you want additional products
 
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/face")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/lips")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/makeup-sets")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/nails")
-
 
