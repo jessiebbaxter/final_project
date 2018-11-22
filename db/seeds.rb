@@ -22,15 +22,16 @@ sephora_products.each do |product|
 		binding.pry
 		new_variant.remote_photo_url = variant[:img_url]
 		new_variant.save
-		# create inventory items - can't remember how to do price
+		# create inventory items - can't remember how to do price. Need to create sellers table first
 	end
 end
 
 puts 'Finished!'
 
 # POTENTIAL BUGS
-# Seems to be creating multiple variants
+# Seems to be creating multiple of the same variants
 
+# Inventory table
 # t.string "source_url"
 # t.string "image_url"
 # t.integer "price_cents", default: 0, null: false
