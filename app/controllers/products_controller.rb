@@ -11,6 +11,13 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @varient_options = @product.varients.all.map{ |u| [ u.name, u.id ] }
+    if params[:varient_id].present?
+      @varient_id = params[:varient_id]
+    else
+      @varient_id = @product.varients.first.id
+    end
+    @current_varient = @product.varients.find(@varient_id)
   end
 
   private
