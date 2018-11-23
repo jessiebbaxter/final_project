@@ -25,7 +25,7 @@ end
 
 puts 'Creating products...'
 
-data = JSON.load(open("http://makeup-api.herokuapp.com/api/v1/products.json"))
+data = JSON.load(open("http://makeup-api.herokuapp.com/api/v1/products.json?product_type=eyeshadow"))
 
 data[100...200].each do |product|
 	# creating product
