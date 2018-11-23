@@ -1,33 +1,22 @@
-require 'open-uri'
-require 'nokogiri'
-# require 'pry'
-require 'json'
-require 'csv'
-
 class ScrapeTargetService
 
 	def initialize
-		@products = []
-		@product_urls = []
-		@variants = []
-		run
-	end
-
-	def get_product_pg_urls
-		categories_to_parse = [
+		@categories_to_parse = [
 			"https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid"
 			# "https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
 			# "https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
 			# "https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
 		]
+	end
 
+	def grab_products
 		categories_to_parse.each do |url|
 			# First page format is unique
-			get_product_urls(url)
+			get_product_url(url)
 			count = 1
 			url = url+"&page=#{count}"
 			until final_page?(url)
-				get_product_urls(url)
+				get_product_url(url)
 				count += 1
 				url = url[0...-1]+"#{count}"
 			end
@@ -48,45 +37,47 @@ class ScrapeTargetService
 		 html_doc.search('.results-problem').text.include? "Unfortunately"
 	end
 
-	def get_product_urls(url)
+	def get_product_url(url)
 		html_doc = get_html_doc(url)
 
 		product_results = html_doc.search(".name-heading a")
 
 		product_results.each do |link|
-			@product_urls << "https://www.target.com.au"+link.attribute('href').value
+			create_product("https://www.target.com.au"+link.attribute('href').value)
 		end
 	end
 
-	def parse_product_urls
-		@product_urls.each do |url|
-			html_doc = get_html_doc(url)
-			@product_data = JSON.parse(html_doc.search(".__react_initial_state__").text)
-			pull_product_info
-			pull_variant_info
-		end
+	def create_seller
+		Seller.create(domain: "Target")
+		puts "Created seller"
+		@seller_id = Seller.last.id
 	end
 
-	def pull_product_info
-
+	def create_product(url)
+		html_doc = get_html_doc(url)
+		@product_data = JSON.parse(html_doc.search(".__react_initial_state__").text)
 		@seller_product_id = @product_data["entities"]["products"].keys[0]
 
-		brand = @product_data["entities"]["products"][@seller_product_id]["brand"]
-
-		categories = []
+		product_categories = []
 			@product_data["entities"]["products"][@seller_product_id]["categories"].each do |category|
-				categories << category["name"].downcase
+				product_categories << category["name"].downcase
 			end
 
-		@products << {
-			brand: brand,
-			name: @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, ""),
-			categories: categories,
-			seller_product_id: @seller_product_id
-		}
+		new_product = Product.new(
+				name: @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, ""),
+				category: product_categories,
+				brand: @product_data["entities"]["products"][@seller_product_id]["brand"]
+			)
+
+		product_hero_image = "https://www.target.com.au"+@product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"][0]["images"][0]["url"]
+		new_product.remote_photo_url = product_hero_image
+		new_product.save
+		puts "Created product"
+		@product_id = Product.last.id
+		create_variant
 	end
 
-	def pull_variant_info
+	def create_variant
 		variants_data = @product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"]
 
 		variants_data.each do |variant|
@@ -97,25 +88,32 @@ class ScrapeTargetService
 				name = variant["swatchColour"]
 			end
 
-			@variants << {
-				seller_product_id: @seller_product_id,
-				variant_url: "https://www.target.com.au"+variant["url"],
+			new_variant = Varient.new(
 				name: name,
-				price: variant["price"]["value"],
-			  image_url: "https://www.target.com.au"+variant["images"][0]["url"]
-			}
+				product_id: @product_id
+			) 
+
+			new_variant.remote_photo_url = "https://www.target.com.au"+variant["images"][0]["url"]
+			new_variant.save
+			puts 'Created variant'
+			@variant_id = Varient.last.id
+			create_inventory(variant)
 		end
 	end
 
+	def create_inventory(variant)
+		Inventory.create(
+				price: variant["price"]["value"],
+				source_url: "https://www.target.com.au"+variant["url"],
+				varient_id: @variant_id,
+				seller_id: @seller_id 
+			)
+		puts "Created inventory"
+	end
+
 	def run
-		get_product_pg_urls
-		parse_product_urls
-		@target_scrape = [
-			@products,
-			@variants
-		]
+		create_seller
+		grab_products
 	end
 
 end
-
-ScrapeTargetService.new

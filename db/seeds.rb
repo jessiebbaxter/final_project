@@ -16,10 +16,20 @@ puts 'Removing products...'
 Product.destroy_all
 puts 'Removed products'
 
-puts 'Starting Sephora scrape...'
+puts 'Starting Target scrape...'
 
-ScrapeSephoraService.new.run(500, 7)
+ScrapeTargetService.new.run
 
-puts 'Finished Sephora scrape...'
+puts 'Finished Target scrape...'
 
 puts 'Finished seed!'
+
+# -----------------------------
+
+# puts 'Starting Sephora scrape...'
+
+# ScrapeSephoraService.new.run(500, 7)
+
+# puts 'Finished Sephora scrape...'
+
+# puts 'Finished seed!'
