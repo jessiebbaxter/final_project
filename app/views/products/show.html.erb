@@ -17,26 +17,28 @@
             <% @price_array.sort %>
             <h4>from $ <%= @price_array.first  %></h4>
 					</div>
-					<div class="product-actions">
-					  <% if current_user %>
-					    <div class="action-add">
-					      <%= link_to "Add to Cart", product_order_items_path(@product), method: :post, class: "btn btn-primary" %>
-					    </div>
-					   <% else %>
-					   <!-- Modal link -->
-					    <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
-					    <% end %>
-					</div>
-					<div class="product-selector">
-						<%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
-							<%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
-					    <% end %>
-					</div>
-					<div id="product-price-holder">
-						<div class="product-prices" id="product-prices">
-							<% @current_varient.inventories.each do |inventory| %>
-								<p> $ <%= inventory.price %> | <%= inventory.seller.domain %></p>
-							<% end %>
+          <div class="product-selector">
+            <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
+              <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
+              <% end %>
+          </div>
+          <div id="product-price-holder">
+            <div class="product-prices" id="product-prices">
+              <% @current_varient.inventories.each do |inventory| %>
+                <div class="product-actions">
+                  <% if current_user %>
+                    <div class="action-add">
+                    <%= form_tag order_items_path do %>
+                    <%= button_tag  "Add to Cart" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
+                    <% end %>
+                    </div>
+                   <% else %>
+                   <!-- Modal link -->
+      					    <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
+      					    <% end %>
+      					</div>
+                <p> $ <%= inventory.price %> | <%= inventory.seller.domain %></p>
+              <% end %>
 						</div>
 					</div>
 				</div>
