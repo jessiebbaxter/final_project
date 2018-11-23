@@ -1,7 +1,3 @@
-require 'open-uri'
-require 'json'
-require 'pry'
-
 puts 'Cleaning database...'
 
 Inventory.destroy_all
@@ -31,7 +27,7 @@ puts 'Creating products...'
 
 data = JSON.load(open("http://makeup-api.herokuapp.com/api/v1/products.json"))
 
-data[0...100].each do |product|
+data[100...200].each do |product|
 	# creating product
 	Product.create(brand: product["brand"].capitalize, name: product["name"], category: product["category"])
 	puts "Created product"

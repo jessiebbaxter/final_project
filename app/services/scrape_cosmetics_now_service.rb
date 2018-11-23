@@ -2,7 +2,7 @@ require 'open-uri'
 require 'nokogiri'
 require 'json'
 require 'csv'
-require 'pry'
+# require 'pry'
 
 class ScrapeCosmeticsNowService
 
