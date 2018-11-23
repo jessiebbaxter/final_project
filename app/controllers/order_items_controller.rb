@@ -1,16 +1,16 @@
 class OrderItemsController < ApplicationController
-  before_action :set_order, only: [:create, :update]
+  before_action :set_order, only: [:create, :update, :destroy]
 
   def create
     if !@order
       @order = Order.create(user_id: current_user, state: "pending")
     end
-    if @order.order_items.find_by(product_id: params[:product_id])
+    if @order.order_items.find_by(inventory_id: params[:inventory_id])
       set_order_item
       @order_item.qty += 1
       @order_item.save
     else
-      @order_item = OrderItem.create(product_id: params[:product_id], order_id: @order.id)
+      @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id)
     end
     @order.save
     flash[:notice] = "This item has been saved to your cart"
@@ -37,10 +37,10 @@ class OrderItemsController < ApplicationController
   end
 
   def set_order_item
-    @order_item = @order.order_items.find_by(product_id: params[:product_id])
+    @order_item = @order.order_items.find_by(inventory_id: params[:inventory_id])
   end
 
   def order_item_params
-    params.require(:order_item).permit(:product_id, :id, :qty)
+    params.require(:order_item).permit(:inventory_id, :order_id, :qty)
   end
 end
