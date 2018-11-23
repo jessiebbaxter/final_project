@@ -25,6 +25,7 @@ gem 'nokogiri'
 
 gem 'poltergeist'
 gem 'launchy'
+gem 'rest-client', '>= 2.0.2'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
