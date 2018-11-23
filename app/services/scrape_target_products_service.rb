@@ -1,4 +1,6 @@
-class ScrapeTargetService
+# Need to add in matching before creation
+
+class ScrapeTargetProductsService
 
 	def initialize
 		@seller_id = Seller.find_by(domain: "Target").id
@@ -96,18 +98,7 @@ class ScrapeTargetService
 			new_variant.save
 			puts 'Created variant'
 			@variant_id = Varient.last.id
-			create_inventory(variant)
 		end
-	end
-
-	def create_inventory(variant)
-		Inventory.create(
-				price: variant["price"]["value"],
-				source_url: "https://www.target.com.au"+variant["url"],
-				varient_id: @variant_id,
-				seller_id: @seller_id 
-			)
-		puts "Created inventory"
 	end
 
 	def run

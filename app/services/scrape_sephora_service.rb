@@ -1,12 +1,9 @@
 class ScrapeSephoraService
 
 	def initialize
-		@seller = "Sephora"
-	end
-
-	def find_seller
-		seller = Seller.find_by(domain: @seller)
-		@seller_id = seller.id
+		@seller_id = Seller.find_by(domain: "Sephora").id
+		grab_brands
+		grab_categories
 	end
 
 	def grab_brands
@@ -128,9 +125,6 @@ class ScrapeSephoraService
 	end
 
 	def run(products_per_page, page_count)
-		find_seller
-		grab_brands
-		grab_categories
 		count = 1
 		# Product api displays max 500 items/pg over 7 pages
 		if page_count > 7

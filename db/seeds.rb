@@ -1,20 +1,27 @@
-# puts 'Cleaning database...'
+puts 'Cleaning database...'
 
-# puts 'Removing inventory...'
-# Inventory.destroy_all
-# puts 'Removed inventory'
+puts 'Removing inventory...'
+Inventory.destroy_all
+puts 'Removed inventory'
 
-# puts 'Removing sellers...'
-# Seller.destroy_all
-# puts 'Removed sellers'
+puts 'Removing sellers...'
+Seller.destroy_all
+puts 'Removed sellers'
 
-# puts 'Removing variants...'
-# Varient.destroy_all
-# puts 'Removed variants'
+puts 'Removing variants...'
+Varient.destroy_all
+puts 'Removed variants'
 
-# puts 'Removing products...'
-# Product.destroy_all
-# puts 'Removed products'
+puts 'Removing products...'
+Product.destroy_all
+puts 'Removed products'
+
+puts 'Creating sellers...'
+sellers = ["Target", "Sephora", "Mecca", "Cosmetics Now"]
+sellers.each do |seller|
+	Seller.create(domain: seller)
+	puts "Created seller: #{seller}"
+end
 
 puts 'Starting Target scrape...'
 
@@ -22,7 +29,7 @@ ScrapeTargetService.new.run
 
 puts 'Finished Target scrape...'
 
-puts 'Finished seed!'
+# puts 'Finished seed!'
 
 # -----------------------------
 
