@@ -1,21 +1,29 @@
 class ScrapeTargetService
 
 	def initialize
+		@seller = "Target"
 		@categories_to_parse = [
-			"https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid"
-			# "https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
+			# "https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid"
+			"https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
 			# "https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
 			# "https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
 		]
 	end
 
+	def find_seller
+		seller = Seller.find_by(domain: @seller)
+		@seller_id = seller.id
+	end
+
 	def grab_products
-		categories_to_parse.each do |url|
+		@categories_to_parse.each do |url|
 			# First page format is unique
+			puts "Grabbing products on page 1..."
 			get_product_url(url)
 			count = 1
 			url = url+"&page=#{count}"
 			until final_page?(url)
+				puts "Grabbing products on page #{count + 1}..."
 				get_product_url(url)
 				count += 1
 				url = url[0...-1]+"#{count}"
@@ -47,12 +55,6 @@ class ScrapeTargetService
 		end
 	end
 
-	def create_seller
-		Seller.create(domain: "Target")
-		puts "Created seller"
-		@seller_id = Seller.last.id
-	end
-
 	def create_product(url)
 		html_doc = get_html_doc(url)
 		@product_data = JSON.parse(html_doc.search(".__react_initial_state__").text)
@@ -63,10 +65,12 @@ class ScrapeTargetService
 				product_categories << category["name"].downcase
 			end
 
+		brand = @product_data["entities"]["products"][@seller_product_id]["brand"]
+
 		new_product = Product.new(
 				name: @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, ""),
 				category: product_categories,
-				brand: @product_data["entities"]["products"][@seller_product_id]["brand"]
+				brand: brand
 			)
 
 		product_hero_image = "https://www.target.com.au"+@product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"][0]["images"][0]["url"]
@@ -112,7 +116,7 @@ class ScrapeTargetService
 	end
 
 	def run
-		create_seller
+		find_seller
 		grab_products
 	end
 

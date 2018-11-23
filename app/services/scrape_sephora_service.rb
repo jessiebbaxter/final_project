@@ -1,14 +1,12 @@
 class ScrapeSephoraService
 
 	def initialize
-		@brands = {}
-		@categories = {}
+		@seller = "Sephora"
 	end
 
-	def create_seller
-		Seller.create(domain: "Sephora")
-		puts "Created seller"
-		@seller_id = Seller.last.id
+	def find_seller
+		seller = Seller.find_by(domain: @seller)
+		@seller_id = seller.id
 	end
 
 	def grab_brands
@@ -17,6 +15,7 @@ class ScrapeSephoraService
 		url = "https://www.sephora.com.au/api/v2.3/brands?page[size]=500&page[number]=1"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
+		@brands = {}
 
 		result["data"].each do |element|
 			@brands[element["id"]] = element["attributes"]["name"]
@@ -29,6 +28,7 @@ class ScrapeSephoraService
 		url = "https://www.sephora.com.au/api/v2.4/categories"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
+		@categories = {}
 
 		result["data"].each do |element|
 			@categories[element["id"]] = element["attributes"]["label"]
@@ -128,7 +128,7 @@ class ScrapeSephoraService
 	end
 
 	def run(products_per_page, page_count)
-		create_seller
+		find_seller
 		grab_brands
 		grab_categories
 		count = 1
