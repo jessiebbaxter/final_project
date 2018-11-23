@@ -11,8 +11,15 @@ class ScrapeSephoraService
 		@categories = {}
 	end
 
+	def create_seller
+		Seller.create(domain: "Sephora")
+		puts "Created seller"
+		@seller_id = Seller.last.id
+	end
+
 	def grab_brands
 		# brands are stores in seperate API
+		puts "Grabbing brand list..."
 		url = "https://www.sephora.com.au/api/v2.3/brands?page[size]=500&page[number]=1"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
@@ -24,6 +31,7 @@ class ScrapeSephoraService
 
 	def grab_categories
 		# cateogires are stored in seperate api
+		puts "Grabbing category list..."
 		url = "https://www.sephora.com.au/api/v2.4/categories"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
@@ -34,6 +42,7 @@ class ScrapeSephoraService
 	end
 
 	def grab_products(products_per_page, count)
+		puts "Grabbing product list on page #{count} (#{products_per_page} products per page requested - max 500)..."
 		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=#{products_per_page}&page[number]=#{count}&sort=sales&include=variants,brand"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
@@ -85,17 +94,19 @@ class ScrapeSephoraService
 			else
 				result["included"].each do |element|
 
-					new_variant = Varient.new(
-							name: element["attributes"]["name"],
-							product_id: @product_id
-						)
-					new_variant.remote_photo_url = element["attributes"]["image-url"]
-					new_variant.save
+					if element["attributes"]["name"].present?
+						new_variant = Varient.new(
+								name: element["attributes"]["name"],
+								product_id: @product_id
+							)
+						new_variant.remote_photo_url = element["attributes"]["image-url"]
+						new_variant.save
 
-					puts 'Created variant'
-					@variant_id = Varient.last.id
+						puts 'Created variant'
+						@variant_id = Varient.last.id
 
-					create_inventory(element)
+						create_inventory(element)
+					end
 				end
 			end
 		rescue OpenURI::HTTPError => ex
@@ -104,13 +115,8 @@ class ScrapeSephoraService
     end 
 	end
 
-	def create_seller
-		Seller.create(domain: "Sephora")
-		puts "Created seller"
-		@seller_id = Seller.last.id
-	end
-
 	def create_inventory(element)
+		
 		if !element["attributes"]["slug-url"]
 			variant_url = @product_url
 		else
@@ -118,15 +124,17 @@ class ScrapeSephoraService
 		end
 
 		Inventory.create(
-				price: element["attributes"]["price"],
+				price: element["attributes"]["price"]/100,
 				source_url: variant_url,
 				varient_id: @variant_id,
 				seller_id: @seller_id 
 			)
+
 		puts 'Created inventory'
 	end
 
 	def run(products_per_page, page_count)
+		create_seller
 		grab_brands
 		grab_categories
 		count = 1
