@@ -3,10 +3,15 @@ class ProductsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
-    @products = Product.all
     if params[:query].present?
-      sql_query = "name ILIKE :query OR description ILIKE :query"
-      @products = @products.where(sql_query, query: "%#{params[:query]}%")
+      sql_query = " \
+        products.name @@ :query \
+        OR products.brand @@ :query \
+        OR products.category @@ :query \
+      "
+      @products = Product.where(sql_query, query: "%#{params[:query]}%")
+    else
+      @products = Product.all
     end
   end
 
@@ -26,3 +31,4 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
   end
 end
+
