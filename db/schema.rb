@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_23_012109) do
+ActiveRecord::Schema.define(version: 2018_11_23_195112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_012109) do
     t.bigint "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "photo"
     t.index ["seller_id"], name: "index_inventories_on_seller_id"
     t.index ["varient_id"], name: "index_inventories_on_varient_id"
   end
@@ -53,6 +52,9 @@ ActiveRecord::Schema.define(version: 2018_11_23_012109) do
     t.string "brand"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "rating"
+    t.integer "review_count"
+    t.string "photo"
   end
 
   create_table "quick_buy_items", force: :cascade do |t|

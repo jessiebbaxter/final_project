@@ -9,11 +9,17 @@ class ScrapeSephoraService
 	def initialize
 		@brands = {}
 		@categories = {}
-		@products = []
-		@variants = []
+	end
+
+	def create_seller
+		Seller.create(domain: "Sephora")
+		puts "Created seller"
+		@seller_id = Seller.last.id
 	end
 
 	def grab_brands
+		# brands are stores in seperate API
+		puts "Grabbing brand list..."
 		url = "https://www.sephora.com.au/api/v2.3/brands?page[size]=500&page[number]=1"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
@@ -21,10 +27,11 @@ class ScrapeSephoraService
 		result["data"].each do |element|
 			@brands[element["id"]] = element["attributes"]["name"]
 		end
-		return @brands
 	end
 
 	def grab_categories
+		# cateogires are stored in seperate api
+		puts "Grabbing category list..."
 		url = "https://www.sephora.com.au/api/v2.4/categories"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
@@ -32,18 +39,18 @@ class ScrapeSephoraService
 		result["data"].each do |element|
 			@categories[element["id"]] = element["attributes"]["label"]
 		end
-		return @categories
 	end
 
-	def grab_products(page)
-		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=1&page[number]=#{page}&sort=sales&include=variants,brand"
+	def grab_products(products_per_page, count)
+		puts "Grabbing product list on page #{count} (#{products_per_page} products per page requested - max 500)..."
+		url = "https://www.sephora.com.au/api/v2.3/products?filter&page[size]=#{products_per_page}&page[number]=#{count}&sort=sales&include=variants,brand"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
 
-		build_products_variants(result)
+		create_products(result)
 	end
 
-	def build_products_variants(result)
+	def create_products(result)
 
 		result["data"].each do |element|
 			
@@ -53,72 +60,91 @@ class ScrapeSephoraService
 				product_categories << @categories[category["id"]]
 			end
 
-			brand = @brands[element["relationships"]["brand"]["data"]["id"]]
-			product_name = element["attributes"]["name"]
+			new_product = Product.new(
+					name: element["attributes"]["name"],
+					category: product_categories,
+					brand: @brands[element["relationships"]["brand"]["data"]["id"]],
+					rating: element["attributes"]["rating"].to_i,
+					review_count: element["attributes"]["reviews-count"].to_i
+				)
 
-			@products << {
-				seller_product_id: element["id"],
-				brand: @brands[element["relationships"]["brand"]["data"]["id"]],
-				name: element["attributes"]["name"],
-				categories: product_categories,
-				rating: element["attributes"]["rating"],
-				review_count: element["attributes"]["reviews-count"],
-				web_url: element["attributes"]["web-url"],
-				variants_count: element["attributes"]["variants-count"],
-			}
+			new_product.remote_photo_url = element["attributes"]["image-urls"].first
+			new_product.save
+
+			puts 'Created product'
+
+			@product_url = element["attributes"]["web-url"]
+			@product_id = Product.last.id
 
 			product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
 			product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
 			
-			json_file = open(product_api, "Accept-Language" => "en-AU").read
+			create_variants(product_api)
+		end
+	end
+
+	def create_variants(api)
+		begin
+			json_file = open(api, "Accept-Language" => "en-AU").read
 			result = JSON.parse(json_file)
 
-			result["included"].each do |element|
+			if result["included"].nil?
+				Product.last.destroy
+				puts "Oops. No result from product api, product skipped"
+			else
+				result["included"].each do |element|
 
-				if !element["attributes"]["slug-url"]
-					variant_url = @products.last[:web_url]
-				else
-					variant_url = @products.last[:web_url]+'/v/'+element["attributes"]["slug-url"]
+					if element["attributes"]["name"].present?
+						new_variant = Varient.new(
+								name: element["attributes"]["name"],
+								product_id: @product_id
+							)
+						new_variant.remote_photo_url = element["attributes"]["image-url"]
+						new_variant.save
+
+						puts 'Created variant'
+						@variant_id = Varient.last.id
+
+						create_inventory(element)
+					end
 				end
-
-				@variants << {
-					seller_product_id: @products.last[:source_id],
-					name: element["attributes"]["name"],
-					img_url: element["attributes"]["image-url"],
-					original_price: element["attributes"]["original-price"],
-					price: element["attributes"]["price"],
-					variant_url: variant_url
-				}
 			end
-
-		end
+		rescue OpenURI::HTTPError => ex
+			Product.last.destroy
+      puts "Oops. HTTP error, product skipped"
+    end 
 	end
 
-	# def csv_export
-	# 	csv_options = { col_sep: ',', force_quotes: true, quote_char: '"' }
-	# 	filepath    = 'sephora.csv'
+	def create_inventory(element)
+		
+		if !element["attributes"]["slug-url"]
+			variant_url = @product_url
+		else
+			variant_url = @product_url+'/v/'+element["attributes"]["slug-url"]
+		end
 
-	# 	CSV.open(filepath, 'wb', csv_options) do |csv|
-	# 	  csv << ['source_id', 'brand', 'name', 'categories', 'price', 'rating', 'review_count', 'original_price', 'web_url', 'image_urls', 'variant_count']
-	# 	  @products.each do |product|
-	# 	  	csv << [product[:source_id], product[:brand], product[:name], product[:categories], product[:price], product[:rating], product[:review_count], product[:original_price], product[:web_url], product[:image_urls], product[:variants_count]]
-	# 	  end
-	# 	end
-	# end
+		Inventory.create(
+				price: element["attributes"]["price"]/100,
+				source_url: variant_url,
+				varient_id: @variant_id,
+				seller_id: @seller_id 
+			)
 
-	def run
+		puts 'Created inventory'
+	end
+
+	def run(products_per_page, page_count)
+		create_seller
 		grab_brands
 		grab_categories
-		page = 1
-		# Product api displays 500 items/pg over 7 pages
-		7.times do 
-			grab_products(page)
-			page += 1
+		count = 1
+		# Product api displays max 500 items/pg over 7 pages
+		if page_count > 7
+			page_count = 7
 		end
-		# csv_export
+		page_count.times do 
+			grab_products(products_per_page, count)
+			count += 1
+		end
 	end
-
 end
-
-ScrapeSephoraService.new.run
-

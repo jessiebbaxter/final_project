@@ -1,0 +1,5 @@
+class RemovePhotoFromInventories < ActiveRecord::Migration[5.2]
+  def change
+  	 remove_column :inventories, :photo, :string
+  end
+end
