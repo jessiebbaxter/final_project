@@ -10,7 +10,11 @@
 	      		<p><%= product.name %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
-		    	<p><strong>from $TODO</strong></p>
+            <% product.inventories.each do |inventory| %>
+                <% @price_array << inventory.price %>
+            <% end %>
+            <% @price_array.sort %>
+		    	<p><strong>from $ <%= @price_array.first %></strong></p>
 			    <% if current_user %>
 			      <%= link_to "Add to Cart", product_order_items_path(product), method: :post, class: "btn btn-primary btn-sm" %>
 			    <% end %>
@@ -18,3 +22,5 @@
 		</div>
 	</div>
 </div>
+
+
