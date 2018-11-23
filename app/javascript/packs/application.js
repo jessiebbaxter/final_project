@@ -8,3 +8,5 @@ initSignInOnEnter();
 
 import { sumTotal } from '../components/order';
 sumTotal();
+
+import '../components/variant-select';

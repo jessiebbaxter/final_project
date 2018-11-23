@@ -2,7 +2,7 @@ require 'open-uri'
 require 'nokogiri'
 require 'json'
 require 'csv'
-require 'pry'
+# require 'pry'
 
 # Image URL isn't working
 # Need to add prefix to web_url
