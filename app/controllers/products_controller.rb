@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show]
+  before_action :set_price_array, only: [:index, :show]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
@@ -30,5 +31,8 @@ class ProductsController < ApplicationController
   def set_product
     @product = Product.find(params[:id])
   end
-end
 
+  def set_price_array
+    @price_array = []
+  end
+end
