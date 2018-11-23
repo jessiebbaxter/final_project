@@ -5,17 +5,17 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-6">
 					<div class="product-image">
-						<%= image_tag "coming-soon.png", height: 400, crop: :fill %>
+						<%= cl_image_tag @product.varients.first.photo, height: 400, crop: :fill %>
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6">
 					<div class="product-details">
 						<h3><%= @product.name %> </h3>
 						<% @product.inventories.each do |inventory| %>
-                <% @price_array << inventory.price %>
-            <% end %>
-            <% @price_array.sort %>
-            <h4>from $ <%= @price_array.first  %></h4>
+			                <% @price_array << inventory.price %>
+			            <% end %>
+			            <% @price_array.sort %>
+			            <h4>from $ <%= @price_array.first  %></h4>
 					</div>
 					<div class="product-actions">
 					  <% if current_user %>

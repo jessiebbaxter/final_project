@@ -19,7 +19,7 @@
         <% product = Product.find(order.product_id) %>
           <tr>
             <td>
-              <p>image to go here</p>
+              <%= cl_image_tag(product.varients.first.photo, :width=>100, :height=>100, :crop=>"thumb") %></td>
               <td><%= link_to product.name, product_path(product) %>
             </td>
             <td class="td-center align-middle"><%= order.qty %></td>
