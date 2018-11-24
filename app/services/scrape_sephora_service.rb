@@ -1,20 +1,9 @@
-require 'open-uri'
-require 'nokogiri'
-# require 'pry'
-require 'json'
-require 'csv'
-
 class ScrapeSephoraService
 
 	def initialize
-		@brands = {}
-		@categories = {}
-	end
-
-	def create_seller
-		Seller.create(domain: "Sephora")
-		puts "Created seller"
-		@seller_id = Seller.last.id
+		@seller_id = Seller.find_by(domain: "Sephora").id
+		grab_brands
+		grab_categories
 	end
 
 	def grab_brands
@@ -23,6 +12,7 @@ class ScrapeSephoraService
 		url = "https://www.sephora.com.au/api/v2.3/brands?page[size]=500&page[number]=1"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
+		@brands = {}
 
 		result["data"].each do |element|
 			@brands[element["id"]] = element["attributes"]["name"]
@@ -35,6 +25,7 @@ class ScrapeSephoraService
 		url = "https://www.sephora.com.au/api/v2.4/categories"
 		json_file = open(url, "Accept-Language" => "en-AU").read
 		result = JSON.parse(json_file)
+		@categories = {}
 
 		result["data"].each do |element|
 			@categories[element["id"]] = element["attributes"]["label"]
@@ -134,9 +125,6 @@ class ScrapeSephoraService
 	end
 
 	def run(products_per_page, page_count)
-		create_seller
-		grab_brands
-		grab_categories
 		count = 1
 		# Product api displays max 500 items/pg over 7 pages
 		if page_count > 7

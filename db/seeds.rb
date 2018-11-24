@@ -16,6 +16,13 @@ puts 'Removing products...'
 Product.destroy_all
 puts 'Removed products'
 
+puts 'Creating sellers...'
+sellers = ["Target", "Sephora", "Mecca", "Cosmetics Now"]
+sellers.each do |seller|
+	Seller.create(domain: seller)
+	puts "Created seller: #{seller}"
+end
+
 puts 'Starting Sephora scrape...'
 
 ScrapeSephoraService.new.run(500, 1)
