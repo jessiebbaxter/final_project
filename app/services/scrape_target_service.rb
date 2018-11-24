@@ -60,7 +60,7 @@ class ScrapeTargetService
 				product_categories << category["name"].downcase
 			end
 
-		brand = @product_data["entities"]["products"][@seller_product_id]["brand"]
+		brand = @product_data["entities"]["lookData"][0]["collectionName"]
 		name = @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, "")
 
 		product = {
