@@ -3,25 +3,58 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Sign In</h4>
+        <h4 class="modal-title" id="myModalLabel">Welcome</h4>
       </div>
       <div class="modal-body">
-        <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <div class="form-inputs">
-              <%= f.input :email,
-                          required: false,
-                          autofocus: true,
-                          input_html: { autocomplete: "email" } %>
-              <%= f.input :password,
-                          required: false,
-                          input_html: { autocomplete: "current-password" } %>
-              <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+        <div role="tabpanel">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#signIn" aria-controls="signIn"role="tab" data-toggle="tab">Sign In</a>
+            </li>
+            <li role="presentation">
+              <a href="#signUp" aria-controls="signUp" role="tab" data-toggle="tab">Sign Up</a>
+            </li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="signInTab">
+              <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: {id: :old_user}) do |f| %>
+                <div class="form-inputs">
+                  <%= f.input :email,
+                              required: false,
+                              autofocus: true,
+                              input_html: { autocomplete: "email" } %>
+                  <%= f.input :password,
+                              required: false,
+                              input_html: { autocomplete: "current-password" } %>
+                  <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+                </div>
+              <% end %>
             </div>
-          <% end %>
-          <%= render "devise/shared/links" %>
+            <div role="tabpanel" class="tab-pane" id="signUpTab">
+              <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+                <%= f.error_notification %>
+                <div class="form-inputs">
+                  <%= f.input :email,
+                              required: true,
+                              autofocus: true ,
+                              input_html: { autocomplete: "email" }%>
+                  <%= f.input :password,
+                              required: true,
+                              hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
+                              input_html: { autocomplete: "new-password" } %>
+                  <%= f.input :password_confirmation,
+                              required: true,
+                              input_html: { autocomplete: "new-password" } %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <%= link_to "Sign In", '#', class: 'btn btn-primary', id: 'sign-in-btn' %>
+        <%= link_to "submit", '#', class: 'btn btn-primary', id: 'sign-in-btn' %>
         <%= link_to "Cancel", "#", class: 'btn btn-default', data: { dismiss: "modal"} %>
       </div>
     </div>

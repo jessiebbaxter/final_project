@@ -18,7 +18,7 @@ puts 'Removed products'
 
 puts 'Starting Sephora scrape...'
 
-ScrapeSephoraService.new.run(500, 7)
+ScrapeSephoraService.new.run(500, 1)
 
 puts 'Finished Sephora scrape...'
 
