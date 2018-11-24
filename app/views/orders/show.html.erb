@@ -7,6 +7,7 @@
       <thead>
         <tr>
           <th style="width: 50%", scope="column" colspan="2">Product</th>
+          <th style="width: 10%", scope="column", class="td-center">Seller</th>
           <th style="width: 10%", scope="column", class="td-center">Price</th>
           <th style="width: 20%", scope="column", class="td-center">Total</th>
           <th style="width: 10%", scope="column", class="td-center">Quantity</th>
@@ -21,6 +22,9 @@
               <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %>
               <td><%= link_to "#{item.varient.product.brand} #{item.varient.product.name} - #{item.varient.name}", product_path(item.varient.product) %>
             </td>
+            <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
+            </td>
+            <td class="td-center align-middle"><%= order_item.qty %></td>
             <td class="td-center"><%= item.price %></td>
             <td class="order-item-total td-center""> <%= order_item.qty*item.price %></td>
             <td class="td-center">

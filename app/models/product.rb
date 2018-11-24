@@ -6,5 +6,15 @@ class Product < ApplicationRecord
 	validates :name, presence: true
 	validates :brand, presence: true
 
+  include PgSearch
+  pg_search_scope :global_search,
+    against: [:name, :brand],
+    associated_against: {
+      varients: [:name]
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
+
 	mount_uploader :photo, PhotoUploader
 end
