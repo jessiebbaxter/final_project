@@ -68,7 +68,9 @@ class ScrapeTargetProductsService
 			name: name
 		}
 
-		if MatchingService.new.product_not_found?(product)
+		product_found = MatchingService.new.product_found(product)
+
+		if product_found == false
 			new_product = Product.new(
 				name: name,
 				category: product_categories,
@@ -95,7 +97,9 @@ class ScrapeTargetProductsService
 				name = variant["swatchColour"]
 			end
 
-			if MatchingService.new.variant_not_found?(variant, @product_id)
+			variant_found = MatchingService.new.variant_found(variant, @product_id)
+
+			if variant_found == false
 				new_variant = Varient.new(
 					name: name,
 					product_id: @product_id
