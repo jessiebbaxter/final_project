@@ -1,5 +1,3 @@
-# Need to add in matching before creation
-
 class ScrapeTargetProductsService
 
 	def initialize
