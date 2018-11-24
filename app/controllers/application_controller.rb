@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
       super
     else
       stored_location_for(resource) || request.referer || root_path
+      is_local_request = request.referer.match(Regexp.new(request.domain))
+      stored_location_for(resource) || (is_local_request ? request.referer : nil) || root_path
     end
   end
 end
