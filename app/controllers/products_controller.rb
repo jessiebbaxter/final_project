@@ -10,7 +10,7 @@ class ProductsController < ApplicationController
         OR products.brand @@ :query \
         OR products.category @@ :query \
       "
-      @products = Product.where(sql_query, query: "%#{params[:query]}%")
+      @products = Product.global_search(params[:query])
     else
       @products = Product.all
     end
