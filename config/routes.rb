@@ -12,7 +12,10 @@ Rails.application.routes.draw do
   end
 
   resources :order_items, only: [:create, :edit, :update, :destroy]
-  resources :orders, only: [:show]
+  resources :orders, only: [:show] do
+    resources :payments, only: [:new, :create]
+  end
   resources :quick_buy_items, only: [:edit, :update, :destory]
+  get 'orders/:id/complete', to: 'orders#complete', as: :orders_complete
 
 end
