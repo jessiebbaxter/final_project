@@ -5,11 +5,6 @@ class ProductsController < ApplicationController
 
   def index
     if params[:query].present?
-      sql_query = " \
-        products.name @@ :query \
-        OR products.brand @@ :query \
-        OR products.category @@ :query \
-      "
       @products = Product.global_search(params[:query])
     else
       @products = Product.all
