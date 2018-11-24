@@ -1,28 +1,17 @@
-require 'open-uri'
-require 'nokogiri'
-# require 'pry'
-require 'json'
-require 'csv'
-
-class ScrapeTargetService
+class ScrapeMeccaService
 
 	def initialize
-		@products = []
-		@product_urls = []
-		@variants = []
+		@seller_id = Seller.find_by(domain: "Mecca").id
+		@categories_to_parse = [
+			"https://www.mecca.com.au/makeup/#sz=150",
+			"https://www.mecca.com.au/skin-care/#sz=150",
+			"https://www.mecca.com.au/hair/#sz=150",
+			"https://www.mecca.com.au/body/#sz=150"
+		]
 	end
 
-	# URL format: 
-	# https://www.mecca.com.au/makeup/#sz=150 <-- first page of results
-	# https://www.mecca.com.au/makeup/#sz=150&start=150 <-- 2nd page of results
-
-	def get_product_pg_urls
-		categories_to_parse = [
-			"https://www.mecca.com.au/makeup/#sz=150"
-			#add more categories here
-		]
-
-		categories_to_parse.each do |url|
+	def grab_products
+		@categories_to_parse.each do |url|
 			final_page_start = final_page_start(url)
 			size = url.scan(/\d+/).last
 			start = size
@@ -42,7 +31,7 @@ class ScrapeTargetService
 		  'Cookie' => 'troute=t1;',
 		}).read
 
-		html_doc = Nokogiri::HTML(html_file)
+		return Nokogiri::HTML(html_file)
 	end
 
 	def final_page_start(url)
@@ -52,67 +41,61 @@ class ScrapeTargetService
 	end
 
 	def get_product_urls(url)
-		# binding.pry
-		html_doc = get_html_doc(url)
+		product_results = get_html_doc(url).search('.brand-name')
 
-		product_results = html_doc.search('.brand-name')
-
-		product_results.each do |element|
-			@product_urls << element['href']
-		end
-
-		# TO DO: Count of @product_urls is 36 when it should be 150
-	end
-
-	def parse_product_urls
-		@product_urls.each do |url|
-			html_doc = get_html_doc(url)
-			build_products_variants(html_doc)
+		product_results.each do |product|
+			create_product(product['href']) 
 		end
 	end
 
-	# FOR SEED: pass in html_doc (not url) for final piece
-	def build_products_variants(url)
-		html_file = open(url, {
-			'User-Agent' => 'Mozilla',
-		  'Cookie' => 'troute=t1;',
-		}).read
+	def create_product(url)
+		@product_result = get_html_doc(url)
 
-		html_doc = Nokogiri::HTML(html_file)
+		new_product = Product.new(
+			name: @product_result.search('.product-name')[1].text,
+			# category: TODO,
+			brand: @product_result.search('a .product-brand').text,
+			rating: @product_result.search('.visually-hidden span')[4].children.text,
+			review_count: @product_result.search('.visually-hidden span')[5].children.text
+		)
 
-		@products << {
-			web_url: url,
-			brand: html_doc.search('a .product-brand').text,
-			name: html_doc.search('.product-name')[1].text,
-			seller_product_id: html_doc.search('.visually-hidden span')[0].children.text,
-			rating: html_doc.search('.visually-hidden span')[4].children.text,
-			review_count: html_doc.search('.visually-hidden span')[5].children.text,
-			price: html_doc.search('.visually-hidden span')[6]['content']
-			# category: TODO
-		}
+		# product_hero_image = @product_result.search('.primary-image')
+		# new_product.remote_photo_url = TODO
+		new_product.save
+		puts "Created product"
+		@product_id = Product.last.id
+		create_variant
+	end
 
-		variant_options = html_doc.search('.variation-select option')
+	def create_variant
+		variants = @product_result.search('.variation-select option')
 
-		variant_options.each do |option|
-			@variants << {
-				seller_product_id: html_doc.search('.visually-hidden span')[0].children.text,
-				variant_url: option['value'],
-				# image_url: TODO
-				name: option.text.strip,
-				price: html_doc.search('.visually-hidden span')[6]['content']
-			}
+		variants.each do |variant|
+			new_variant = Varient.new(
+					name: variant.text.strip,
+					product_id: @product_id
+				) 
+
+				# new_variant.remote_photo_url = TODO
+				# new_variant.save
+				puts 'Created variant'
+				@variant_id = Varient.last.id
+				create_inventory(variant)
 		end
-		
-		p html_doc.search('.variation-select option')[0]
-		# TODO: Add categories and image_urls, update this method & test
+	end
 
+	def create_inventory(variant)
+		Inventory.create(
+				price: @product_result.search('.visually-hidden span')[6]['content'],
+				source_url: variant['value'],
+				varient_id: @variant_id,
+				seller_id: @seller_id 
+			)
+
+		puts 'Created inventory'
 	end
 
 	def run
-		get_product_pg_urls
-		parse_product_urls
+		grab_products
 	end
-
 end
-
-ScrapeTargetService.new.build_products_variants("https://www.mecca.com.au/stila/magnificent-metals-glitter-glow-liquid-eye-shadow/V-026663.html?cgpath=makeup")

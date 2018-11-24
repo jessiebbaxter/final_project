@@ -3,10 +3,10 @@ class ScrapeTargetService
 	def initialize
 		@seller_id = Seller.find_by(domain: "Target").id
 		@categories_to_parse = [
-			# "https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid"
-			"https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
-			# "https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
-			# "https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
+			"https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid",
+			"https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505",
+			"https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
+			"https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
 		]
 	end
 

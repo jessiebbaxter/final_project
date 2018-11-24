@@ -23,20 +23,10 @@ sellers.each do |seller|
 	puts "Created seller: #{seller}"
 end
 
-puts 'Starting Target scrape...'
+puts 'Starting Sephora scrape...'
 
-ScrapeTargetService.new.run
+ScrapeSephoraService.new.run(500, 7)
 
-puts 'Finished Target scrape...'
+puts 'Finished Sephora scrape...'
 
-# puts 'Finished seed!'
-
-# -----------------------------
-
-# puts 'Starting Sephora scrape...'
-
-# ScrapeSephoraService.new.run(500, 7)
-
-# puts 'Finished Sephora scrape...'
-
-# puts 'Finished seed!'
+puts 'Finished seed!'

@@ -5,10 +5,10 @@ class ScrapeTargetProductsService
 	def initialize
 		@seller_id = Seller.find_by(domain: "Target").id
 		@categories_to_parse = [
-			# "https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid"
-			"https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505"
-			# "https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
-			# "https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
+			"https://www.target.com.au/c/beauty/shaving-grooming/W298377?N=271z&Nrpp=90&viewAs=grid",
+			"https://www.target.com.au/c/beauty/makeup/W1110505?N=28wx&Nrpp=90&viewAs=grid&category=W1110505",
+			"https://www.target.com.au/c/beauty/skincare/W298354?N=2721&Nrpp=90&viewAs=grid",
+			"https://www.target.com.au/c/beauty/bodycare/W298361?N=26ze&Nrpp=90&viewAs=grid"
 		]
 	end
 
@@ -63,19 +63,27 @@ class ScrapeTargetProductsService
 			end
 
 		brand = @product_data["entities"]["products"][@seller_product_id]["brand"]
+		name = @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, "")
 
-		new_product = Product.new(
-				name: @product_data["entities"]["products"][@seller_product_id]["name"].gsub(/#{brand} /i, ""),
+		product = {
+			brand: brand,
+			name: name
+		}
+
+		if MatchingService.new.product_not_found?(product)
+			new_product = Product.new(
+				name: name,
 				category: product_categories,
 				brand: brand
 			)
 
-		product_hero_image = "https://www.target.com.au"+@product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"][0]["images"][0]["url"]
-		new_product.remote_photo_url = product_hero_image
-		new_product.save
-		puts "Created product"
-		@product_id = Product.last.id
-		create_variant
+			product_hero_image = "https://www.target.com.au"+@product_data["entities"]["products"][@seller_product_id]["targetVariantProductListerData"][0]["images"][0]["url"]
+			new_product.remote_photo_url = product_hero_image
+			new_product.save
+			puts "Created product"
+			@product_id = Product.last.id
+			create_variant
+		end
 	end
 
 	def create_variant
@@ -89,15 +97,17 @@ class ScrapeTargetProductsService
 				name = variant["swatchColour"]
 			end
 
-			new_variant = Varient.new(
-				name: name,
-				product_id: @product_id
-			) 
+			if MatchingService.new.variant_not_found?(variant)
+				new_variant = Varient.new(
+					name: name,
+					product_id: @product_id
+				) 
 
-			new_variant.remote_photo_url = "https://www.target.com.au"+variant["images"][0]["url"]
-			new_variant.save
-			puts 'Created variant'
-			@variant_id = Varient.last.id
+				new_variant.remote_photo_url = "https://www.target.com.au"+variant["images"][0]["url"]
+				new_variant.save
+				puts 'Created variant'
+				@variant_id = Varient.last.id
+			end
 		end
 	end
 
