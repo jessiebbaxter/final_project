@@ -2,7 +2,10 @@ require 'open-uri'
 require 'nokogiri'
 require 'json'
 require 'csv'
-require 'pry'
+# require 'pry'
+
+# Image URL isn't working
+# Need to add prefix to web_url
 
 class ScrapeCosmeticsNowService
 
@@ -25,6 +28,7 @@ class ScrapeCosmeticsNowService
       run
     end
     merge_product_arrays
+    @combined_products_array[0..10]
   end
   # Get data
 
@@ -111,7 +115,7 @@ end
 # below are links you can run this code on, you can also
 # go grab additional links like hair care if you want additional products
 
-# ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes")
+ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/eyes")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/face")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/lips")
 # ScrapeCosmeticsNowService.new("https://www.cosmeticsnow.com.au/c/makeup/makeup-sets")

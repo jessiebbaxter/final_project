@@ -1,12 +1,13 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show]
+  before_action :set_price_array, only: [:index, :show]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   def index
-    @products = Product.all
     if params[:query].present?
-      sql_query = "name ILIKE :query OR description ILIKE :query"
-      @products = @products.where(sql_query, query: "%#{params[:query]}%")
+      @products = Product.global_search(params[:query])
+    else
+      @products = Product.all
     end
   end
 
@@ -24,5 +25,9 @@ class ProductsController < ApplicationController
 
   def set_product
     @product = Product.find(params[:id])
+  end
+
+  def set_price_array
+    @price_array = []
   end
 end

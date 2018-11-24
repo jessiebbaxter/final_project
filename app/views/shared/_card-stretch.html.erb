@@ -1,8 +1,8 @@
 <div class="col-xs-12 col-sm-6 col-md-4">
 	<div class="card-stretch">
 		<%= link_to product_path(product) do %>
-		 	<div class="card-stretch-img" style="background-image: url('https://static1.squarespace.com/static/59384ae5cd0f684d39a6f485/t/5a7e329a0d9297f654feaef3/1518219930914/ComingSoon-613x388.png">
-	  		</div>
+		 	<div class="card-stretch-img" style="background-image: url('<%= cl_image_path product.varients.first.photo, crop: :fill %>');">
+			</div>
 		<% end %>
 	  	<div class="card-stretch-content">
 	    	<div class="content-stretch-header">
@@ -10,11 +10,13 @@
 	      		<p><%= product.name %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
-		    	<p><strong>from $TODO</strong></p>
-			    <% if current_user %>
-			      <%= link_to "Add to Cart", product_order_items_path(product), method: :post, class: "btn btn-primary btn-sm" %>
-			    <% end %>
+            <% product.inventories.each do |inventory| %>
+                <% @price_array << inventory.price %>
+            <% end %>
+            <% @price_array.sort %>
+		    	<p><strong>from $ <%= @price_array.first %></strong></p>
 		    </div>
 		</div>
 	</div>
 </div>
+

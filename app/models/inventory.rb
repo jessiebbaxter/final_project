@@ -4,5 +4,5 @@ class Inventory < ApplicationRecord
 
   monetize :price_cents
 
-  mount_uploader :photo, PhotoUploader
+  validates :source_url, presence: true, uniqueness: true
 end
