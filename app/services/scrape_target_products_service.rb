@@ -97,7 +97,7 @@ class ScrapeTargetProductsService
 				name = variant["swatchColour"]
 			end
 
-			if MatchingService.new.variant_not_found?(variant)
+			if MatchingService.new.variant_not_found?(variant, @product_id)
 				new_variant = Varient.new(
 					name: name,
 					product_id: @product_id

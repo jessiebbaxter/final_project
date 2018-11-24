@@ -2,12 +2,15 @@ def MatchingService
 
 	def product_not_found?(product)
 		puts "Checking if product is found..."
-		# If we have a product with the same brand and name, return false. Else, true.
+		Product.where("brand ILIKE ? AND name ILIKE ?", "%#{product[:brand]}%", "%#{product[:name]}%").nil?
 	end
 
-	def variant_not_found?(variant)
+	def variant_not_found?(variant, product_id)
 		puts "Checking if variant is found..."
-		# If we variant with the same product id and name, return false. Else, true.
+		Varient.where("name ILIKE ? AND product_id = ?", "%#{variant[:name]}%", product_id).nil?
 	end
-
 end
+
+
+
+
