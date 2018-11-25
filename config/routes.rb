@@ -19,6 +19,6 @@ Rails.application.routes.draw do
   get 'orders/:id/complete', to: 'orders#complete', as: :orders_complete
   # post 'orders/:id/payments/', to: 'payments#one_click_purchases', as: :one_click_payments
 
-  get '/alert', to: 'pages#alert', as: :alert
+  get '/pricedrop', to: 'pages#pricedrop', as: :pricedrop
 
 end
