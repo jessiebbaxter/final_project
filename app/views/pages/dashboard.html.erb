@@ -6,6 +6,11 @@
 		</div>
 		<div class="products-container">
 	      <h1>Buy again</h1>
+	      <div class="cards-container row">
+	          <% @quick_buy_list.each do |quick_buy_item| %>
+	            <%= render "shared/card-image", quick_buy_item: quick_buy_item %>
+	          <% end %>
+	       </div>
 	    </div>
 	</div>
 </div>
