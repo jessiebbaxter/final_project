@@ -10,7 +10,6 @@
     </div>
     <div class="card-body">
       <div class="card-body-content">
-      
         <% if not product.inventories.empty? %>
           <h4 class="card-body-title"><%= product.inventories.sample.seller.domain %></h4>
         <% end %>
@@ -20,12 +19,10 @@
         
         <div class="rating">
           <div class="star-rating" title="">
-         
             <div class="back-stars">
               <% 5.times do %>              
                 <i class="fa fa-star" aria-hidden="true"></i>
               <% end %>              
-
               <div class="front-stars" style="width:<%= (product.rating / 5.0)* 100 %>%">
                 <% 5.times do %>  
                   <i class="fa fa-star" aria-hidden="true"></i>
@@ -33,7 +30,6 @@
               </div>
             </div>
           </div>
-          
           <p class="num-reviews">(<%= product.review_count %>)</p>    
         </div>
         <div class="price">
@@ -49,7 +45,6 @@
           <p class="status">Free Delivery</p>
           <% current_date = DateTime.now %>
           <% delivery_date = current_date + rand(2.0...5.0) %>
-          
           <p class="delivery-date"><%= delivery_date.strftime('%a %b %e') %></p>
         </div>     
       </div>      
