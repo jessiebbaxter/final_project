@@ -75,17 +75,6 @@ ActiveRecord::Schema.define(version: 2018_11_25_022805) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "shippings", force: :cascade do |t|
-    t.integer "minimum_spend"
-    t.integer "shipping_speed"
-    t.string "rule"
-    t.integer "cost_cents", default: 0, null: false
-    t.bigint "seller_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["seller_id"], name: "index_shippings_on_seller_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -94,13 +83,6 @@ ActiveRecord::Schema.define(version: 2018_11_25_022805) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "provider"
-    t.string "uid"
-    t.string "facebook_picture_url"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "token"
-    t.datetime "token_expiry"
     t.string "customer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -121,6 +103,5 @@ ActiveRecord::Schema.define(version: 2018_11_25_022805) do
   add_foreign_key "orders", "users"
   add_foreign_key "quick_buy_items", "products"
   add_foreign_key "quick_buy_items", "users"
-  add_foreign_key "shippings", "sellers"
   add_foreign_key "varients", "products"
 end
