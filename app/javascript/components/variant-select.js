@@ -11,7 +11,5 @@ variantForms.forEach((variantForm) => {
 		
 		$priceHolder.load(`${formUrl}?varient_id=${variantId} #product-prices`);
 		window.history.pushState('', '', variantUrl);
-
-
 	})
 });
