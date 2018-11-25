@@ -9,11 +9,7 @@ class PagesController < ApplicationController
   end
   
   def pricedrop  
-    @products = []
-    quick_buy_list = QuickBuyItem.where(user_id: current_user.id)
-    quick_buy_list.each do |quick_buy_item|
-      @products << quick_buy_item.product
-    end
+    generate_quick_buy_list
   end
 
   # Need to add some of this logic to purchase - find for now
