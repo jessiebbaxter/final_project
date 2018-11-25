@@ -6,7 +6,8 @@
   <div class="navbar-wagon-right hidden-xs hidden-sm">
 
     <a href="/" class="navbar-wagon-item navbar-wagon-link">Dashboard</a>
-    <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order) %>
+    <%= link_to '<i class="fas fa-bell"></i>'.html_safe, pricedrop_path, :class => "nav-notifcations" %>
+    <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order), :class => "nav-cart" %>
 
     <!-- Profile picture with dropdown list -->
     <div class="navbar-wagon-item">
@@ -23,7 +24,8 @@
 
   <!-- Dropdown appearing on mobile only -->
   <div class="navbar-wagon-item hidden-md hidden-lg">
-    <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order) %>
+    <%= link_to '<i class="fas fa-bell"></i>'.html_safe, pricedrop_path, :class => "nav-notifcations" %>
+    <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order), :class => "nav-cart" %>
     <div class="dropdown">
       <i class="fas fa-bars dropdown-toggle" data-toggle="dropdown" role="button"></i>
       <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">

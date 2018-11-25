@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_25_022805) do
+ActiveRecord::Schema.define(version: 2018_11_25_182514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "coupons", force: :cascade do |t|
+    t.bigint "seller_id"
+    t.float "discount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seller_id"], name: "index_coupons_on_seller_id"
+  end
 
   create_table "inventories", force: :cascade do |t|
     t.string "source_url"
@@ -22,7 +30,8 @@ ActiveRecord::Schema.define(version: 2018_11_25_022805) do
     t.bigint "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "photo"
+    t.bigint "coupon_id"
+    t.index ["coupon_id"], name: "index_inventories_on_coupon_id"
     t.index ["seller_id"], name: "index_inventories_on_seller_id"
     t.index ["varient_id"], name: "index_inventories_on_varient_id"
   end
@@ -97,6 +106,8 @@ ActiveRecord::Schema.define(version: 2018_11_25_022805) do
     t.index ["product_id"], name: "index_varients_on_product_id"
   end
 
+  add_foreign_key "coupons", "sellers"
+  add_foreign_key "inventories", "coupons"
   add_foreign_key "inventories", "sellers"
   add_foreign_key "inventories", "varients"
   add_foreign_key "order_items", "orders"

@@ -16,6 +16,7 @@
   }
 }
 
+// Mobile
 @media screen and (max-width: 992px) {
   .navbar-wagon {
     padding: 0px 10px;
@@ -44,6 +45,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.nav-notifcations {
+  padding: 0 5px;
+}
+.nav-cart {
+  padding: 0 10px;
 }
 
 /* Basic navbar item */
@@ -96,4 +103,7 @@
   transform: rotate(45deg);
   border-left: 1px solid #E6E6E6;
   border-top: 1px solid #E6E6E6;
+}
+.dropdown {
+  margin-left: 5px;
 }
