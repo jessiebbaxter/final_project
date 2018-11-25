@@ -81,3 +81,18 @@
   position: absolute;
   bottom: 5px;
 }
+
+// inventory card
+.card-inventory {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  padding: 10px 5px;
+  box-shadow: 0 1px 2px -2px gray;
+}
+.card-inventory-shipping {
+  p {
+    font-size: 13px;
+  }
+}
