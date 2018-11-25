@@ -18,4 +18,6 @@ Rails.application.routes.draw do
   resources :quick_buy_items, only: [:edit, :update, :destory]
   get 'orders/:id/complete', to: 'orders#complete', as: :orders_complete
 
+  get '/alert', to: 'pages#alert', as: :alert
+
 end

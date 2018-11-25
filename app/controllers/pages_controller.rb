@@ -9,6 +9,8 @@ class PagesController < ApplicationController
 
   
   def alert
+    
+    @products = Product.all.sample(10).flatten
   end
 
 end
