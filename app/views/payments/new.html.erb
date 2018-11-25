@@ -1,18 +1,29 @@
-<h1>Purchase of Product <%= @order.order_items.first.inventory.varient.product.name %></h1>
-<%= form_tag order_payments_path(@order) do %>
-  <%= hidden_field_tag 'amount', finalise_total %>
-  <article>
-    <label class="amount">
-      <span>Amount: <%= humanized_money_with_symbol(@order.amount) %></span>
-    </label>
-  </article>
+<div class="wrapper">
+  <div class="container">
+    <h3 class="text-center">BELLA BIRD</h3>
+    <div class="row">
+      <div class="checkout-title col-xs-6">
+        <h4 class="text-center">Shipping Details</h4>
+      </div>
+    </div>
+    <div class="row">
+      <%= @order.order_items.first.inventory.varient.product.name %></h1>
+    </div>
+    <%= form_tag order_payments_path(@order) do %>
+      <%= hidden_field_tag 'amount', finalise_total %>
+      <article>
+        <label class="amount">
+          <span>Amount: <%= humanized_money_with_symbol(@order.amount) %></span>
+        </label>
+      </article>
 
-  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-    data-name="My Order"
-    data-email="<%= current_user.email %>"
-    data-description="Product <%= @order.order_items.first.inventory.varient.product.name %>"
-    data-amount="<%= @order.amount_cents %>"
-    data-currency="<%= @order.amount.currency %>"></script>
-
-<% end %>
+      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+        data-name="My Order"
+        data-email="<%= current_user.email %>"
+        data-description="Product <%= @order.order_items.first.inventory.varient.product.name %>"
+        data-amount="<%= @order.amount_cents %>"
+        data-currency="<%= @order.amount.currency %>"></script>
+    <% end %>
+  </div>
+</div>
