@@ -22,18 +22,14 @@
           <div class="star-rating" title="">
          
             <div class="back-stars">
+              <% 5.times do %>              
                 <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
+              <% end %>              
 
               <div class="front-stars" style="width:<%= (product.rating / 5.0)* 100 %>%">
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
-                <i class="fa fa-star" aria-hidden="true"></i>
+                <% 5.times do %>  
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                <% end %>  
               </div>
             </div>
           </div>
