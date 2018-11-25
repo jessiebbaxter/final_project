@@ -1,0 +1,12 @@
+<div class="wrapper">
+  <div class="container">
+    <h1>Price Drops</h1>    
+    <div class="products-container">     
+      <div class="cards-container row">
+        <% @products.each do |product| %>
+          <%= render 'shared/alert-card', product: product %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

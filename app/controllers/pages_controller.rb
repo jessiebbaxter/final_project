@@ -7,6 +7,10 @@ class PagesController < ApplicationController
   def dashboard
   	generate_quick_buy_list
   end
+  
+  def alert   
+    @products = Product.all.sample(10).flatten
+  end
 
   # Need to add some of this logic to purchase - find for now
   def generate_quick_buy_list
