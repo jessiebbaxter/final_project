@@ -1,13 +1,13 @@
 <div class="col-xs-12 col-sm-4 col-md-3">
 	<div class="card-repurchase">
 		<%= link_to product_path(quick_buy_item.product) do %>
-		 	<div class="card-repurchase-img" style="background-image: url('<%= cl_image_path quick_buy_item.product.photo, crop: :fill %>');">
+		 	<div class="card-repurchase-img" style="background-image: url('<%= cl_image_path quick_buy_item.inventory.varient.photo, crop: :fill %>');">
 	  		</div>
 		<% end %>
 			<div class="card-repurchase-action">
 				<%= form_tag order_items_path do %>
-          <%= button_tag  "Add to Cart" , name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary" %>
-         <% end %>
+		          <%= button_tag  "Add to Cart" , name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary" %>
+		         <% end %>
 			</div>
 	</div>
 </div>

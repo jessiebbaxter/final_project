@@ -5,12 +5,18 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-6">
 					<div class="product-details">
-						<h3><%= @product.name %> </h3>
-						<% @product.inventories.each do |inventory| %>
+						<div class="product-details-header">
+							<div class="product-details-header-title">
+								<h3><%= @product.name %> </h3>
+							</div>
+						</div>
+						<div class="product-details-footer">
+							<% @product.inventories.each do |inventory| %>
 							<% @price_array << inventory.price %>
-						<% end %>
-						<% @price_array.sort %>
-						<h4>from $ <%= @price_array.first  %></h4>
+							<% end %>
+							<% @price_array.sort %>
+							<h4>from $ <%= @price_array.first  %></h4>
+						</div>	
 					</div>
 					<div class="product-image-container">
 						<%= cl_image_tag @product.varients.first.photo, crop: :fill, class: "product-image" %>
@@ -29,6 +35,11 @@
 									<div class="card-inventory">
 										<div class="card-inventory-seller">
 											<p><strong><%= inventory.seller.domain %></strong></p>
+										</div>
+										<div class="card-inventory-save">
+											<%= form_tag product_quick_buy_items_path(@product), method: :post do %>
+												<%= button_tag  "<i class='fas fa-heart'></i>".html_safe, name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
+											<% end %>
 										</div>
 										<div class="card-inventory-shipping">
 											<p>FREE delivery<br>Tues, Nov 12</p>
