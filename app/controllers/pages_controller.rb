@@ -8,8 +8,12 @@ class PagesController < ApplicationController
   	generate_quick_buy_list
   end
   
-  def alert   
-    @products = Product.all.sample(10).flatten
+  def pricedrop  
+    @products = []
+    quick_buy_list = QuickBuyItem.where(user_id: current_user.id)
+    quick_buy_list.each do |quick_buy_item|
+      @products << quick_buy_item.product
+    end
   end
 
   # Need to add some of this logic to purchase - find for now
