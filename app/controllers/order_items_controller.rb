@@ -7,13 +7,13 @@ class OrderItemsController < ApplicationController
     end
     if @order.order_items.find_by(inventory_id: params[:inventory_id])
       set_order_item
-      @order_item.qty += 1
+      check_order_limit
       @order_item.save
     else
       @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: params[:qty])
+      flash[:notice] = "This item has been saved to your cart"
     end
     @order.save
-    flash[:notice] = "This item has been saved to your cart"
     redirect_to request.referrer
   end
 
@@ -42,5 +42,14 @@ class OrderItemsController < ApplicationController
 
   def order_item_params
     params.require(:order_item).permit(:inventory_id, :order_id, :qty)
+  end
+
+  def check_order_limit
+    if @order_item.qty + params[:qty].to_i > 5
+      flash[:alert] = "You have reached the maximum order quantity (5) for this item"
+    else
+      @order_item.qty += params[:qty].to_i
+      flash[:notice] = "This item has been saved to your cart"
+    end
   end
 end
