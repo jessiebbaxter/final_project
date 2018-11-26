@@ -88,8 +88,8 @@ class ScrapeMeccaService
 		binding.pry
 		variants = @product_result.search('.variation-select option')
 
-		# IF VARIANTS IS FALSE - ADD DEFAULT VARIENT
-		
+		# IF VARIANTS IS FALSE - ADD DEFAULT VARIANT
+
 		variants.each do |variant|
 
 			variant_name = variant.text.strip
@@ -111,7 +111,7 @@ class ScrapeMeccaService
 				@variant_id = Varient.last.id
 				create_inventory(variant)
 			else
-				@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{name}%", @product_id).id
+				@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{name}%", @product_id)[0].id
 				create_inventory(variant)
 			end
 		end
