@@ -80,12 +80,14 @@ class ScrapeMeccaService
 			create_variant
 		else
 			@product_id = Product.where("brand ILIKE ? AND name ILIKE ?", "%#{brand}%", "%#{name}%")[0].id
-			create_variant	
+			create_variant
 		end
 	end
 
 	def create_variant
 		variants = @product_result.search('.variation-select option')
+		# CREATE INSTANCE VARIABLE OF PRODUCT PAGE URL - NEED IT IN ADD INVENTORY
+		# NEED TO CHECK TO SEE IF DEFAILT VALUE BELOW EXISTS BEFORE ADDING
 
 		if variants.empty?
 			variant = Varient.new(
@@ -97,6 +99,7 @@ class ScrapeMeccaService
 			puts 'Created variant'
 			@variant_id = Varient.last.id
 			create_inventory(variant)
+			# ABOVE LOGIC DOESN'T MAKE SENSE - PASSING IN VARIENT NEEDS TO BE UPDATED
 		else
 			variants.each do |variant|
 				variant_name = variant.text.strip
@@ -133,6 +136,7 @@ class ScrapeMeccaService
 		if inventory_found == false
 			Inventory.create(
 					price: @product_result.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i,
+					# PRICE ISN'T RETURNING ANYTHING
 					source_url: source_url,
 					varient_id: @variant_id,
 					seller_id: @seller_id 
