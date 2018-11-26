@@ -8,7 +8,7 @@ class Product < ApplicationRecord
 
   include PgSearch
   pg_search_scope :global_search,
-    against: [:name, :brand],
+    against: [:name, :brand, :category],
     associated_against: {
       varients: [:name]
     },
