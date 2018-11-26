@@ -10,13 +10,32 @@
 	      		<p><%= product.name %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
-            <% product.varients.each do |varient| %>
+		    	<% if product.rating.present? %>
+			    	<div class="rating">
+		          <div class="star-rating" title="">
+		            <div class="back-stars">
+		              <% 5.times do %>              
+		                <i class="fa fa-star" aria-hidden="true"></i>
+		              <% end %>              
+		              <div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
+		                <% 5.times do %>  
+		                  <i class="fa fa-star" aria-hidden="true"></i>
+		                <% end %>  
+		              </div>
+		            </div>
+		          </div>
+		          <p class="num-reviews">(<%= product.review_count %>)</p>    
+		        </div>
+		      <% end  %>
+		    	<div class="price">
+		    		<% product.varients.each do |varient| %>
               <% varient.inventories.each do |inventory|%>
                 <% @price_array << inventory.price %>
               <% end %>
             <% end %>
             <% @price_array.sort %>
             <p><strong>from $ <%= @price_array.first %></strong></p>
+		    	</div>
         </div>
 		</div>
 	</div>

@@ -20,7 +20,6 @@
     display:inline-block;
     width: 100%;
   }
-
   .card-repurchase-action {
     position: absolute;
     right: 10px;
@@ -33,23 +32,19 @@
     background-size: cover;
     background-repeat: no-repeat;
   }
-
   .card-body {
     width: 100%;
     height: 220px;
     padding-left: 20px;
     position: relative;
   }
-
   .card-body-title {
     font-family: 'Open Sans', sans-serif !important;
     font-weight: bold;
     position: absolute;
     top: 5px;
   }
-
   .coupon-applied {
-    // padding-right: 40%;
     opacity: 0.4;
     margin-bottom: 5px;
     .coupon-status {
@@ -80,21 +75,17 @@
         @extend %flex-display;
         align-items: center;
         font-size: 1em;
-        
     }
     .back-stars {
         @extend %flex-display;
         color: rgba(125, 125, 125, 0.541);
-        
         position: relative;
-        // text-shadow: 4px 4px 10px #843a3a;
     }
     .front-stars {
         @extend %flex-display;
         color: $turquoise;
         overflow: hidden;
         position: absolute;
-        // text-shadow: 2px 2px 5px #d29b09;
         top: 0;
     }
   }
