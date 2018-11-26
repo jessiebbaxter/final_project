@@ -51,48 +51,81 @@ class ScrapeMeccaService
 	def create_product(url)
 		@product_result = get_html_doc(url)
 
-		new_product = Product.new(
-			name: @product_result.search('.product-name')[1].text,
-			# category: TODO,
-			brand: @product_result.search('a .product-brand').text,
-			rating: @product_result.search('.visually-hidden span')[4].children.text,
-			review_count: @product_result.search('.visually-hidden span')[5].children.text
-		)
+		brand = @product_result.search('a .product-brand').text
+		name = @product_result.search('.product-name')[1].text
 
-		# product_hero_image = @product_result.search('.primary-image')
-		# new_product.remote_photo_url = TODO
-		new_product.save
-		puts "Created product"
-		@product_id = Product.last.id
-		create_variant
+		product = {
+			brand: brand,
+			name: name
+		}
+
+		product_found = MatchingService.new.product_found(product)
+
+		if product_found == false
+			new_product = Product.new(
+				name: name,
+				# category: TODO,
+				brand: brand,
+				rating: @product_result.search('.visually-hidden span')[4].children.text,
+				review_count: @product_result.search('.visually-hidden span')[5].children.text
+			)
+
+			product_hero_image = @product_result.search('.primary-image').attr('src').value
+			new_product.remote_photo_url = "https://www.mecca.com.au"+product_hero_image
+			new_product.save
+			puts "Created product"
+			@product_id = Product.last.id
+			create_variant
+		else
+			@product_id = Product.where("brand ILIKE ? AND name ILIKE ?", "%#{brand}%", "%#{name}%").id
+			create_variant	
+		end
 	end
 
 	def create_variant
 		variants = @product_result.search('.variation-select option')
 
 		variants.each do |variant|
-			new_variant = Varient.new(
-					name: variant.text.strip,
-					product_id: @product_id
-				) 
 
-				# new_variant.remote_photo_url = TODO
-				# new_variant.save
+			variant_found = MatchingService.new.variant_found(variant, @product_id)
+
+			if variant_found == false
+				new_variant = Varient.new(
+						name: variant.text.strip,
+						product_id: @product_id
+					) 
+
+				json_img_file = variant.attr('data-lgimg')
+				result = JSON.parse(json_img_file)
+				variant_photo = result["url"]
+
+				new_variant.remote_photo_url = variant_photo
+				new_variant.save
 				puts 'Created variant'
 				@variant_id = Varient.last.id
 				create_inventory(variant)
+			else
+				@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{name}%", @product_id).id
+				create_inventory(variant)
+			end
 		end
 	end
 
 	def create_inventory(variant)
-		Inventory.create(
-				price: @product_result.search('.visually-hidden span')[6]['content'],
-				source_url: variant['value'],
-				varient_id: @variant_id,
-				seller_id: @seller_id 
-			)
+		source_url = variant['value']
 
-		puts 'Created inventory'
+		inventory_found = Inventory.where("source_url = ?", "#{source_url}").present?
+
+		if inventory_found == false
+			Inventory.create(
+					price: @product_result.search('.visually-hidden span')[6]['content'],
+					source_url: source_url,
+					varient_id: @variant_id,
+					seller_id: @seller_id 
+				)
+
+			puts 'Created inventory'
+		end
 	end
 
 	def run

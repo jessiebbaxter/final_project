@@ -12,7 +12,11 @@ html_file = open(url, {
 
 html_doc = Nokogiri::HTML(html_file)
 
-p html_doc.search('.primary-image')
+json_file = html_doc.search('.variation-select option')[1].attr('data-lgimg')
+result = JSON.parse(json_file)
+p result["url"]
+
+# product_hero_image = @product_result.search('.primary-image').attr('src').value
 
 # url = "https://www.target.com.au/p/chi-chi-eyeshadow-palette/61833173"
 
