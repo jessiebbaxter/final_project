@@ -1,9 +1,8 @@
 <div class="col-xs-12 col-sm-6 col-md-4">
-	<div class="card-stretch">
-		<%= link_to product_path(product) do %>
+	<%= link_to product_path(product) do %>
+    <div class="card-stretch">
 		 	<div class="card-stretch-img" style="background-image: url('<%= cl_image_path product.varients.first.photo, crop: :fill %>');">
 			</div>
-		<% end %>
 	  	<div class="card-stretch-content">
 	    	<div class="content-stretch-header">
 	    		<h5><%= product.brand %></h5>
@@ -14,17 +13,17 @@
 			    	<div class="rating">
 		          <div class="star-rating" title="">
 		            <div class="back-stars">
-		              <% 5.times do %>              
+		              <% 5.times do %>
 		                <i class="fa fa-star" aria-hidden="true"></i>
-		              <% end %>              
+		              <% end %>
 		              <div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
-		                <% 5.times do %>  
+		                <% 5.times do %>
 		                  <i class="fa fa-star" aria-hidden="true"></i>
-		                <% end %>  
+		                <% end %>
 		              </div>
 		            </div>
 		          </div>
-		          <p class="num-reviews">(<%= product.review_count %>)</p>    
+		          <p class="num-reviews">(<%= product.review_count %>)</p>
 		        </div>
 		      <% end  %>
 		    	<div class="price">
@@ -37,7 +36,8 @@
             <p><strong>from $ <%= @price_array.first %></strong></p>
 		    	</div>
         </div>
-		</div>
-	</div>
+		  </div>
+    </div>
+  <% end %>
 </div>
 
