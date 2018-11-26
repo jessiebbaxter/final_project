@@ -10,7 +10,7 @@ class OrderItemsController < ApplicationController
       @order_item.qty += 1
       @order_item.save
     else
-      @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id)
+      @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: params[:qty])
     end
     @order.save
     flash[:notice] = "This item has been saved to your cart"

@@ -16,7 +16,7 @@
 							<% end %>
 							<% @price_array.sort %>
 							<h4>from $ <%= @price_array.first  %></h4>
-						</div>	
+						</div>
 					</div>
 					<div class="product-image-container">
 						<%= cl_image_tag @product.varients.first.photo, crop: :fill, class: "product-image" %>
@@ -47,8 +47,13 @@
 										<div class="card-inventory-price">
 											<p><strong>$ <%= inventory.price %></strong></p>
 										</div>
+                    <div class="card-inventory-qty">
+                      <%= form_tag order_items_path do %>
+                      <div class="form-group dropdown">
+                        <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty" %>
+                      </div>
+                    </div>
 										<div class="card-inventory-add">
-											<%= form_tag order_items_path do %>
 												<%= button_tag  "Add" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
 											<% end %>
 										</div>
@@ -57,7 +62,6 @@
 									<!-- Modal link -->
 									<%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
 								<% end %>
-								
 							<% end %>
 						</div>
 					</div>
