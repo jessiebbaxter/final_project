@@ -1,3 +1,5 @@
+require 'pry'
+
 class ScrapeMeccaService
 
 	def initialize
@@ -77,21 +79,25 @@ class ScrapeMeccaService
 			@product_id = Product.last.id
 			create_variant
 		else
-			@product_id = Product.where("brand ILIKE ? AND name ILIKE ?", "%#{brand}%", "%#{name}%").id
+			@product_id = Product.where("brand ILIKE ? AND name ILIKE ?", "%#{brand}%", "%#{name}%")[0].id
 			create_variant	
 		end
 	end
 
 	def create_variant
+		binding.pry
 		variants = @product_result.search('.variation-select option')
 
+		# IF VARIANTS IS FALSE - ADD DEFAULT VARIENT
+		
 		variants.each do |variant|
 
-			variant_found = MatchingService.new.variant_found(variant, @product_id)
+			variant_name = variant.text.strip
+			variant_found = MatchingService.new.variant_found(variant_name, @product_id)
 
 			if variant_found == false
 				new_variant = Varient.new(
-						name: variant.text.strip,
+						name: variant_name,
 						product_id: @product_id
 					) 
 
@@ -99,7 +105,7 @@ class ScrapeMeccaService
 				result = JSON.parse(json_img_file)
 				variant_photo = result["url"]
 
-				new_variant.remote_photo_url = variant_photo
+				new_variant.remote_photo_url = "https://www.mecca.com.au"+variant_photo
 				new_variant.save
 				puts 'Created variant'
 				@variant_id = Varient.last.id
