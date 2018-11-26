@@ -1,5 +1,8 @@
 require 'pry'
 
+# Delete all Mecca products and try again with binding.prys catching matching exceptions
+# Product 684, 705, 706
+
 class ScrapeMeccaService
 
 	def initialize
@@ -51,7 +54,11 @@ class ScrapeMeccaService
 	end
 
 	def create_product(url)
+		# LOGIC
+		# If product isn't found, it creates it and pushes it to 'create_inventory'
+		# If product is found, it sets the product_id and pushes it to 'create inventory'
 		@product_result = get_html_doc(url)
+		@product_url = url
 
 		brand = @product_result.search('a .product-brand').text
 		name = @product_result.search('.product-name')[1].text
@@ -75,31 +82,47 @@ class ScrapeMeccaService
 			@product_hero_image = "https://www.mecca.com.au"+@product_result.search('.primary-image').attr('src').value
 			new_product.remote_photo_url = @product_hero_image
 			new_product.save
-			puts "Created product"
+			puts "CREATED PRODUCT"
 			@product_id = Product.last.id
 			create_variant
 		else
 			@product_id = Product.where("brand ILIKE ? AND name ILIKE ?", "%#{brand}%", "%#{name}%")[0].id
+			binding.pry
 			create_variant
 		end
 	end
 
 	def create_variant
+		# LOGIC
+		# If product has no variants, it sets the variant name to 'default'
+		# If the 'default' variant isn't found, it sets the variant_id & source_url and adds it and pushes it to create_inventory
+		# If the 'default' variant is found, it sets the variant_id & source_url and pushes it to create_inventory
+		# If there are variants, it loops through each one and checks whether it exists for the product
+		# If it does exist, it sets the variant_id and source_url and pushes it to create_inventory
+		# If it does not exist, it creates a new variant, sets the variant_id & source_url and pushes it to create_inventory 
 		variants = @product_result.search('.variation-select option')
-		# CREATE INSTANCE VARIABLE OF PRODUCT PAGE URL - NEED IT IN ADD INVENTORY
-		# NEED TO CHECK TO SEE IF DEFAILT VALUE BELOW EXISTS BEFORE ADDING
 
 		if variants.empty?
-			variant = Varient.new(
-						name: "default",
-						product_id: @product_id
-					) 
-			variant.remote_photo_url = @product_hero_image
-			variant.save
-			puts 'Created variant'
-			@variant_id = Varient.last.id
-			create_inventory(variant)
-			# ABOVE LOGIC DOESN'T MAKE SENSE - PASSING IN VARIENT NEEDS TO BE UPDATED
+			variant_name = "default"
+			variant_found = MatchingService.new.variant_found(variant_name, @product_id)
+
+			if variant_found == false
+				new_variant = Varient.new(
+							name: variant_name,
+							product_id: @product_id
+						) 
+				new_variant.remote_photo_url = @product_hero_image
+				new_variant.save
+				puts 'CREATED VARIANT'
+				@variant_id = Varient.last.id
+				@source_url = @product_url
+				create_inventory
+			else
+				@variant_id = Varient.where("name LIKE ? AND product_id = ?", "default", "#{@product_id}")[0].id
+				@source_url = @product_url
+				binding.pry
+				create_inventory
+			end
 		else
 			variants.each do |variant|
 				variant_name = variant.text.strip
@@ -117,31 +140,37 @@ class ScrapeMeccaService
 
 					new_variant.remote_photo_url = "https://www.mecca.com.au"+variant_photo
 					new_variant.save
-					puts 'Created variant'
+					puts 'CREATED VARIANT'
 					@variant_id = Varient.last.id
-					create_inventory(variant)
+					@source_url = variant['value']
+					create_inventory
 				else
 					@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{variant_name}%", "#{@product_id}")[0].id
-					create_inventory(variant)
+					@source_url = variant['value']
+					binding.pry
+					create_inventory
 				end
 			end
 		end
 	end
 
-	def create_inventory(variant)
-		source_url = variant['value']
+	def create_inventory
+		# LOGIC
+		# If the inventory isn't found, it adds it. Else, it does nothing.
 
-		inventory_found = Inventory.where("source_url = ?", "#{source_url}").present?
+		puts "Checking if inventory exists..."
+		inventory_found = Inventory.where("source_url = ?", "#{@source_url}").present?
 
 		if inventory_found == false
 			Inventory.create(
 					price: @product_result.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i,
-					# PRICE ISN'T RETURNING ANYTHING
-					source_url: source_url,
+					source_url: @source_url,
 					varient_id: @variant_id,
 					seller_id: @seller_id 
 				)
-			puts 'Created inventory'
+			puts 'CREATED INVENTORY'
+		else
+			binding.pry
 		end
 	end
 

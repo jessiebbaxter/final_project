@@ -3,7 +3,7 @@ require 'nokogiri'
 # require 'pry'
 require 'json'
 
-url = "https://www.mecca.com.au/too-faced/the-sweet-smell-of-christmas/I-034511.html"
+url = "https://www.mecca.com.au/urban-decay/naked-cherry-eyeshadow-palette/I-033939.html?cgpath=makeup#start=1"
 
 html_file = open(url, {
 	'User-Agent' => 'Mozilla',
@@ -12,7 +12,7 @@ html_file = open(url, {
 
 html_doc = Nokogiri::HTML(html_file)
 
-p html_doc.search('.variation-select option')
+p html_doc.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i
 # result = JSON.parse(json_file)
 # p result["url"]
 
