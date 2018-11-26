@@ -46,7 +46,7 @@ class OrderItemsController < ApplicationController
 
   def check_order_limit
     if @order_item.qty + params[:qty].to_i > 5
-      flash[:alert] = "You have reached the maximum order quantity (5) for this item"
+      flash[:alert] = "You already have #{@order_item.qty} in your cart. The order limit per item is 5."
     else
       @order_item.qty += params[:qty].to_i
       flash[:notice] = "This item has been saved to your cart"

@@ -59,21 +59,19 @@
               </div>
               <div class="card-inventory-qty">
                 <%= form_tag order_items_path do %>
-                  <div class="form-group dropdown">
-                    <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty" %>
-                  </div>
-                <% end %>
+                <div class="form-group dropdown">
+                  <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty" %>
+                </div>
               </div>
-							<div class="card-inventory-add">
-              <% if current_user %>
-                <%= form_tag order_items_path do %>
+    					<div class="card-inventory-add">
+                <% if current_user %>
                   <%= button_tag  "Add" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
-                <% end %>
               </div>
-              <% else %>
-                <!-- Modal link -->
-                <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
+                <% else %>
+                  <!-- Modal link -->
+                  <%= link_to "Add to Cart", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
                 <% end %>
+              <% end %>
               </div>
             </div>
           <% end %>
