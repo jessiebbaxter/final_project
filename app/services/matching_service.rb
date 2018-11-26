@@ -12,7 +12,7 @@ class MatchingService
 
 	def variant_found(variant_name, product_id)
 		puts "Checking if variant exists..."
-		return Varient.where("name ILIKE ? AND product_id = ?", "%#{variant_name}%", "#{product_id}").present?
+		return Varient.where("name ILIKE ? AND product_id = ?", "%#{variant_name}", "#{product_id}").present?
 	end
 end
 

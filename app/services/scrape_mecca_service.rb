@@ -1,8 +1,5 @@
 require 'pry'
 
-# Delete all Mecca products and try again with binding.prys catching matching exceptions
-# Product 684, 705, 706
-
 class ScrapeMeccaService
 
 	def initialize
@@ -87,7 +84,6 @@ class ScrapeMeccaService
 			create_variant
 		else
 			@product_id = Product.where("brand ILIKE ? AND name ILIKE ?", "%#{brand}%", "%#{name}%")[0].id
-			binding.pry
 			create_variant
 		end
 	end
@@ -120,7 +116,6 @@ class ScrapeMeccaService
 			else
 				@variant_id = Varient.where("name LIKE ? AND product_id = ?", "default", "#{@product_id}")[0].id
 				@source_url = @product_url
-				binding.pry
 				create_inventory
 			end
 		else
@@ -147,7 +142,6 @@ class ScrapeMeccaService
 				else
 					@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{variant_name}%", "#{@product_id}")[0].id
 					@source_url = variant['value']
-					binding.pry
 					create_inventory
 				end
 			end
@@ -164,13 +158,14 @@ class ScrapeMeccaService
 		if inventory_found == false
 			Inventory.create(
 					price: @product_result.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i,
+					# THE ABOVE FAILS WHEN THE VARIENT IS SIZE AND THE PRICE IS DIFFERENT
+					# KEEP IT THE SAME WHEN THERE IS NO VARIANT BUT UPDATE IF THERE IS
+					# Test with 'Hourlgass Veil Mineral Primer SPF 15'
 					source_url: @source_url,
 					varient_id: @variant_id,
 					seller_id: @seller_id 
 				)
 			puts 'CREATED INVENTORY'
-		else
-			binding.pry
 		end
 	end
 
