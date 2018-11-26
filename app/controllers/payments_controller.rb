@@ -9,13 +9,10 @@ class PaymentsController < ApplicationController
     if current_user.customer_id
       one_click_purchases
     else
-      customer = Stripe::Customer.create(
-        source: params[:stripeToken],
-        email:  params[:stripeEmail]
-      )
+      save_customer_details
 
       charge = Stripe::Charge.create(
-        customer:     customer.id,
+        customer:     @customer.id,
         amount:       @order.amount_cents,
         description:  "Payment for order #{@order.id}",
         currency:     @order.amount.currency
@@ -28,6 +25,25 @@ class PaymentsController < ApplicationController
     rescue Stripe::CardError => e
       flash[:alert] = e.message
       redirect_to new_order_payment_path(@order)
+  end
+
+  private
+
+  def save_customer_details
+    @customer = Stripe::Customer.create(
+      source: params[:stripeToken],
+      email:  params[:stripeEmail],
+      shipping: {
+        name: params[:first_name, :last_name],
+        address: {
+          line1: params[:streetAddress],
+          city: params[:suburb],
+          state: params[:city],
+          postal_code: params[:postCode],
+          country: "Australia"
+        }
+      }
+    )
   end
 
   def one_click_purchases
