@@ -24,7 +24,6 @@
             </td>
             <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
             </td>
-            <td class="td-center align-middle"><%= order_item.qty %></td>
             <td class="td-center"><%= item.price %></td>
             <td class="order-item-total td-center""> <%= order_item.qty*item.price %></td>
             <td class="td-center">
