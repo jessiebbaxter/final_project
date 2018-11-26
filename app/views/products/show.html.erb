@@ -17,8 +17,8 @@
               <h4>from $ <%= @price_array.first  %></h4>
             </div>
           </div>
-          <div class="product-image-container">
-            <%= cl_image_tag @current_varient.photo, crop: :fill, class: "product-image" %>
+          <div class="product-image-container" id="product-image-varient">
+            <%= cl_image_tag @current_varient.photo, crop: :fill, class: "product-image js-variant-form" %>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6">
