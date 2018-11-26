@@ -10,12 +10,14 @@
 	      		<p><%= product.name %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
-            <% product.inventories.each do |inventory| %>
+            <% product.varients.each do |varient| %>
+              <% varient.inventories.each do |inventory|%>
                 <% @price_array << inventory.price %>
+              <% end %>
             <% end %>
             <% @price_array.sort %>
-		    	<p><strong>from $ <%= @price_array.first %></strong></p>
-		    </div>
+            <p><strong>from $ <%= @price_array.first %></strong></p>
+        </div>
 		</div>
 	</div>
 </div>
