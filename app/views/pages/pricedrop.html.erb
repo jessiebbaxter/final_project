@@ -1,0 +1,14 @@
+<div class="wrapper">
+  <div class="container">
+    <h1>Price Drops</h1>
+    <div class="products-container">     
+      <div class="cards-container row">
+        <% @quick_buy_list.each do |quick_buy_item| %>
+          <% if quick_buy_item.inventory.coupon.present? %>
+            <%= render 'shared/price-drop-card', quick_buy_item: quick_buy_item %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

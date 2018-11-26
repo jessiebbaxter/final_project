@@ -17,5 +17,8 @@ Rails.application.routes.draw do
   end
   resources :quick_buy_items, only: [:edit, :update, :destory]
   get 'orders/:id/complete', to: 'orders#complete', as: :orders_complete
+  # post 'orders/:id/payments/', to: 'payments#one_click_purchases', as: :one_click_payments
+
+  get '/pricedrop', to: 'pages#pricedrop', as: :pricedrop
 
 end

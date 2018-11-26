@@ -41,8 +41,15 @@
     </table>
     <div class="checkout-area">
     <h3>Total = $<span class="total-sum"></span></h3>
-    <%= form_tag new_order_payment_path(@order), method: :get do %>
-      <%= submit_tag 'Checkout', class: 'btn btn-primary' %>
+    <% if current_user.customer_id %>
+      <%= form_tag order_payments_path(@order), method: :post do %>
+        <%= hidden_field_tag 'amount', finalise_total %>
+        <%= submit_tag 'Checkout', class: 'btn btn-primary' %>
+      <% end %>
+    <% else %>
+      <%= form_tag new_order_payment_path(@order), method: :get do %>
+        <%= submit_tag 'Checkout', class: 'btn btn-primary' %>
+      <% end %>
     <% end %>
     </div>
   </div>
