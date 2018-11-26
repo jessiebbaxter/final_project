@@ -23,11 +23,11 @@
 # 	puts "Created seller: #{seller}"
 # end
 
-puts 'Starting Sephora scrape...'
+puts 'Starting Mecca scrape...'
 
-ScrapeSephoraService.new.run(500, 7)
+ScrapeMeccaService.new.run
 
-puts 'Finished Sephora scrape...'
+puts 'Finished Mecca scrape...'
 
 puts 'Finished seed!'
 

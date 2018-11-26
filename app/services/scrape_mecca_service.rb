@@ -72,8 +72,8 @@ class ScrapeMeccaService
 				review_count: @product_result.search('.visually-hidden span')[5].children.text
 			)
 
-			product_hero_image = @product_result.search('.primary-image').attr('src').value
-			new_product.remote_photo_url = "https://www.mecca.com.au"+product_hero_image
+			@product_hero_image = "https://www.mecca.com.au"+@product_result.search('.primary-image').attr('src').value
+			new_product.remote_photo_url = @product_hero_image
 			new_product.save
 			puts "Created product"
 			@product_id = Product.last.id
@@ -85,34 +85,42 @@ class ScrapeMeccaService
 	end
 
 	def create_variant
-		binding.pry
 		variants = @product_result.search('.variation-select option')
 
-		# IF VARIANTS IS FALSE - ADD DEFAULT VARIANT
-
-		variants.each do |variant|
-
-			variant_name = variant.text.strip
-			variant_found = MatchingService.new.variant_found(variant_name, @product_id)
-
-			if variant_found == false
-				new_variant = Varient.new(
-						name: variant_name,
+		if variants.empty?
+			variant = Varient.new(
+						name: "default",
 						product_id: @product_id
 					) 
+			variant.remote_photo_url = @product_hero_image
+			variant.save
+			puts 'Created variant'
+			@variant_id = Varient.last.id
+			create_inventory(variant)
+		else
+			variants.each do |variant|
+				variant_name = variant.text.strip
+				variant_found = MatchingService.new.variant_found(variant_name, @product_id)
 
-				json_img_file = variant.attr('data-lgimg')
-				result = JSON.parse(json_img_file)
-				variant_photo = result["url"]
+				if variant_found == false
+					new_variant = Varient.new(
+							name: variant_name,
+							product_id: @product_id
+						) 
 
-				new_variant.remote_photo_url = "https://www.mecca.com.au"+variant_photo
-				new_variant.save
-				puts 'Created variant'
-				@variant_id = Varient.last.id
-				create_inventory(variant)
-			else
-				@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{name}%", @product_id)[0].id
-				create_inventory(variant)
+					json_img_file = variant.attr('data-lgimg')
+					result = JSON.parse(json_img_file)
+					variant_photo = result["url"]
+
+					new_variant.remote_photo_url = "https://www.mecca.com.au"+variant_photo
+					new_variant.save
+					puts 'Created variant'
+					@variant_id = Varient.last.id
+					create_inventory(variant)
+				else
+					@variant_id = Varient.where("name ILIKE ? AND product_id = ?", "%#{variant_name}%", "#{@product_id}")[0].id
+					create_inventory(variant)
+				end
 			end
 		end
 	end
@@ -124,12 +132,11 @@ class ScrapeMeccaService
 
 		if inventory_found == false
 			Inventory.create(
-					price: @product_result.search('.visually-hidden span')[6]['content'],
+					price: @product_result.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i,
 					source_url: source_url,
 					varient_id: @variant_id,
 					seller_id: @seller_id 
 				)
-
 			puts 'Created inventory'
 		end
 	end

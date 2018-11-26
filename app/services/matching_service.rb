@@ -10,10 +10,9 @@ class MatchingService
 		return Product.where("brand ILIKE ? AND name ILIKE ?", "%#{product[:brand]}%", "%#{product[:name]}%").present?
 	end
 
-	def variant_found(variant, product_id)
+	def variant_found(variant_name, product_id)
 		puts "Checking for variant..."
-		binding.pry
-		return Varient.where("name ILIKE ? AND product_id = ?", "%#{variant[:name]}%", product_id).present?
+		return Varient.where("name ILIKE ? AND product_id = ?", "%#{variant_name}%", "#{product_id}").present?
 	end
 end
 
