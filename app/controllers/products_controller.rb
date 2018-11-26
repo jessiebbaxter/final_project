@@ -23,6 +23,9 @@ class ProductsController < ApplicationController
 
   private
 
+  def set_shipping_price
+  end
+
   def set_product
     @product = Product.find(params[:id])
   end

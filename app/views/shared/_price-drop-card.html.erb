@@ -5,16 +5,17 @@
         <div class="card-repurchase-img" style="background-image: url('<%= cl_image_path quick_buy_item.inventory.varient.photo, crop: :fill %>');"></div>
       <% end %>
       <div class="card-repurchase-action">
-        <%= link_to "Need", '', method: :post, class: "btn btn-primary" %>
+        <%= form_tag order_items_path do %>
+          <%= button_tag  "Add to Cart" , name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary" %>
+         <% end %>
       </div>
     </div>
     <div class="card-body">
       <div class="card-body-content">
-          <h4 class="card-body-title"><%= quick_buy_item.inventory.seller.domain %></h4>
+        <h4 class="card-body-title"><%= quick_buy_item.inventory.seller.domain %></h4>
         <div class="coupon-applied">
           <p class="coupon-status">Coupon Applied</p>
         </div>
-        
         <div class="rating">
           <div class="star-rating" title="">
             <div class="back-stars">

@@ -1,29 +1,32 @@
 <div class="wrapper">
   <div class="container">
-    <h3 class="text-center">BELLA BIRD</h3>
+    <h1 class="text-center">Checkout</h1>
     <div class="row">
-      <div class="checkout-title col-xs-6">
-        <h4 class="text-center">Shipping Details</h4>
+      <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <h3>Shipping Details</h3>
+        <%= simple_form_for order_payments_path(@order) do |f| %>
+          <%= f.input :first_name, label: 'First name' %>
+          <%= f.input :last_name, label: 'Last name' %>
+          <%= f.input :street_address, label: 'Street address' %>
+          <%= f.input :suburb, label: 'Suburb' %>
+          <%= f.input :state, label: 'State' %>
+          <%= f.input :postcode, label: 'Postcode' %>
+          <p>We currently only ship to Australia</p>
+          <%= hidden_field_tag 'amount', finalise_total %>
+          <article>
+            <label class="amount">
+              <span>Amount: <%= humanized_money_with_symbol(@order.amount) %></span>
+            </label>
+          </article>
+          <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+            data-name="My Order"
+            data-email="<%= current_user.email %>"
+            data-description="Bella Bird order #<%= @order.id %>"
+            data-amount="<%= @order.amount_cents %>"
+            data-currency="<%= @order.amount.currency %>"></script>
+        <% end %>
       </div>
     </div>
-    <div class="row">
-      <%= @order.order_items.first.inventory.varient.product.name %></h1>
-    </div>
-    <%= form_tag order_payments_path(@order) do %>
-      <%= hidden_field_tag 'amount', finalise_total %>
-      <article>
-        <label class="amount">
-          <span>Amount: <%= humanized_money_with_symbol(@order.amount) %></span>
-        </label>
-      </article>
-
-      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-        data-name="My Order"
-        data-email="<%= current_user.email %>"
-        data-description="Product <%= @order.order_items.first.inventory.varient.product.name %>"
-        data-amount="<%= @order.amount_cents %>"
-        data-currency="<%= @order.amount.currency %>"></script>
-    <% end %>
   </div>
 </div>

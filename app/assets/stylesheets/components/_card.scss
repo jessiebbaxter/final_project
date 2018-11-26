@@ -48,7 +48,7 @@
 // stretch card
 .card-stretch {
   margin: 5px 0px;
-  box-shadow: 0 0 1px rgba(0,0,0,0.2);
+  // box-shadow: 0 0 1px rgba(0,0,0,0.2);
   display: flex;
   justify-content: space-between;
 }
@@ -58,7 +58,8 @@
   min-width: 150px;
   background-position: center;
   background-size: cover;
-  box-shadow: 0 0 1px rgba(0,0,0,0.2)
+  box-shadow: 0 0 1px rgba(0,0,0,0.2);
+  // border-right: 1px solid rgba(0,0,0,0.2);
 }
 .card-stretch-content {
   padding-left: 10px;
@@ -80,6 +81,34 @@
 .content-stretch-footer {
   position: absolute;
   bottom: 5px;
+  %flex-display {
+    display: flex;
+  }
+  .rating {
+    top: 85px;
+    @extend %flex-display;
+    margin-bottom: 5px;
+    .num-reviews {
+      margin: 0px 0px 0px 5px;
+    }
+    .star-rating {
+        @extend %flex-display;
+        align-items: center;
+        font-size: 1em;
+    }
+    .back-stars {
+        @extend %flex-display;
+        color: rgba(125, 125, 125, 0.541);
+        position: relative;
+    }
+    .front-stars {
+        @extend %flex-display;
+        color: $turquoise;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+    }
+  }
 }
 
 // inventory card
