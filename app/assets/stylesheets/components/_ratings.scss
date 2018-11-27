@@ -1,0 +1,27 @@
+
+.show-rating {}
+.rating {
+  top: 85px;
+  @extend %flex-display;
+  margin-bottom: 5px;
+  .num-reviews {
+    margin: 0px 0px 0px 5px;
+  }
+  .star-rating {
+      @extend %flex-display;
+      align-items: center;
+      font-size: 1em;
+  }
+  .back-stars {
+      @extend %flex-display;
+      color: rgba(125, 125, 125, 0.541);
+      position: relative;
+  }
+  .front-stars {
+      @extend %flex-display;
+      color: $turquoise;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+  }
+}

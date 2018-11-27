@@ -9,6 +9,7 @@
               <div class="product-details-header-title">
                 <h3><%= @product.name %> </h3>
               </div>
+              <%= render 'shared/rating' %>
             </div>
             <div class="product-details-footer">
               <% @product.inventories.each do |inventory| %><% @price_array << inventory.price %>
@@ -26,12 +27,6 @@
             <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
             <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
             <% end %>
-          </div>
-          <div>
-            <label class="switch">
-              <input type="checkbox" data-toggle="toggle">
-              <span class="slider round"></span>
-            </label>
           </div>
           <div id="product-price-holder">
             <div class="product-prices " id="product-prices">
