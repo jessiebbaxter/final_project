@@ -43,7 +43,7 @@
                 <% if current_user %>
                 <div class="card-inventory-save">
                   <%= form_tag product_quick_buy_items_path(@product), method: :post do %>
-                  <%= button_tag  "<i class='fas fa-heart'></i>".html_safe, name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
+                  <%= button_tag  "<i class='fas fa-heart'></i>".html_safe, name: "inventory_id", value: "#{inventory.id}", class: 'heart-save' %>
                   <% end %>
                 </div>
                 <% end %>
