@@ -158,9 +158,8 @@ class ScrapeMeccaService
 		if inventory_found == false
 			Inventory.create(
 					price: @product_result.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i,
-					# THE ABOVE FAILS WHEN THE VARIENT IS SIZE AND THE PRICE IS DIFFERENT
-					# KEEP IT THE SAME WHEN THERE IS NO VARIANT BUT UPDATE IF THERE IS
-					# Test with 'Hourlgass Veil Mineral Primer SPF 15'
+					# The above fails if the variant has a different price, 
+					# would need a headless browser in order to implement correctly
 					source_url: @source_url,
 					varient_id: @variant_id,
 					seller_id: @seller_id 
