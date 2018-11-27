@@ -20,7 +20,7 @@
           <tr>
             <td>
               <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %>
-              <td><%= link_to "#{item.varient.product.brand} #{item.varient.product.name} - #{item.varient.name}", product_path(item.varient.product) %>
+              <td><%= link_to "#{item.varient.product.brand} #{item.varient.product.name} - #{item.varient.name}", product_path(id: item.varient.product, varient_id: item.varient) %>
             </td>
             <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
             </td>
