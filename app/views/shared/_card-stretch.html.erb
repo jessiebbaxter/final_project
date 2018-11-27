@@ -1,9 +1,9 @@
 <div class="col-xs-12 col-sm-6 col-md-4">
+	<%= link_to product_path(product) do %>
 	<div class="card-stretch">
-		<%= link_to product_path(product) do %>
-		 	<div class="card-stretch-img" style="background-image: url('<%= cl_image_path product.varients.first.photo, crop: :fill %>');">
+		 	<div class="card-stretch-img" style="background-image: url('<%= cl_image_path product.photo, crop: :fill %>');">
 			</div>
-		<% end %>
+		
 	  	<div class="card-stretch-content">
 	    	<div class="content-stretch-header">
 	    		<h5><%= product.brand %></h5>
@@ -12,32 +12,52 @@
 		    <div class="content-stretch-footer">
 		    	<% if product.rating.present? %>
 			    	<div class="rating">
-		          <div class="star-rating" title="">
-		            <div class="back-stars">
-		              <% 5.times do %>              
-		                <i class="fa fa-star" aria-hidden="true"></i>
-		              <% end %>              
-		              <div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
-		                <% 5.times do %>  
-		                  <i class="fa fa-star" aria-hidden="true"></i>
-		                <% end %>  
-		              </div>
-		            </div>
-		          </div>
-		          <p class="num-reviews">(<%= product.review_count %>)</p>    
+	          	<div class="star-rating" title="">
+	            	<div class="back-stars">
+	              	<% 5.times do %>              
+	                	<i class="fa fa-star" aria-hidden="true"></i>
+	              	<% end %>              
+	              	<div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
+	                	<% 5.times do %>  
+	                  <i class="fa fa-star" aria-hidden="true"></i>
+	                	<% end %>  
+	              	</div>
+	            	</div>
+	          	</div>
+	          	<p class="num-reviews">(<%= product.review_count %>)</p>
+		        </div>
+		      <% else %>
+		      	<div class="rating">
+	          	<div class="star-rating" title="">
+	            	<div class="back-stars">
+	              	<% 5.times do %>              
+	                	<i class="fa fa-star" aria-hidden="true"></i>
+	              	<% end %>              
+	            	</div>
+	          	</div>
+	          	<p class="num-reviews">(0)</p>
 		        </div>
 		      <% end  %>
 		    	<div class="price">
 		    		<% product.varients.each do |varient| %>
-              <% varient.inventories.each do |inventory|%>
-                <% @price_array << inventory.price %>
-              <% end %>
+			    		<% if varient.inventories.present? %>
+	              <% varient.inventories.each do |inventory|%>
+	                <% @price_array << inventory.price %>
+	              <% end %>
+	            	<% @price_array.sort %>
+							<% end %>
             <% end %>
-            <% @price_array.sort %>
-            <p><strong>from $ <%= @price_array.first %></strong></p>
+            <% if @price_array.first.nil? %>
+            	<div class="product-unavailable">
+            		<p>Product Unavailable</p>
+            	</div>
+            <% else %>
+            	<p><strong>from $ <%= @price_array.first %></strong></p>
+            <% end %>
 		    	</div>
         </div>
 		</div>
 	</div>
+	<% end %>
 </div>
 

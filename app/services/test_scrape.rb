@@ -3,7 +3,7 @@ require 'nokogiri'
 # require 'pry'
 require 'json'
 
-url = "https://www.mecca.com.au/nars/sheer-glow-foundation/V-006868.html?cgpath=makeup#sz=150&start=1"
+url = "https://www.mecca.com.au/urban-decay/naked-cherry-eyeshadow-palette/I-033939.html?cgpath=makeup#start=1"
 
 html_file = open(url, {
 	'User-Agent' => 'Mozilla',
@@ -12,7 +12,11 @@ html_file = open(url, {
 
 html_doc = Nokogiri::HTML(html_file)
 
-p html_doc.search('.primary-image')
+p html_doc.search('.price-sales').text.gsub(/\s+/, "").gsub("$", "").to_i
+# result = JSON.parse(json_file)
+# p result["url"]
+
+# product_hero_image = @product_result.search('.primary-image').attr('src').value
 
 # url = "https://www.target.com.au/p/chi-chi-eyeshadow-palette/61833173"
 

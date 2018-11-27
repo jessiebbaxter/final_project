@@ -23,6 +23,19 @@ sellers.each do |seller|
 	puts "Created seller: #{seller}"
 end
 
+puts 'Starting Sephora scrape...'
+
+ScrapeSephoraService.new.run(50, 3)
+
+puts 'Finished Sephora scrape...'
+
+
+puts 'Finished seed!'
+
+# if you stop the seed to save time from a long scrape,
+# comment out everything above this comment and run the seed
+# on just the below lines.
+
 puts 'Adding Shipping Guidelines...'
 
 target = Seller.find_by(domain: "Target")
@@ -117,17 +130,4 @@ Shipping.create!(
   )
 
 puts 'Finished Shipping'
-
-puts 'Starting Sephora scrape...'
-
-ScrapeSephoraService.new.run(50, 3)
-
-puts 'Finished Sephora scrape...'
-
-puts 'Finished seed!'
-
-# if you stop the seed to save time from a long scrape,
-# comment out everything above this comment and run the seed
-# on just the below lines.
-
 

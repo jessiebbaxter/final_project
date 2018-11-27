@@ -4,13 +4,37 @@
     <div class="row">
       <div class="col-xs-12 col-md-6 col-md-offset-3">
         <h3>Shipping Details</h3>
-        <%= simple_form_for order_payments_path(@order) do |f| %>
-          <%= f.input :first_name, label: 'First name' %>
-          <%= f.input :last_name, label: 'Last name' %>
-          <%= f.input :street_address, label: 'Street address' %>
-          <%= f.input :suburb, label: 'Suburb' %>
-          <%= f.input :state, label: 'State' %>
-          <%= f.input :postcode, label: 'Postcode' %>
+        <%= form_tag order_payments_path(@order) do %>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <%= label_tag :first_name %>
+                <%= text_field_tag :first_name, current_user.first_name, label: 'First name', class: 'form-control', :required => true %>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <%= label_tag :last_name %>
+                <%= text_field_tag :last_name, current_user.last_name, label: 'Last name', class: 'form-control', :required => true %>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= label_tag :street_address %>
+            <%= text_field_tag :street_address, current_user.street_address, label: 'Street address', :required => true, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'Suburb/City' %>
+            <%= text_field_tag :suburb, current_user.suburb, label: 'Suburb/City', :required => true, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag 'State/Territory' %>
+            <%= text_field_tag :state, current_user.state, label: 'State/Territory', :required => true, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= label_tag :postcode %>
+            <%= text_field_tag :postcode, current_user.post_code, label: 'Postcode', :required => true, class: 'form-control' %>
+          </div>
           <p>We currently only ship to Australia</p>
           <%= hidden_field_tag 'amount', finalise_total %>
           <article>
