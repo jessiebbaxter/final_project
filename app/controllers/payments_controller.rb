@@ -18,7 +18,7 @@ class PaymentsController < ApplicationController
         currency:     @order.amount.currency
       )
 
-      current_user.update(customer_id: customer.id)
+      current_user.update(customer_id: @customer.id)
       @order.update(payment: charge.to_json, state: 'paid')
       redirect_to orders_complete_path(@order)
     end
@@ -32,17 +32,16 @@ class PaymentsController < ApplicationController
   def save_customer_details
     @customer = Stripe::Customer.create(
       source: params[:stripeToken],
-      email:  params[:stripeEmail],
-      shipping: {
-        name: params[:first_name, :last_name],
-        address: {
-          line1: params[:streetAddress],
-          city: params[:suburb],
-          state: params[:city],
-          postal_code: params[:postCode],
-          country: "Australia"
-        }
-      }
+      email:  params[:stripeEmail]
+    )
+
+    current_user.update(
+      first_name: params[:first_name],
+      last_name: params[:last_name],
+      street_address: params[:street_address],
+      suburb: params[:suburb],
+      state: params[:state],
+      post_code: params[:postcode]
     )
   end
 
