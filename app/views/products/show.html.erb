@@ -45,7 +45,7 @@
                       <%= form_tag product_quick_buy_items_path(@product), method: :post do %>
                       <%= button_tag  "<i class='fas fa-heart'></i>".html_safe, name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
                       <% end %>
-                    </div
+                    </div>
                   <% end %>
                   <div class="card-inventory-shipping">
                     <p>FREE delivery<br>Tues, Nov 12</p>
@@ -54,13 +54,13 @@
                     <p><strong>$ <%= inventory.price %></strong></p>
                   </div>
                   <%= form_tag order_items_path do %>
-                      <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty", class: "dropdown" %>
-                        <% if current_user %>
-                          <%= button_tag  "Add" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
-                        <% else %>
-                          <!-- Modal link -->
-                          <%= link_to "Add", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
-                        <% end %>
+                    <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty", class: "dropdown" %>
+                      <% if current_user %>
+                        <%= button_tag  "Add" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
+                      <% else %>
+                        <!-- Modal link -->
+                        <%= link_to "Add", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
+                      <% end %>
                   <% end %>
                 </div>
               <% end %>
