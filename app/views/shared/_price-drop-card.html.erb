@@ -16,24 +16,37 @@
         <div class="coupon-applied">
           <p class="coupon-status">Coupon Applied</p>
         </div>
-        <div class="rating">
-          <div class="star-rating" title="">
-            <div class="back-stars">
-              <% 5.times do %>              
-                <i class="fa fa-star" aria-hidden="true"></i>
-              <% end %>              
-              <div class="front-stars" style="width:<%= (quick_buy_item.product.rating / 5.0)* 100 %>%">
-                <% 5.times do %>  
+        <% if quick_buy_item.product.rating.present? %>
+          <div class="rating">
+            <div class="star-rating" title="">
+              <div class="back-stars">
+                <% 5.times do %>              
                   <i class="fa fa-star" aria-hidden="true"></i>
-                <% end %>  
+                <% end %>              
+                <div class="front-stars" style="width:<%= (quick_buy_item.product.rating / 5.0)* 100 %>%">
+                  <% 5.times do %>  
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                  <% end %>  
+                </div>
               </div>
             </div>
+            <p class="num-reviews">(<%= quick_buy_item.product.review_count %>)</p>    
           </div>
-          <p class="num-reviews">(<%= quick_buy_item.product.review_count %>)</p>    
-        </div>
+        <% else %>
+          <div class="rating">
+            <div class="star-rating" title="">
+              <div class="back-stars">
+                <% 5.times do %>              
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                <% end %>              
+              </div>
+            </div>
+            <p class="num-reviews">(0)</p>    
+          </div>
+        <% end %>
         <div class="price">
           <p class="old-price">$<%= quick_buy_item.inventory.price %></p>
-          <p class="sale-price">$<%= quick_buy_item.inventory.price * (1- quick_buy_item.inventory.coupon.discount) %></p>
+          <p class="sale-price">$<%= quick_buy_item.inventory.price * (1- Coupon.find(quick_buy_item.inventory.coupon_id).discount) %></p>
         </div>
         <div class="shipping-details">
           <p class="status">Free Delivery</p>
