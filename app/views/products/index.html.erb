@@ -4,12 +4,13 @@
     <%= render 'shared/search' %>
     <div class="products-container">
       <h1>Results</h1>
-        <div class="cards-container row">
-          <% @products.each do |product| %>
-            <% @price_array = [] %>
-            <%= render "shared/card-stretch", product: product %>
-          <% end %>
-        </div>
+      <%= render "shared/products_count" %>
+      <div class="cards-container row">
+        <% @products.each do |product| %>
+          <% @price_array = [] %>
+          <%= render "shared/card-stretch", product: product %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
