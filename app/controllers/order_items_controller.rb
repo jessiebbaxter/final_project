@@ -12,7 +12,11 @@ class OrderItemsController < ApplicationController
       check_order_limit
       @order_item.save
     else
-      @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: params[:qty])
+      if params[:qty].nil?
+        @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: 1)
+      else
+        @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: params[:qty])
+      end
       flash[:notice] = "This item has been saved to your cart"
     end
     @order.save
