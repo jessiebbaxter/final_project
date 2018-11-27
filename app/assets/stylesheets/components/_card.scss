@@ -54,7 +54,6 @@
     color: $black;
   }
 }
-
 .card-stretch-img {
   min-height: 150px;
   min-width: 150px;
@@ -109,6 +108,14 @@
         position: absolute;
         top: 0;
     }
+  }
+}
+.product-unavailable {
+  border: 1px #B9B9B9 solid;
+  border-radius: 3px; 
+  padding: 5px 5px 0px 5px;
+  p {
+    color: #B9B9B9;
   }
 }
 

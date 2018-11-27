@@ -40,12 +40,20 @@
 		      <% end  %>
 		    	<div class="price">
 		    		<% product.varients.each do |varient| %>
-              <% varient.inventories.each do |inventory|%>
-                <% @price_array << inventory.price %>
-              <% end %>
+			    		<% if varient.inventories.present? %>
+	              <% varient.inventories.each do |inventory|%>
+	                <% @price_array << inventory.price %>
+	              <% end %>
+	            	<% @price_array.sort %>
+							<% end %>
             <% end %>
-            <% @price_array.sort %>
-            <p><strong>from $ <%= @price_array.first %></strong></p>
+            <% if @price_array.first.nil? %>
+            	<div class="product-unavailable">
+            		<p>Product Unavailable</p>
+            	</div>
+            <% else %>
+            	<p><strong>from $ <%= @price_array.first %></strong></p>
+            <% end %>
 		    	</div>
         </div>
 		</div>
