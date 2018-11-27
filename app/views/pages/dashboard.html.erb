@@ -1,10 +1,11 @@
 <div class="wrapper">
 	<div class="container">
 		<div class="search-container">
+			<h1>Search</h1>
 			<%= render 'shared/search' %>
 		</div>
 		<div class="products-container">
-	      <h2><strong>Quick Buys</strong></h2>
+	      <h1>Quick Buys</h1>
 	      <div class="cards-container row">
 	          <% @quick_buy_list.each do |quick_buy_item| %>
 	            <%= render "shared/card-image", quick_buy_item: quick_buy_item %>
@@ -20,7 +21,7 @@
 					       			<i class="far fa-envelope"></i>
 					       		</div>
 					       		<div class="content">
-					       			<p>Connect your gmail to generate automatically</p>
+					       			<p>Connect your gmail to  generate automatically</p>
 					       		</div>
 					       		<div class="action">
 					       			<%= button_tag  "Connect", class: "btn btn-primary" %>
@@ -35,7 +36,7 @@
 					       			<i class='fas fa-heart'></i>
 					       		</div>
 					       		<div class="content">
-					       			<p>Heart your favorite items to add manually</p>
+					       			<p>Heart your favorite  items to add manually</p>
 					       		</div>
 					       		<div class="action">
 					       			<%= button_tag  "Search", class: "btn btn-primary" %>
