@@ -10,6 +10,7 @@
     justify-content: space-between;
   }
 
+// Desktop
 @media screen and (min-width: 992px) {
   .navbar-wagon {
     padding: 0px 30px;
@@ -19,7 +20,10 @@
 // Mobile
 @media screen and (max-width: 992px) {
   .navbar-wagon {
-    padding: 0px 10px;
+    padding: 0px 10px 0px 20px;
+    i {
+      padding-top: 10px;
+    }
   }
 }
 
@@ -106,6 +110,7 @@
 }
 .dropdown {
   margin-left: 5px;
-  margin-right: 10px;
-  margin-top: 10px;
+  margin-right: 0px;
+  margin-top: 0px;
+  padding-top: 0px;
 }

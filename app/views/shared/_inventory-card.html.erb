@@ -1,4 +1,4 @@
-<div class="card-inventory">
+<div class="card-inventory-md-lg hidden-xs hidden-sm">
   <div class="card-inventory-seller">
     <p><strong><%= inventory.seller.domain %></strong></p>
   </div>
@@ -12,8 +12,13 @@
   <div class="card-inventory-shipping">
     <p>FREE delivery<br>Tues, Nov 12</p>
   </div>
-  <div class="card-inventory-price">
-    <p><strong>$ <%= inventory.price %></strong></p>
+  <div class="card-inventory-price text-center">
+    <% if inventory.coupon_id.present? %>
+      <p class="old-price">$ <%= inventory.price %></p>
+      <p class="new-price">$ <%= inventory.price * (1- Coupon.find(inventory.coupon_id).discount) %></p>
+    <% else  %>
+      <p><strong>$ <%= inventory.price %></strong></p>
+    <% end %>
   </div>
   <div class="card-inventory-action">
     <%= form_tag order_items_path do %>
@@ -26,8 +31,35 @@
       <% end %>
     <% end %>
   </div>
+</div>
 
-  <div class="hidden-md hidden-lg">
-    <!-- Mobile card to go here -->
+<div class="card-inventory-xs-sm hidden-md hidden-lg">
+  <div class="seller">
+    <h4><strong><%= inventory.seller.domain %></strong></h4>
+    <p>FREE delivery<br>Tues, Nov 12</p>
+  </div>
+  <div class="save">
+    <%= form_tag product_quick_buy_items_path(@product), method: :post do %>
+      <%= button_tag  "<i class='fas fa-heart'></i>".html_safe, name: "inventory_id", value: "#{inventory.id}", class: "heart-save" %>
+    <% end %>
+  </div>
+  <div class="price text-center">
+    <% if inventory.coupon_id.present? %>
+      <p class="old-price">$ <%= inventory.price %></p>
+      <p class="new-price">$ <%= inventory.price * (1- Coupon.find(inventory.coupon_id).discount) %></p>
+    <% else  %>
+      <p><strong>$ <%= inventory.price %></strong></p>
+    <% end %>
+  </div>
+  <div class="action">
+    <%= form_tag order_items_path do %>
+      <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty", class: "dropdown" %>
+      <% if current_user %>
+        <%= button_tag  "Add" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary btn-sm" %>
+      <% else %>
+        <!-- Modal link -->
+        <%= link_to "Add", "#", class: "btn btn-primary btn-sm", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
+      <% end %>
+    <% end %>
   </div>
 </div>
