@@ -9,6 +9,7 @@
               <div class="product-details-header-title">
                 <h3><%= @product.name %> </h3>
               </div>
+              <%= render 'shared/rating' %>
             </div>
             <div class="product-details-footer">
               <% @product.inventories.each do |inventory| %><% @price_array << inventory.price %>
