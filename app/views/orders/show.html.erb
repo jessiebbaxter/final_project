@@ -2,15 +2,16 @@
   <div class="container">
     <h1>Your Cart</h1>
     <!-- <h3>Order number #<%= @order.id %></h3> -->
-    <table class="table">
+    <table class="table table-responsive">
       <thead>
         <tr>
-          <th style="width: 50%", scope="column" colspan="2">Product</th>
-          <th style="width: 10%", scope="column", class="td-center">Seller</th>
-          <th style="width: 10%", scope="column", class="td-center">Price</th>
-          <th style="width: 20%", scope="column", class="td-center">Total</th>
-          <th style="width: 10%", scope="column", class="td-center">Quantity</th>
-          <th style="width: 5%", scope="column", class="td-center">Delete</th>
+          <th style="width: 10%", scope="column">Product</th>
+          <th style="width: 30%", scope="column", class="td-center order-table-details"></th>
+          <th style="width: 10%", scope="column", class="td-center ">Seller</th>
+          <th style="width: 15%", scope="column", class="td-center">Price</th>
+          <th style="width: 15%", scope="column", class="td-center">Total</th>
+          <th style="width: 10%", scope="column", class="td-center order-table-qty">Qty</th>
+          <th style="width: 10%", scope="column", class="td-center order-table-delete w-auto">Delete</th>
         </tr>
       </thead>
       <tbody class="table-align-middle">
@@ -18,21 +19,21 @@
         <% item = Inventory.find(order_item.inventory_id) %>
           <tr>
             <td>
-              <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %>
-              <td><%= link_to "#{item.varient.product.brand} #{item.varient.product.name} - #{item.varient.name}", product_path(item.varient.product) %>
+              <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %> </td>
+              <td class="order-table-details"><%= link_to "#{item.varient.product.brand} #{item.varient.product.name} - #{item.varient.name}", product_path(item.varient.product) %>
             </td>
             <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
             </td>
             <td class="td-center"><%= item.price %></td>
             <td class="order-item-total td-center""> <%= order_item.qty*item.price %></td>
-            <td class="td-center">
+            <td class="td-center order-table-qty">
               <%= form_for(order_item, url: order_item_path(order_item), method: :patch )  do |f| %>
                 <div class='form-group dropdown'>
                   <%= f.select :qty, (1..5), {}, onChange: "this.form.submit();"%>
                 </div>
               <% end %>
             </td>
-            <td class="td-center"> <%= link_to "<i class='far fa-trash-alt'></i>".html_safe, order_item_path(order_item), method: :delete %></td>
+            <td class="td-center order-table-delete"> <%= link_to "<i class='far fa-trash-alt'></i>".html_safe, order_item_path(order_item), method: :delete %></td>
           </tr>
         <% end %>
       </tbody>
