@@ -21,4 +21,9 @@ Rails.application.routes.draw do
 
   get '/pricedrop', to: 'pages#pricedrop', as: :pricedrop
 
+  # Routes for Google authentication
+  get 'auth/:provider/callback', to: 'sessions#googleAuth'
+  get 'auth/failure', to: redirect('/')
+  get '/gmail', to: 'gmail_searcher#get_messages'
+
 end
