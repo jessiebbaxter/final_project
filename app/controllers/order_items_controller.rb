@@ -1,11 +1,13 @@
 class OrderItemsController < ApplicationController
   before_action :set_order, only: [:create, :update, :destroy]
 
+  #every time we change the dropdown for a new varient, we need to create a new inventory item? or we need to create an order_item with a varient id.
+
   def create
     if !@order
       @order = Order.create(user_id: current_user, state: "pending")
     end
-    if @order.order_items.find_by(inventory_id: params[:inventory_id])
+    if @order.order_items.find_by(inventory_id: params[:inventory_id]).present?
       set_order_item
       check_order_limit
       @order_item.save
