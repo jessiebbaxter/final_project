@@ -1,0 +1,15 @@
+.card-dashboard {
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0px 20px 0px;
+	align-items: center;
+	i {
+		font-size: 25px;
+	}
+	p {
+		margin-bottom: 0px;
+	}
+	.content {
+		padding: 0px 20px;
+	}
+}
