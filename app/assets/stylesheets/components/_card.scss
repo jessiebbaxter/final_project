@@ -128,6 +128,10 @@
   padding: 10px 5px;
   box-shadow: 0 1px 2px -2px gray;
 }
+.card-inventory-add {
+  display: flex;
+  justify-content: space-between;
+}
 .card-inventory-shipping {
   p {
     font-size: 13px;
@@ -141,7 +145,10 @@
   padding-right: 40px;
 }
 
-.card-inventory-add {
-  display: flex;
-  justify-content: space-between;
+
+// Mobile
+@media screen and (max-width: 992px) {
+  .card-inventory-shipping {
+    display: none;
+  }
 }

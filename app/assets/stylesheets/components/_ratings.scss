@@ -1,11 +1,16 @@
+%flex-display {
+  display: flex;
+}
 
-.show-rating {}
 .rating {
   top: 85px;
   @extend %flex-display;
   margin-bottom: 5px;
   .num-reviews {
     margin: 0px 0px 0px 5px;
+    p {
+      margin: 0px;
+    }
   }
   .star-rating {
       @extend %flex-display;
