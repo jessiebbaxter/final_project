@@ -1,0 +1,13 @@
+<% if params[:query].present? %>
+  <% seller_array = [] %>
+  <p>Your search returned <%= @products.count %> products from
+    <% @products.each do |product| %>
+      <% product.sellers.each do |seller| %>
+        <% seller_array << seller.domain%>
+      <% end %>
+    <% end %>
+    <%= seller_array.uniq.count %> sellers...
+  </p>
+<% else %>
+  <p> Showing <%= @products.count %> products... </p>
+<% end %>
