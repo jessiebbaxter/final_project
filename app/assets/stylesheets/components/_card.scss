@@ -31,18 +31,37 @@
   margin-top: 15px;
   box-shadow: 0 0 1px rgba(0,0,0,0.1);
   display: relative;
+  .discount {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-color: #d22780;
+    text-align: center;
+    p {
+      margin: 15px 0px 0px 0px;
+      color: white;
+      font-size: 12px;
+    }
+  }
 }
 .card-repurchase-img {
-  min-height: 220px;
-  width: 100%;
+  height: 240px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  padding: 10px;
 }
 .card-repurchase-action {
-  position: absolute;
-  right: 30px;
-  bottom: 20px;
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 20px;
+  box-shadow: 0 0 1px rgba(0,0,0,0.1);
+  .add {
+    margin-left: 10px;
+  }
 }
 
 // stretch card

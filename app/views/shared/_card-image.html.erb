@@ -2,12 +2,24 @@
 	<div class="card-repurchase">
 		<%= link_to product_path(quick_buy_item.product) do %>
 		 	<div class="card-repurchase-img" style="background-image: url('<%= cl_image_path quick_buy_item.inventory.varient.photo, crop: :fill %>');">
-	  		</div>
+		 		<% if quick_buy_item.inventory.coupon_id.present? %>
+			 		<div class="discount">
+			 			<p><%= Coupon.find(quick_buy_item.inventory.coupon_id).discount * 100 %>%<br>OFF</p>
+			 		</div>
+		 		<% end %>
+	  	</div>
 		<% end %>
-			<div class="card-repurchase-action">
+		<div class="card-repurchase-action">
+			<div class="add">
 				<%= form_tag order_items_path do %>
-		          <%= button_tag  "Add to Cart" , name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary" %>
-		         <% end %>
+        	<%= button_tag  "Add to Cart", name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary btn-sm" %>
+       	<% end %>
 			</div>
+			<div class="buy">
+			<%= form_tag order_items_path do %>
+      	<%= button_tag  "Buy Now", name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-success btn-sm" %>
+     	<% end %>
+			</div>
+		</div>
 	</div>
 </div>
