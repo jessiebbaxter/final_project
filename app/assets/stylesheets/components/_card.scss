@@ -48,9 +48,11 @@
 // stretch card
 .card-stretch {
   margin: 5px 0px;
-  // box-shadow: 0 0 1px rgba(0,0,0,0.2);
   display: flex;
   justify-content: space-between;
+  h5, p {
+    color: $black;
+  }
 }
 
 .card-stretch-img {
@@ -59,7 +61,6 @@
   background-position: center;
   background-size: cover;
   box-shadow: 0 0 1px rgba(0,0,0,0.2);
-  // border-right: 1px solid rgba(0,0,0,0.2);
 }
 .card-stretch-content {
   padding-left: 10px;
