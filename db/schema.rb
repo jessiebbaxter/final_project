@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_25_182514) do
+ActiveRecord::Schema.define(version: 2018_11_27_005402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2018_11_25_182514) do
     t.bigint "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "photo"
     t.bigint "coupon_id"
     t.index ["coupon_id"], name: "index_inventories_on_coupon_id"
     t.index ["seller_id"], name: "index_inventories_on_seller_id"
@@ -103,7 +104,18 @@ ActiveRecord::Schema.define(version: 2018_11_25_182514) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "uid"
+    t.string "facebook_picture_url"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "token"
+    t.datetime "token_expiry"
     t.string "customer_id"
+    t.string "street_address"
+    t.string "suburb"
+    t.string "state"
+    t.string "post_code"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
