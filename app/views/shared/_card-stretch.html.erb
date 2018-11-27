@@ -12,19 +12,30 @@
 		    <div class="content-stretch-footer">
 		    	<% if product.rating.present? %>
 			    	<div class="rating">
-		          <div class="star-rating" title="">
-		            <div class="back-stars">
-		              <% 5.times do %>              
-		                <i class="fa fa-star" aria-hidden="true"></i>
-		              <% end %>              
-		              <div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
-		                <% 5.times do %>  
-		                  <i class="fa fa-star" aria-hidden="true"></i>
-		                <% end %>  
-		              </div>
-		            </div>
-		          </div>
-		          <p class="num-reviews">(<%= product.review_count %>)</p>    
+	          	<div class="star-rating" title="">
+	            	<div class="back-stars">
+	              	<% 5.times do %>              
+	                	<i class="fa fa-star" aria-hidden="true"></i>
+	              	<% end %>              
+	              	<div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
+	                	<% 5.times do %>  
+	                  <i class="fa fa-star" aria-hidden="true"></i>
+	                	<% end %>  
+	              	</div>
+	            	</div>
+	          	</div>
+	          	<p class="num-reviews">(<%= product.review_count %>)</p>
+		        </div>
+		      <% else %>
+		      	<div class="rating">
+	          	<div class="star-rating" title="">
+	            	<div class="back-stars">
+	              	<% 5.times do %>              
+	                	<i class="fa fa-star" aria-hidden="true"></i>
+	              	<% end %>              
+	            	</div>
+	          	</div>
+	          	<p class="num-reviews">(0)</p>
 		        </div>
 		      <% end  %>
 		    	<div class="price">
