@@ -5,12 +5,47 @@
 			<%= render 'shared/search' %>
 		</div>
 		<div class="products-container">
-	      <h1>Buy again</h1>
+	      <h1>Quick Buys</h1>
 	      <div class="cards-container row">
 	          <% @quick_buy_list.each do |quick_buy_item| %>
 	            <%= render "shared/card-image", quick_buy_item: quick_buy_item %>
 	          <% end %>
 	       </div>
+	       <% if @quick_buy_list.count == 0 %>
+		       <div class="quick-buy-info">
+		       	<h4>Generate your Quick Buy list to repurchase in 1-click!</h4>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<div class="card-dashboard">
+					       		<div class="icon">
+					       			<i class="far fa-envelope"></i>
+					       		</div>
+					       		<div class="content">
+					       			<p>Connect your gmail to  generate automatically</p>
+					       		</div>
+					       		<div class="action">
+					       			<%= button_tag  "Connect", class: "btn btn-primary" %>
+					       		</div>
+					       	</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<div class="card-dashboard">
+					       		<div class="icon">
+					       			<i class='fas fa-heart'></i>
+					       		</div>
+					       		<div class="content">
+					       			<p>Heart your favorite  items to add manually</p>
+					       		</div>
+					       		<div class="action">
+					       			<%= button_tag  "Search", class: "btn btn-primary" %>
+					       		</div>
+					       	</div>
+					       </div>
+					     </div>
+		       </div>
+				<% end %>
 	    </div>
 	</div>
 </div>

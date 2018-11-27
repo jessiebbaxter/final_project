@@ -25,9 +25,11 @@
         </div>
         <div class="col-xs-12 col-sm-6">
           <div class="product-selector">
-            <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
-            <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
-            <% end %>
+            <% if @varient_options.count > 1 %>
+              <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
+              <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
+              <% end %>
+            <% end  %>
           </div>
           <div id="product-price-holder">
             <div class="product-prices " id="product-prices">

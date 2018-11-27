@@ -31,17 +31,6 @@
 	padding: 10px 0;
 }
 
-.heart-save {
-	outline: none;
-	border: 0;
-	color: #97B1AB;
-	&:hover {
-		color: $turquoise;
-		font-size: 18px;
-	}
-}
-
-
 // Larger screens
 @media screen and (min-width: 992px) {
   .product-selector {
