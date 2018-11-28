@@ -40,6 +40,7 @@
       </tbody>
     </table>
     <div class="checkout-area">
+    <p>Shipping: $<%= money_without_cents @ship.cost %></p>
     <h3>Total = $<span class="total-sum"></span></h3>
     <% if current_user.customer_id %>
       <%= form_tag order_payments_path(@order), method: :post do %>
