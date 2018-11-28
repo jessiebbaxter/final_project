@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   def store_location
     # store last url - this is needed for post-login redirect to whatever the user last visited.
     return unless request.get?
-
     if (request.path != "/users/sign_in" &&
 
         request.path != "/admins/sign_in" &&
@@ -28,8 +27,11 @@ class ApplicationController < ActionController::Base
         !request.xhr?) # don't store ajax calls
 
       session[:previous_url] = request.fullpath
-
     end
+  end
+
+  def default_url_options
+    { host: ENV["www.bellabird.net"] || "localhost:3000" }
   end
 
   def after_sign_in_path_for(resource)
