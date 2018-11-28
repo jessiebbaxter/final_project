@@ -10,7 +10,7 @@
     </div>
   <% end %>
   <div class="card-inventory-shipping">
-    <p>FREE delivery<br>Tues, Nov 12</p>
+    <%= render "shared/display_shipping", inventory: inventory %>
   </div>
   <div class="card-inventory-price text-center">
     <% if inventory.coupon_id.present? %>
@@ -36,7 +36,7 @@
 <div class="card-inventory-xs-sm hidden-md hidden-lg">
   <div class="seller">
     <h4><strong><%= inventory.seller.domain %></strong></h4>
-    <p>FREE delivery<br>Tues, Nov 12</p>
+    <%= render "shared/display_shipping", inventory: inventory %>
   </div>
   <div class="save">
     <%= form_tag product_quick_buy_items_path(@product), method: :post do %>

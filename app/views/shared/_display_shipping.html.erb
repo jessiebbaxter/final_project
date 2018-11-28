@@ -1,0 +1,14 @@
+<% @shipping_array = [] %>
+<% @shipping_list = Shipping.where(seller_id: inventory.seller_id) %>
+  <% @shipping_list.order(cost_cents: :asc).each do |ship| %>
+      <% if ship.minimum_spend.to_i < inventory.price.to_i %>
+        <% @shipping_array << ship %>
+      <% end %>
+  <% end %>
+  <% @ship = @shipping_array.first %>
+  <% @cost = @ship.cost %>
+  <% if @cost == 0 %>
+    <p>FREE Delivery<br><%= (Date.today + @ship.shipping_speed).strftime("%a, %b %e") %></p>
+  <% else %>
+    <p>$ <%= money_without_cents @cost %> Delivery<br><%= (Date.today + @ship.shipping_speed).strftime("%a, %b %e") %></p>
+  <% end %>
