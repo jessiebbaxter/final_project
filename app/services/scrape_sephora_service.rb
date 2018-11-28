@@ -70,18 +70,22 @@ class ScrapeSephoraService
 						review_count: element["attributes"]["reviews-count"].to_i
 					)
 
-				new_product.remote_photo_url = element["attributes"]["image-urls"].first
-				new_product.save
+				begin
+					new_product.remote_photo_url = element["attributes"]["image-urls"].first
+					new_product.save
 
-				puts 'CREATED PRODUCT'
+					puts 'CREATED PRODUCT'
 
-				@product_url = element["attributes"]["web-url"]
-				@product_id = Product.last.id
+					@product_url = element["attributes"]["web-url"]
+					@product_id = Product.last.id
 
-				product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
-				product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
-				
-				create_variants(product_api)
+					product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
+					product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
+					
+					create_variants(product_api)
+				rescue
+					puts "One product skipped due to image..."
+				end
 			end
 		end
 	end
@@ -108,6 +112,7 @@ class ScrapeSephoraService
 									name: element["attributes"]["name"],
 									product_id: @product_id
 								)
+							begin
 							new_variant.remote_photo_url = element["attributes"]["image-url"]
 							new_variant.save
 
@@ -115,6 +120,9 @@ class ScrapeSephoraService
 							@variant_id = Varient.last.id
 
 							create_inventory(element)
+							rescue
+								puts "One variant skipped due to image..."
+							end
 						end
 					end
 				end
