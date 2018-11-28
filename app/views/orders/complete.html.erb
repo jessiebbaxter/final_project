@@ -20,16 +20,18 @@
 		      		**** **** **** 4242</p>
 		      	<p><strong>Shipping address:</strong><br>
 		      		<%= current_user.street_address %><br>
-			      	<%= current_user.suburb %> 
-			      	<%= current_user.state %> 
+			      	<%= current_user.suburb %>
+			      	<%= current_user.state %>
 			      	<%= current_user.post_code %>
 			     </p>
 			     <a href="">Cancel this order?</a>
 			     <a href="">Help & Contact</a>
 			     <a href="">My Account</a>
+           <p>Expected Delivery <%= (Date.today + @ship.shipping_speed).strftime("%a, %b %e") %></p>
 			   </div>
 			   <div class="content-order-details">
 			   	<h4 class="text-center">Your Order Details</h4>
+          <p>Shipping Total: $<%= money_without_cents @ship.cost %></p>
 			   	<table class="table table-responsive">
 			      <thead>
 			        <tr>

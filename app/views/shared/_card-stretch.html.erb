@@ -6,7 +6,7 @@
 	  	<div class="card-stretch-content">
 	    	<div class="content-stretch-header">
 	    		<h5><%= product.brand %></h5>
-	      		<p><%=h truncate(product.name, :length => 45, :separator => ' ') %></p>
+	      		<p><%=h truncate(product.name, :length => 40) %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
 		    	<% if product.rating.present? %>
