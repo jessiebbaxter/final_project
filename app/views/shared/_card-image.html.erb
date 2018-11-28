@@ -4,7 +4,7 @@
 		 	<div class="card-repurchase-img" style="background-image: url('<%= cl_image_path quick_buy_item.inventory.varient.photo, crop: :fill %>');">
 		 		<% if quick_buy_item.inventory.coupon_id.present? %>
 			 		<div class="discount">
-			 			<p><%= Coupon.find(quick_buy_item.inventory.coupon_id).discount * 100 %>%<br>OFF</p>
+			 			<p><strong><%= (Coupon.find(quick_buy_item.inventory.coupon_id).discount * 100).to_i %>%<br>OFF</strong></p>
 			 		</div>
 		 		<% end %>
 	  	</div>
