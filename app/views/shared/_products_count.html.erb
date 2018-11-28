@@ -6,8 +6,8 @@
         <% seller_array << seller.domain%>
       <% end %>
     <% end %>
-    <%= seller_array.uniq.count %> sellers...
+    <%= seller_array.uniq.count %> sellers
   </p>
 <% else %>
-  <p> Showing <%= @products.count %> products... </p>
+  <p> Showing <%= @products.count %> products</p>
 <% end %>
