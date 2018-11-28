@@ -7,7 +7,8 @@
           <div class="product-details">
             <div class="product-details-header">
               <div class="product-details-header-title">
-                <h3><%= @product.name %> </h3>
+                <h3><%= @product.brand %></h3>
+                <h5><%= @product.name %></h5>
               </div>
               <%= render 'shared/rating' %>
             </div>
@@ -24,40 +25,16 @@
         </div>
         <div class="col-xs-12 col-sm-6">
           <div class="product-selector">
-            <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
-            <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
-            <% end %>
+            <% if @varient_options.count > 1 %>
+              <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
+              <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
+              <% end %>
+            <% end  %>
           </div>
           <div id="product-price-holder">
             <div class="product-prices " id="product-prices">
               <% @current_varient.inventories.each do |inventory| %>
-                <div class="card-inventory">
-                  <div class="card-inventory-seller">
-                    <p><strong><%= inventory.seller.domain %></strong></p>
-                  </div>
-                  <% if current_user %>
-                    <div class="card-inventory-save">
-                      <%= form_tag product_quick_buy_items_path(@product), method: :post do %>
-                      <%= button_tag  "<i class='fas fa-heart'></i>".html_safe, name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
-                      <% end %>
-                    </div>
-                  <% end %>
-                  <div class="card-inventory-shipping">
-                    <p>FREE delivery<br>Tues, Nov 12</p>
-                  </div>
-                  <div class="card-inventory-price">
-                    <p><strong>$ <%= inventory.price %></strong></p>
-                  </div>
-                  <%= form_tag order_items_path do %>
-                    <%= select_tag :qty,  options_for_select((1..5), params[:qty]), id: "order_item_qty", class: "dropdown" %>
-                      <% if current_user %>
-                        <%= button_tag  "Add" , name: "inventory_id", value: "#{inventory.id}", class: "btn btn-primary" %>
-                      <% else %>
-                        <!-- Modal link -->
-                        <%= link_to "Add", "#", class: "btn btn-primary", :id => 'add-product', data: {toggle: "modal", target: "#signInModal"} %>
-                      <% end %>
-                  <% end %>
-                </div>
+                <%= render 'shared/inventory-card', inventory: inventory %>
               <% end %>
             </div>
             <%= render 'shared/modal' %>

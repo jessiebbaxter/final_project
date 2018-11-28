@@ -1,9 +1,8 @@
 <div class="wrapper">
   <div class="container">
-    <h1>Search</h1>
     <%= render 'shared/search' %>
     <div class="products-container">
-      <h1>Results</h1>
+      <h2><strong>Results</strong></h1>
       <%= render "shared/products_count" %>
       <div class="cards-container row">
         <% @products.each do |product| %>

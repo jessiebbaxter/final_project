@@ -3,25 +3,24 @@
 	<div class="card-stretch">
 		 	<div class="card-stretch-img" style="background-image: url('<%= cl_image_path product.photo, crop: :fill %>');">
 			</div>
-		
 	  	<div class="card-stretch-content">
 	    	<div class="content-stretch-header">
 	    		<h5><%= product.brand %></h5>
-	      		<p><%= product.name %></p>
+	      		<p><%=h truncate(product.name, :length => 40) %></p>
 	    	</div>
 		    <div class="content-stretch-footer">
 		    	<% if product.rating.present? %>
 			    	<div class="rating">
 	          	<div class="star-rating" title="">
 	            	<div class="back-stars">
-	              	<% 5.times do %>              
-	                	<i class="fa fa-star" aria-hidden="true"></i>
-	              	<% end %>              
-	              	<div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
-	                	<% 5.times do %>  
-	                  <i class="fa fa-star" aria-hidden="true"></i>
-	                	<% end %>  
-	              	</div>
+		              	<% 5.times do %>
+		                	<i class="fa fa-star" aria-hidden="true"></i>
+		              	<% end %>
+		              	<div class="front-stars" style="width:<%= ( product.rating / 5.0) * 100 %>%">
+		                	<% 5.times do %>
+		                  <i class="fa fa-star" aria-hidden="true"></i>
+		                	<% end %>
+		              	</div>
 	            	</div>
 	          	</div>
 	          	<p class="num-reviews">(<%= product.review_count %>)</p>
@@ -30,9 +29,9 @@
 		      	<div class="rating">
 	          	<div class="star-rating" title="">
 	            	<div class="back-stars">
-	              	<% 5.times do %>              
+	              	<% 5.times do %>
 	                	<i class="fa fa-star" aria-hidden="true"></i>
-	              	<% end %>              
+	              	<% end %>
 	            	</div>
 	          	</div>
 	          	<p class="num-reviews">(0)</p>

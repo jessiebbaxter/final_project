@@ -25,3 +25,19 @@
 .checkout-area {
   text-align: right;
 }
+
+@media screen and (max-width: 768px) {
+  .order-table-details {
+    display:none;
+    }
+  .table-responsive {
+    border: none;
+  }
+}
+
+@media (max-width: 440px) {
+  .table-responsive {
+      font-size:10px !important;
+      border: none;
+  }
+}

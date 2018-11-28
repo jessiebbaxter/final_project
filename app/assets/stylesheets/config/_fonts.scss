@@ -1,9 +1,10 @@
 // Import Google fonts
 @import url("https://fonts.googleapis.com/css?family=Merriweather:400,700|Montserrat:400,700");
-
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 // Define fonts for body and headers
 $body-font: "Montserrat", "sans-serif";
-$headers-font: "Merriweather", "serif";
+$headers-font: "Lato", "sans-serif";
+// $headers-font: "Merriweather", "serif";
 
 // To use a font file (.woff) uncomment following lines
 // @font-face {

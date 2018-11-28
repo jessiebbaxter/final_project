@@ -1,6 +1,16 @@
+.search-container {
+	padding-top: 15px;
+}
 .search-bar {
 	padding: 10px;
+  	padding-bottom: 8px;
 	border-radius: 3px;
-	width: calc(100% - 120px);
+	width: calc(100% - 50px);
 	color: black;
+}
+#search-form {
+	button {
+		padding: 10px 12px;
+		margin-bottom: 5px;
+	}
 }

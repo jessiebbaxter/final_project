@@ -46,31 +46,47 @@ class ScrapeSephoraService
 		result["data"].each do |element|
 			
 			product_categories = []
-
 			element["relationships"]["categories"]["data"].each do |category|
 				product_categories << @categories[category["id"]]
 			end
-
-			new_product = Product.new(
-					name: element["attributes"]["name"],
-					category: product_categories,
-					brand: @brands[element["relationships"]["brand"]["data"]["id"]],
-					rating: element["attributes"]["rating"].to_i,
-					review_count: element["attributes"]["reviews-count"].to_i
-				)
-
-			new_product.remote_photo_url = element["attributes"]["image-urls"].first
-			new_product.save
-
-			puts 'Created product'
-
-			@product_url = element["attributes"]["web-url"]
-			@product_id = Product.last.id
-
-			product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
-			product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
 			
-			create_variants(product_api)
+			brand = @brands[element["relationships"]["brand"]["data"]["id"]]
+			name = element["attributes"]["name"]
+
+			product = {
+				brand: brand,
+				name: name
+			}
+
+			product_found = MatchingService.new.product_found(product)
+
+			if product_found == false
+
+				new_product = Product.new(
+						name: name,
+						category: product_categories,
+						brand: brand,
+						rating: element["attributes"]["rating"].to_i,
+						review_count: element["attributes"]["reviews-count"].to_i
+					)
+
+				begin
+					new_product.remote_photo_url = element["attributes"]["image-urls"].first
+					new_product.save
+
+					puts 'CREATED PRODUCT'
+
+					@product_url = element["attributes"]["web-url"]
+					@product_id = Product.last.id
+
+					product_url_id = element["attributes"]["web-url"].gsub("https://www.sephora.com.au/products/", "")
+					product_api = "https://www.sephora.com.au/api/v2.1/products/"+"#{product_url_id}"+"?&include=variants,variants.ads,product_articles"
+					
+					create_variants(product_api)
+				rescue
+					puts "One product skipped due to image..."
+				end
+			end
 		end
 	end
 
@@ -85,18 +101,29 @@ class ScrapeSephoraService
 			else
 				result["included"].each do |element|
 
-					if element["attributes"]["name"].present?
-						new_variant = Varient.new(
-								name: element["attributes"]["name"],
-								product_id: @product_id
-							)
-						new_variant.remote_photo_url = element["attributes"]["image-url"]
-						new_variant.save
+					variant_name = element["attributes"]["name"]
 
-						puts 'Created variant'
-						@variant_id = Varient.last.id
+					if variant_name.present?
 
-						create_inventory(element)
+						variant_found = MatchingService.new.variant_found(variant_name, @product_id)
+
+						if variant_found == false
+							new_variant = Varient.new(
+									name: element["attributes"]["name"],
+									product_id: @product_id
+								)
+							begin
+							new_variant.remote_photo_url = element["attributes"]["image-url"]
+							new_variant.save
+
+							puts 'CREATED VARIANT'
+							@variant_id = Varient.last.id
+
+							create_inventory(element)
+							rescue
+								puts "One variant skipped due to image..."
+							end
+						end
 					end
 				end
 			end
@@ -114,14 +141,19 @@ class ScrapeSephoraService
 			variant_url = @product_url+'/v/'+element["attributes"]["slug-url"]
 		end
 
-		Inventory.create(
-				price: element["attributes"]["price"]/100,
-				source_url: variant_url,
-				varient_id: @variant_id,
-				seller_id: @seller_id 
-			)
+		puts "Checking if inventory exists..."
+		inventory_found = Inventory.where("source_url = ?", "#{variant_url}").present?
 
-		puts 'Created inventory'
+		if inventory_found == false
+			Inventory.create(
+					price: element["attributes"]["price"]/100,
+					source_url: variant_url,
+					varient_id: @variant_id,
+					seller_id: @seller_id 
+				)
+
+			puts 'CREATED INVENTORY'
+		end
 	end
 
 	def run(products_per_page, page_count)
