@@ -1,11 +1,63 @@
 <div class="wrapper">
   <div class="container">
-    <div class="complete-container text-center">
-      <h3>Thank you for your order! 🎉 🦄</h3>
-      <br>
-      <h4>Order # <%= @order.id %> is being processed by <strong>Paal</strong></h4>
-      <br>
-      <p>We will email you a shipping notification when it's heading your way.</p>
-    </div>
+  	<div class="row">
+  		<div class="col-xs-12 col-md-6 col-md-offset-3">
+  			<div class="complete-container">
+		      <div class="content-header text-center">
+		      	<h3>Thank you for your order! 🎉 🦄</h3>
+		      </div>
+		      <div class="content-summary">
+		      	<h4 class="text-center">Your Order Summary</h4>
+		      	<p><strong>Order number:</strong> <%= @order.id + 2357 %></p>
+		      	<p><strong>Total:</strong> $<%= @order.amount %></p>
+		      	<% total_qty = 0 %>
+		      	<% @order.order_items.each do |item| %>
+		      		<% total_qty += item.qty %>
+		      	<% end %>
+		      	<p><strong>Items:</strong> <%= total_qty %></p>
+		      	<p><strong>Shipping address:</strong><br>
+		      		<%= current_user.street_address %><br>
+			      	<%= current_user.suburb %> 
+			      	<%= current_user.state %> 
+			      	<%= current_user.post_code %>
+			     </p>
+			     <a href="">Cancel this order?</a>
+			     <a href="">Help & Contact</a>
+			     <a href="">My Account</a>
+			   </div>
+			   <div class="content-order-details">
+			   	<h4 class="text-center">Your Order Details</h4>
+			   	<table class="table table-responsive">
+			      <thead>
+			        <tr>
+			          <th style="width: 10%", scope="column">Product</th>
+			          <th style="width: 10%", scope="column", class="td-center ">Seller</th>
+			          <th style="width: 15%", scope="column", class="td-center">Price</th>
+			          <th style="width: 15%", scope="column", class="td-center">Total</th>
+			          <th style="width: 10%", scope="column", class="td-center order-table-qty">Qty</th>
+			        </tr>
+			      </thead>
+			      <tbody class="table-align-middle">
+			        <% @order.order_items.order('id').each do |order_item| %>
+			        <% item = Inventory.find(order_item.inventory_id) %>
+			          <tr>
+			            <td>
+			              <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %>
+			            </td>
+			            <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
+			            </td>
+			            <td class="td-center"><%= item.price %></td>
+			            <td class="order-item-total td-center""> <%= order_item.qty*item.price %></td>
+			            <td class="td-center order-table-qty">
+			              <%=  order_item.qty %>
+			            </td>
+			          </tr>
+			        <% end %>
+			      </tbody>
+			    </table>
+			   </div>
+		    </div>
+  		</div>
+  	</div>
   </div>
 </div>
