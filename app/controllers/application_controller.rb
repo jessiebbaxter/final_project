@@ -5,49 +5,38 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  private
+  def store_location
+    # store last url - this is needed for post-login redirect to whatever the user last visited.
+    return unless request.get?
 
-    def store_location
+    if (request.path != "/users/sign_in" &&
 
-      # store last url - this is needed for post-login redirect to whatever the user last visited.
+        request.path != "/admins/sign_in" &&
 
-      return unless request.get?
+        request.path != "/admin" &&
 
-      if (request.path != "/users/sign_in" &&
+        request.path != "/users/sign_up" &&
 
-          request.path != "/admins/sign_in" &&
+        request.path != "/users/password/new" &&
 
-          request.path != "/admin" &&
+        request.path != "/users/password/edit" &&
 
-          request.path != "/users/sign_up" &&
+        request.path != "/users/confirmation" &&
 
-          request.path != "/users/password/new" &&
+        request.path != "/users/sign_out" &&
 
-          request.path != "/users/password/edit" &&
+        !request.xhr?) # don't store ajax calls
 
-          request.path != "/users/confirmation" &&
-
-          request.path != "/users/sign_out" &&
-
-          !request.xhr?) # don't store ajax calls
-
-        session[:previous_url] = request.fullpath
-
-      end
+      session[:previous_url] = request.fullpath
 
     end
+  end
 
+  def after_sign_in_path_for(resource)
+    session[:previous_url] || root_path
+  end
 
-    def after_sign_in_path_for(resource)
-
-      session[:previous_url] || root_path
-
-    end
-
-
-    def after_sign_out_path_for(resource)
-
-      session[:previous_url] || root_path
-
-    end
+  def after_sign_out_path_for(resource)
+    session[:previous_url] || root_path
+  end
 end
