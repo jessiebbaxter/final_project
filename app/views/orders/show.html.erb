@@ -44,7 +44,7 @@
     <% if current_user.customer_id %>
       <%= form_tag order_payments_path(@order), method: :post do %>
         <%= hidden_field_tag 'amount', finalise_total %>
-        <%= submit_tag 'Checkout', class: 'btn btn-primary' %>
+        <%= submit_tag 'Pay Now', class: 'btn btn-primary' %>
       <% end %>
     <% else %>
       <%= form_tag new_order_payment_path(@order), method: :get do %>

@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-   before_action :set_order
+   before_action :set_order, except: [:quick_buy]
    helper_method :finalise_total
 
   def new
@@ -25,6 +25,20 @@ class PaymentsController < ApplicationController
     rescue Stripe::CardError => e
       flash[:alert] = e.message
       redirect_to new_order_payment_path(@order)
+  end
+
+  def quick_buy
+    @order = Order.create!(user_id: current_user.id, state: "pending")
+    if params[:qty].nil?
+      @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: 1)
+    else
+      @order_item = OrderItem.create!(inventory_id: params[:inventory_id], order_id: @order.id, qty: params[:qty])
+    end
+    @order.order_items.each do |item|
+      @order.amount += (item.inventory.price * item.qty)
+    end
+    @order.save
+    create
   end
 
   private

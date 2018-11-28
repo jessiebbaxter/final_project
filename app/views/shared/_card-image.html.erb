@@ -16,9 +16,9 @@
        	<% end %>
 			</div>
 			<div class="buy">
-			<%= form_tag order_items_path do %>
-      	<%= button_tag  "Buy Now", name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-success btn-sm" %>
-     	<% end %>
+      <%= form_tag quick_buy_path, method: :post do %>
+        <%= button_tag 'Buy Now', name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: 'btn btn-success btn-sm' %>
+      <% end %>
 			</div>
 		</div>
 	</div>
