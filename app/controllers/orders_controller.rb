@@ -4,7 +4,9 @@ class OrdersController < ApplicationController
 
   def show
     # @order = current_user.orders.where(state: 'paid').find(params[:id])
-    set_shipping_price
+    if @order.order_items.count > 0
+      set_shipping_price
+    end
   end
 
   def complete
