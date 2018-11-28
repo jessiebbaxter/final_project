@@ -15,6 +15,10 @@
 		      		<% total_qty += item.qty %>
 		      	<% end %>
 		      	<p><strong>Items:</strong> <%= total_qty %></p>
+		      	<p><strong>Delivery details</strong><br>
+		      	<%= @ship.rule %><br>
+				Expected Delivery by <%= (Date.today + @ship.shipping_speed).strftime("%a, %b %e") %>
+		      	</p>
 		      	<p> <strong>Payment details:</strong><br>
 		      		<i class="fab fa-cc-visa"></i>
 		      		**** **** **** 4242</p>
@@ -27,11 +31,9 @@
 			     <a href="">Cancel this order?</a>
 			     <a href="">Help & Contact</a>
 			     <a href="">My Account</a>
-           <p>Expected Delivery <%= (Date.today + @ship.shipping_speed).strftime("%a, %b %e") %></p>
 			   </div>
 			   <div class="content-order-details">
 			   	<h4 class="text-center">Your Order Details</h4>
-          <p>Shipping Total: $<%= money_without_cents @ship.cost %></p>
 			   	<table class="table table-responsive">
 			      <thead>
 			        <tr>

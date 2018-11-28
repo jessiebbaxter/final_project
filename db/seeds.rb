@@ -33,7 +33,7 @@
 # comment out everything above this comment and run the seed
 # on just the below lines.
 
-puts 'destroying shipping guidelines'
+puts 'Destroying shipping guidelines'
 Shipping.destroy_all
 puts 'Adding Shipping Guidelines...'
 
