@@ -19,7 +19,9 @@
         <% item = Inventory.find(order_item.inventory_id) %>
           <tr>
             <td>
-              <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %>
+              <%= link_to product_path(id: item.varient.product, varient_id: item.varient) do %>
+                <%= cl_image_tag(item.varient.photo, :width=>100, :height=>100, :crop=>"thumb") %>
+              <% end %>
             </td>
             <td class="order-table-details"><%= link_to "#{item.varient.product.brand} #{item.varient.product.name} - #{item.varient.name}", product_path(id: item.varient.product, varient_id: item.varient) %>
             </td>
