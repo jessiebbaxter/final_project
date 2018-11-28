@@ -29,6 +29,7 @@
       <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
         <li><a href="/">Profile</a></li>
         <li><a href="/">My orders</a></li>
+        <li><%= link_to "Sign out", destroy_user_session_path, :method => 'delete' %></li>
       </ul>
     </div>
   </div>
