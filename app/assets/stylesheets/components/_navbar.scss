@@ -60,6 +60,9 @@
 }
 .nav-cart {
   padding: 0 10px;
+  i {
+    font-size: 18px;
+  }
 }
 
 /* Basic navbar item */
@@ -118,4 +121,7 @@
   margin-right: 0px;
   margin-top: 0px;
   padding-top: 0px;
+  i {
+    font-size: 20px;
+  }
 }
