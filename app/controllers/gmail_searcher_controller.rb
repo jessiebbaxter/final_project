@@ -11,7 +11,7 @@ class GmailSearcherController < ApplicationController
     # Request for a new aceess token just incase it expired
     # service.authorization.refresh!
     # Get a list of calendars
-    messages_list = service.list_user_messages('leconti2@gmail.com', q: 'asdfasdfasdfasdfasfasdfa').messages
+    messages_list = service.list_user_messages(current_user.email, q: 'asdfasdfasdfasdfasfasdfa').messages
     raise
     messages_list.each do |message|
       puts message
