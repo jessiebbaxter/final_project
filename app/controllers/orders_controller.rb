@@ -27,6 +27,7 @@ class OrdersController < ApplicationController
   end
 
   def set_shipping_price
+    if @order.inventories
     @shipping_array = []
     @shipping_list = Shipping.where(seller_id: @order.inventories.first.seller_id)
     @shipping_list.order(cost_cents: :asc).each do |ship|
@@ -35,5 +36,6 @@ class OrdersController < ApplicationController
       end
     end
     @ship = @shipping_array.first
+    end
   end
 end
