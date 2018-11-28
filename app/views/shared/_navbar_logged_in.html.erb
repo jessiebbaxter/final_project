@@ -4,8 +4,6 @@
 
   <!-- Right Navigation -->
   <div class="navbar-wagon-right hidden-xs hidden-sm">
-
-    <%= link_to '<i class="fas fa-bell"></i>'.html_safe, pricedrop_path, :class => "nav-notifcations" %>
     <%= link_to '<i class="fas fa-shopping-cart"></i>'.html_safe, order_path(current_user.find_or_create_pending_order), :class => "nav-cart" %>
 
     <!-- Profile picture with dropdown list -->
