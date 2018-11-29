@@ -11,9 +11,10 @@ class GmailSearcherController < ApplicationController
     # Request for a new aceess token just incase it expired
     # service.authorization.refresh!
     # Get a list of calendars
-    varient = Varient.find_by(name: 'Gobi')
+    varient = Varient.find(11583)
+    product = Product.find_by(varient_id: varient.id)
     inventory_list = []
-    if messages_list = service.list_user_messages(current_user.email, q: varient.name).messages
+    if messages_list = service.list_user_messages(current_user.email, q: product.name).messages
       inventory_list << varient
     end
     inventory_list << Varient.find(2703)
