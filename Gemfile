@@ -23,6 +23,8 @@ gem 'cloudinary'
 gem 'carrierwave', '~> 1.2'
 gem 'nokogiri'
 gem 'pg_search'
+gem 'omniauth-google-oauth2'
+gem 'google-api-client', require: 'google/apis/gmail_v1'
 
 gem 'poltergeist'
 gem 'launchy'
