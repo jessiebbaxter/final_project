@@ -1,3 +1,9 @@
 .checkout-container {
 	margin-bottom: 20px;
 }
+
+button.stripe-button-el,
+button.stripe-button-el>span {
+  background-color: #43c0ac !important;
+  background-image: none;
+}
