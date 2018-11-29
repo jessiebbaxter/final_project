@@ -12,7 +12,7 @@ class GmailSearcherController < ApplicationController
     # service.authorization.refresh!
     # Get a list of calendars
     varient = Varient.find(11583)
-    product = Product.find_by(varient_id: varient.id)
+    product = Product.find(varient.product_id)
     inventory_list = []
     if messages_list = service.list_user_messages(current_user.email, q: product.name).messages
       inventory_list << varient
