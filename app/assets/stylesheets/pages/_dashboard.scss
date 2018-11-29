@@ -4,6 +4,7 @@
 	background-color: $light-gray;
 	padding: 15px;
 	align-items: center;
+	position: relative;
 	i {
 		font-size: 25px;
 	}
@@ -22,4 +23,15 @@
 	h4 {
 		margin-bottom: 0px;
 	}
+}
+.gmail-connect {
+	margin-top: 5px;
+	.action {
+		margin-right: 12px;
+	}
+}
+.cross-out {
+	position: absolute;
+	top: 3px;
+	right: 8px;
 }

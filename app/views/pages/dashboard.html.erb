@@ -13,6 +13,26 @@
 		</div>
 		<div class="products-container">
 	      <h2><strong>Quick Buys</strong></h2>
+	      <div class="gmail-connect">
+	       	<div class="row">
+	       		<div class="col-xs-12 col-md-6">
+	       			<div class="card-dashboard">
+			       		<div class="icon">
+			       			<i class="far fa-envelope"></i>
+			       		</div>
+			       		<div class="content">
+			       			<p>Connect your gmail to generate automatically</p>
+			       		</div>
+			       		<div class="action">
+			       			<%= link_to "Connect", google_path, method: :get, class: 'btn btn-primary'%>
+			       		</div>
+			       		<div class="cross-out">
+			       			<p><strong>x</strong></p>
+			       		</div>
+			       	</div>
+	       		</div>
+	       	</div>
+	       </div>
 	      <div class="cards-container row">
 	          <% @quick_buy_list.each do |quick_buy_item| %>
 	            <%= render "shared/card-image", quick_buy_item: quick_buy_item %>
