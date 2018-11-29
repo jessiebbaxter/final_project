@@ -5,6 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" media="screen" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" />
     <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
 
     <style>
@@ -207,13 +208,14 @@
 
   @media screen and (max-width: 555px) {
     .background.error-page-wrapper {
-      padding:30px 5%;
+      /*padding:30px 5%;*/
     }
     .background.error-page-wrapper .content-container {
       padding:37px;
-      position: static;
+     /* position: static;*/
       left: 0;
       margin-left:0;
+      box-shadow: none;
     }
     .background.error-page-wrapper .head-line {
       font-size:36px;
@@ -236,7 +238,8 @@
 
   @media screen and (max-width: 450px) {
     .background.error-page-wrapper {
-      padding:30px;
+      box-shadow: none;
+      /*padding:30px;*/
     }
     .background.error-page-wrapper .head-line {
       font-size:32px;
