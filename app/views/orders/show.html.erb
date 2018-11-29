@@ -48,9 +48,9 @@
     <div class="checkout-area">
       <% if @order.order_items.count > 0 %>
         <% if @ship.cost != 0 %>
-          <p>Shipping = $<span class="order-item-shipping"><%= money_without_cents @ship.cost %></span></p>
+          <h4>Shipping = $<span class="order-item-shipping"><%= money_without_cents @ship.cost %></span></h4>
         <% else %>
-          <p>Shipping = FREE!</p>
+          <h4>Shipping = FREE!</h4>
         <% end %>
         <h3>Total = $<span class="total-sum"></span></h3>
         <% if current_user.customer_id %>
