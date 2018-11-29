@@ -46,18 +46,24 @@
       </tbody>
     </table>
     <div class="checkout-area">
-    <p>Shipping: $<%= money_without_cents @ship.cost %></p>
-    <h3>Total = $<span class="total-sum"></span></h3>
-    <% if current_user.customer_id %>
-      <%= form_tag order_payments_path(@order), method: :post do %>
-        <%= hidden_field_tag 'amount', finalise_total %>
-        <%= submit_tag 'Pay Now', class: 'btn btn-primary' %>
+      <% if @order.order_items.count > 0 %>
+        <% if @ship.cost != 0 %>
+          <p>Shipping = $<span class="order-item-shipping"><%= money_without_cents @ship.cost %></span></p>
+        <% else %>
+          <p>Shipping = FREE!</p>
+        <% end %>
+        <h3>Total = $<span class="total-sum"></span></h3>
+        <% if current_user.customer_id %>
+          <%= form_tag order_payments_path(@order), method: :post do %>
+            <%= hidden_field_tag 'amount', finalise_total %>
+            <%= submit_tag 'Pay Now', class: 'btn btn-primary btn-checkout' %>
+          <% end %>
+        <% else %>
+          <%= form_tag new_order_payment_path(@order), method: :get do %>
+            <%= submit_tag 'Checkout', class: 'btn btn-primary btn-checkout' %>
+          <% end %>
+        <% end %>
       <% end %>
-    <% else %>
-      <%= form_tag new_order_payment_path(@order), method: :get do %>
-        <%= submit_tag 'Checkout', class: 'btn btn-primary' %>
-      <% end %>
-    <% end %>
     </div>
   </div>
 </div>
