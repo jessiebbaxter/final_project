@@ -7,6 +7,8 @@ class Product < ApplicationRecord
 	validates :name, presence: true
 	validates :brand, presence: true
 
+  paginates_per 20
+
   include PgSearch
   pg_search_scope :global_search,
     against: [:name, :brand, :category],
