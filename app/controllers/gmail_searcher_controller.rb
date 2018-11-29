@@ -11,11 +11,20 @@ class GmailSearcherController < ApplicationController
     # Request for a new aceess token just incase it expired
     # service.authorization.refresh!
     # Get a list of calendars
-    messages_list = service.list_user_messages(current_user.email, q: 'asdfasdfasdfasdfasfasdfa').messages
-    raise
-    messages_list.each do |message|
-      puts message
+    varient = Varient.find_by(name: 'Better than Sex')
+    inventory_list = []
+    if messages_list = service.list_user_messages(current_user.email, q: varient.name).messages
+      inventory_list << varient
     end
+    inventory_list << Varient.find(2703)
+    inventory_list << Varient.find(3877)
+    inventory_list.each do |item|
+      product = item.inventories.first
+      @quick_buy = QuickBuyItem.create(inventory_id: product.id, product_id: item.product_id, user_id: current_user.id)
+    end
+
+    redirect_to root_path
+    flash[:notice] = "#{inventory_list.count} products have been found and added to your Quick Buys"
   end
 
 private
