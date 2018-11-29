@@ -2,18 +2,25 @@
 	display: flex;
 	justify-content: space-between;
 	background-color: $light-gray;
-	padding: 15px;
+	padding: 20px;
 	align-items: center;
 	position: relative;
 	i {
 		font-size: 25px;
+		padding-right: 20px;
 	}
 	p {
 		margin-bottom: 0px;
 	}
 	.content {
-		padding: 0px 20px;
+		padding: 0px 20px 0px 0px;
+		text-align: left;
 	}
+.quick-buy-info {
+	.content {
+		font-size: 13px;
+	}
+}
 }
 .dashboard-header-container {
 	padding-top: 10px;

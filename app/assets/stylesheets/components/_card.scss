@@ -58,12 +58,15 @@
 }
 .card-repurchase-action {
   display: flex;
-  flex-direction: row-reverse;
+  justify-content: space-between;
   padding: 20px;
   box-shadow: 0 0 1px rgba(0,0,0,0.1);
-  .add {
-    margin-left: 10px;
-  }
+}
+// Mobile
+@media screen and (max-width: 992px) {
+  .card-repurchase-action {
+    margin: 0px 15px;
+  }  
 }
 
 // stretch card
