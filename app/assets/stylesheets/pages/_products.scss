@@ -1,6 +1,26 @@
 .products-container {
-	margin-top: 30px;
+	margin-top: 20px;
+	h4 {
+		padding-bottom: 10px;
+	}
 }
-.search-container {
-	margin-top: 15px;
+.product-pagination {
+	font-size: 16px;
+	margin-bottom: 20px;
+	span {
+		padding: 0px 5px;
+	}
+	.first, .last {
+		display: none;
+	}
+	.prev, .next {
+		font-weight: bold;
+		font-size: 18px;
+	}
+	.prev {
+		padding-right: 10px,
+	}
+	.next {
+		padding-left: 10px;
+	}
 }

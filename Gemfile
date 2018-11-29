@@ -29,6 +29,7 @@ gem 'google-api-client', require: 'google/apis/gmail_v1'
 gem 'poltergeist'
 gem 'launchy'
 gem 'rest-client', '>= 2.0.2'
+gem 'kaminari'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
