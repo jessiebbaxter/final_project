@@ -12,24 +12,26 @@
 			<%= render 'shared/search' %>
 		</div>
 		<div class="products-container">
-	      <h2><strong>Quick Buys</strong></h2>
+	      <h2><strong>My Quick Buys</strong></h2>
 	      <div class="gmail-connect">
 	       	<div class="row">
 	       		<div class="col-xs-12 col-md-6">
-	       			<div class="card-dashboard">
-			       		<div class="icon">
-			       			<i class="far fa-envelope"></i>
-			       		</div>
-			       		<div class="content">
-			       			<p>Connect your gmail to generate automatically</p>
-			       		</div>
-			       		<div class="action">
-			       			<%= link_to "Connect", google_path, method: :get, class: 'btn btn-primary'%>
-			       		</div>
-			       		<div class="cross-out">
-			       			<p><strong>x</strong></p>
-			       		</div>
-			       	</div>
+	       			<% if @quick_buy_list.count > 0 %>
+		       			<div class="card-dashboard">
+				       		<div class="icon">
+				       			<i class="far fa-envelope"></i>
+				       		</div>
+				       		<div class="content">
+				       			<p><strong>Connect your Gmail.</strong> If you've purchased it in the past, we'll add it to your list!</p>
+				       		</div>
+				       		<div class="action">
+				       			<%= link_to "Connect", google_path, method: :get, class: 'btn btn-primary'%>
+				       		</div>
+				       		<div class="cross-out">
+				       			<p><strong>x</strong></p>
+				       		</div>
+				       	</div>
+			       	<% end %>
 	       		</div>
 	       	</div>
 	       </div>
@@ -39,38 +41,38 @@
 	          <% end %>
 	       </div>
 	       <% if @quick_buy_list.count == 0 %>
-	       <h4>Generate your Quick Buys now:</h4>
 		       <div class="quick-buy-info">
-					<div class="row">
-						<div class="col-xs-12 col-sm-9">
-							<div class="card-dashboard">
-			       		<div class="icon">
-			       			<i class="far fa-envelope"></i>
-			       		</div>
-			       		<div class="content">
-			       			<p>Connect your gmail to generate automatically</p>
-			       		</div>
-			       		<div class="action">
-			       			<%= link_to "Connect", google_path, method: :get, class: 'btn btn-primary'%>
-			       		</div>
-			       	</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-9">
+								<h4>Your Quick Buys are your go to beauty items. Start building your list now by:</h4>
+								<div class="card-dashboard">
+									<div class="icon hidden-xs">
+				       			<i class="far fa-envelope"></i>
+				       		</div>
+				       		<div class="content">
+				       			<p><strong>Connecting your Gmail.</strong> If you've purchased it in the past, we'll add it to your list!</p>
+				       		</div>
+				       		<div class="action">
+				       			<%= link_to "Connect", google_path, method: :get, class: 'btn btn-primary'%>
+				       		</div>
+				       	</div>
+							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-9">
-							<div class="card-dashboard">
-			       		<div class="icon">
-			       			<i class='fas fa-heart'></i>
-			       		</div>
-			       		<div class="content">
-			       			<p>Heart your favorite items to add manually</p>
-			       		</div>
-			       		<div class="action">
-			       			<%= button_tag  "Search", class: "btn btn-primary" %>
-			       		</div>
-			       	</div>
-			       </div>
-			     </div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-9">
+								<div class="card-dashboard">
+									<div class="icon hidden-xs">
+				       			<i class="far fa-heart"></i>
+				       		</div>
+				       		<div class="content">
+				       			<p><strong>Hearting your favorite items.</strong> Just search for what you love and click on the heart.</p>
+				       		</div>
+				       		<div class="action">
+				       			<%= button_tag  "Search", class: "btn btn-primary" %>
+				       		</div>
+				       	</div>
+				       </div>
+				     </div>
 		       </div>
 				<% end %>
 	    </div>
