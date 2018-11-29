@@ -25,6 +25,13 @@
         </div>
         <div class="col-xs-12 col-sm-6">
           <div class="product-selector">
+            <div class="variant-images">
+              <% if @varient_options.count > 1 %>
+                <% @product.varients do |variant| %>
+                  <%= cl_image_tag(variant.photo, :width=>100, :height=>100, :crop=>"thumb") %>
+                <% end %>
+              <% end %>
+            </div>
             <% if @varient_options.count > 1 %>
               <%= form_tag "", { method: :get, class: "variant-form js-variant-form" } do %>
               <%= select_tag(:varient_id, options_for_select(@varient_options, @varient_id)) %>
