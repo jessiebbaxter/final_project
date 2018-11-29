@@ -3,12 +3,15 @@
     <%= render 'shared/search' %>
     <div class="products-container">
       <h2><strong>Results</strong></h1>
-      <%= render "shared/products_count" %>
+        <%= render "shared/products_count" %>
       <div class="cards-container row">
         <% @products.each do |product| %>
           <% @price_array = [] %>
           <%= render "shared/card-stretch", product: product %>
         <% end %>
+      </div>
+      <div class="product-pagination text-center">
+        <%= paginate @products, window: 1, left: 1, right: 1 %>
       </div>
     </div>
   </div>
