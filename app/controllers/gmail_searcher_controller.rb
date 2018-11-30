@@ -17,11 +17,17 @@ class GmailSearcherController < ApplicationController
     if messages_list = service.list_user_messages(current_user.email, q: product.name).messages
       inventory_list << varient
     end
+    inventory_list << Varient.find(4615)
+    inventory_list << Varient.find(11327)
     inventory_list << Varient.find(2703)
+    inventory_list << Varient.find(11667)
     inventory_list << Varient.find(3877)
     inventory_list.each do |item|
       product = item.inventories.first
-      @quick_buy = QuickBuyItem.create(inventory_id: product.id, product_id: item.product_id, user_id: current_user.id)
+      already_saved = QuickBuyItem.where("user_id = ? and product_id = ? and inventory_id = ?", current_user.id, item.product_id, product.id).present?
+      if already_saved == false
+        @quick_buy = QuickBuyItem.create(inventory_id: product.id, product_id: item.product_id, user_id: current_user.id)
+      end
     end
 
     redirect_to root_path
