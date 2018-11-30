@@ -31,6 +31,11 @@
   margin-top: 15px;
   box-shadow: 0 0 1px rgba(0,0,0,0.1);
   display: relative;
+  .delete {
+    position: absolute;
+    bottom: 80px;
+    right: 30px;
+  }
   .discount {
     position: absolute;
     top: 30px;
@@ -65,7 +70,7 @@
 // Mobile
 @media screen and (max-width: 992px) {
   .card-repurchase-action {
-    margin: 0px 15px;
+    padding: 20px 35px;
   }  
 }
 
@@ -154,6 +159,9 @@
     margin-right: 20px;
   }
 }
+.card-inventory-seller {
+    width: 100px;
+  }
 .card-inventory-shipping {
   p {
     font-size: 13px;

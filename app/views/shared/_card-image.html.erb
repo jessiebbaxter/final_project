@@ -7,18 +7,21 @@
 			 			<p><strong><%= (Coupon.find(quick_buy_item.inventory.coupon_id).discount * 100).to_i %>%<br>OFF</strong></p>
 			 		</div>
 		 		<% end %>
+		 		<div class="delete">
+		 			<%= link_to "<i class='far fa-trash-alt'></i>".html_safe, quick_buy_item_path(quick_buy_item), method: :delete %>
+		 		</div>
 	  	</div>
 		<% end %>
 		<div class="card-repurchase-action">
-			<div class="add">
-				<%= form_tag order_items_path do %>
-        	<%= button_tag  "Add to Cart", name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary btn-sm" %>
-       	<% end %>
-			</div>
 			<div class="buy">
       <%= form_tag quick_buy_path, method: :post do %>
         <%= button_tag 'Buy Now', name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: 'btn btn-success btn-sm' %>
       <% end %>
+			</div>
+			<div class="add">
+				<%= form_tag order_items_path do %>
+        	<%= button_tag  "Add to Cart", name: "inventory_id", value: "#{quick_buy_item.inventory.id}", class: "btn btn-primary btn-sm" %>
+       	<% end %>
 			</div>
 		</div>
 	</div>
