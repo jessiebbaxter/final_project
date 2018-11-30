@@ -62,7 +62,7 @@ inventories = Inventory.all
 price_diff = [-300, -200, -100, 0, 100, 200, 300]
 sellers = Seller.all
 
-100.times do 
+10.times do 
   random_inventory = inventories.sample
   seller_id = random_inventory.seller_id
   remaining_sellers = sellers.reject { |seller| seller.id == seller_id }
@@ -88,12 +88,12 @@ end
 puts "Applying coupons randomly to inventory"
 
 coupons = Coupon.all
+inventories_new = Inventory.all
 
-100.times do
+10.times do
   inventory = inventories.sample
   inventory.coupon_id = coupons.sample.id
   inventory.save
 end
 
 puts "Finished seed!"
-
