@@ -29,8 +29,8 @@
               <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
               </td>
               <td class="td-center">
-                <% if item.coupon_id %>
-                  <% price = (item.price)*(1 - item.coupon.discount) %>
+                <% if item.coupon_id.present? %>
+                  <% price = (item.price)*(1- Coupon.find(item.coupon_id).discount)  %>
                   <p class="old-price">$ <%= item.price %></p>
                   <p class="new-price">$ <%= price %></p>
                 <% else %>
