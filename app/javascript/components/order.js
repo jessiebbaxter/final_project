@@ -5,19 +5,20 @@ function sumTotal() {
     var nums = [];
     var sum = 0
     totals.forEach ((total) => {
-      const value = parseInt(total.innerHTML.substring(1))
+      const value = parseFloat(total.innerHTML.substring(1))
       nums.push(value)
     });
     if (shippingString) {
-      const shippingTotal = parseInt(shippingString.innerHTML)
+      const shippingTotal = parseFloat(shippingString.innerHTML)
       nums.push(shippingTotal)
     };
+    console.log(nums)
     nums.forEach ((num) => {
       sum += num
     })
     const totalsum = document.querySelector('.total-sum')
     if (totalsum) {
-      totalsum.innerHTML = sum
+      totalsum.innerHTML = sum.toFixed(2)
     }
   };
 };

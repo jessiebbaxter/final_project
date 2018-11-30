@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2018_11_27_044349) do
     t.bigint "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "photo"
     t.bigint "coupon_id"
     t.index ["coupon_id"], name: "index_inventories_on_coupon_id"
     t.index ["seller_id"], name: "index_inventories_on_seller_id"

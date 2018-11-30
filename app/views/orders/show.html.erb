@@ -28,8 +28,17 @@
               </td>
               <td class="td-center align-middle"><%=Seller.find(item.seller_id).domain %>
               </td>
-              <td class="td-center"><%= item.price %></td>
-              <td class="order-item-total td-center""> <%= order_item.qty*item.price %></td>
+              <td class="td-center">
+                <% if item.coupon_id %>
+                  <% price = (item.price)*(1 - item.coupon.discount) %>
+                  <p class="old-price">$ <%= item.price %></p>
+                  <p class="new-price">$ <%= price %></p>
+                <% else %>
+                  <% price = item.price %>
+                  <%= price %>
+                <% end %>
+              </td>
+              <td class="order-item-total td-center""> <%= order_item.qty*price %></td>
               <td class="td-center order-table-qty">
                 <%= form_for(order_item, url: order_item_path(order_item), method: :patch )  do |f| %>
                   <div class='form-group dropdown'>
