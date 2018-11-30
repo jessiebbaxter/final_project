@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :store_location
+  helper_method :finalise_total
 
   protected
 
@@ -40,5 +41,18 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource)
     session[:previous_url] || root_path
+  end
+
+  def finalise_total
+    @order.amount = 0
+    @order.order_items.each do |item|
+      if item.inventory.coupon
+        @order.amount += ((item.inventory.price * (1 - item.inventory.coupon.discount)) * item.qty)
+      else
+        @order.amount += (item.inventory.price * item.qty)
+      end
+    end
+    @order.amount += @ship.cost
+    @order.save
   end
 end

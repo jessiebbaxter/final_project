@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
    before_action :set_order, except: [:quick_buy]
-   helper_method :finalise_total
+   # helper_method :finalise_total
 
   def new
   end
@@ -72,14 +72,6 @@ class PaymentsController < ApplicationController
   rescue Stripe::CardError => e
     flash[:alert] = e.message
     redirect_to new_order_payment_path(@order)
-  end
-
-  def finalise_total
-    @order.amount = 0
-    @order.order_items.each do |item|
-      @order.amount += (item.inventory.price * item.qty)
-    end
-    @order.save
   end
 
 private
