@@ -35,6 +35,10 @@
     position: absolute;
     bottom: 80px;
     right: 30px;
+    i {
+      color: $gray;
+      opacity: 0.4;
+    }
   }
   .discount {
     position: absolute;
