@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
    before_action :set_order, except: [:quick_buy]
-   # helper_method :finalise_total
+   helper_method :finalise_total
 
   def new
   end
@@ -73,8 +73,6 @@ class PaymentsController < ApplicationController
     flash[:alert] = e.message
     redirect_to new_order_payment_path(@order)
   end
-
-private
 
   def set_order
     @order = current_user.orders.where(state: 'pending').find(params[:order_id])

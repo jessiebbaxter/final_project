@@ -44,6 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def finalise_total
+    set_shipping_price
     @order.amount = 0
     @order.order_items.each do |item|
       if item.inventory.coupon
@@ -54,5 +55,16 @@ class ApplicationController < ActionController::Base
     end
     @order.amount += @ship.cost
     @order.save
+  end
+
+  def set_shipping_price
+    @shipping_array = []
+    @shipping_list = Shipping.where(seller_id: @order.inventories.first.seller_id)
+    @shipping_list.order(cost_cents: :asc).each do |ship|
+      if ship.minimum_spend.to_i < @order.inventories.first.price.to_i
+        @shipping_array << ship
+      end
+    end
+    @ship = @shipping_array.first
   end
 end
