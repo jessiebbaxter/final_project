@@ -8,4 +8,10 @@ class QuickBuyItemsController < ApplicationController
 
 		redirect_to product_path(params[:product_id])
 	end
+
+  def destroy
+    @quick_buy_item = QuickBuyItem.find(params[:id])
+    @quick_buy_item.destroy
+    redirect_to root_path
+  end
 end

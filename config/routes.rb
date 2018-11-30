@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   resources :orders, only: [:show] do
     resources :payments, only: [:new, :create]
   end
-  resources :quick_buy_items, only: [:edit, :update, :destory]
+  resources :quick_buy_items, only: [:edit, :update, :destroy]
   get 'orders/:id/complete', to: 'orders#complete', as: :orders_complete
   post 'payments/quick_buy', to: 'payments#quick_buy', as: :quick_buy
 
