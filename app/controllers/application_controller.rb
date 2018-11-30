@@ -47,8 +47,8 @@ class ApplicationController < ActionController::Base
     set_shipping_price
     @order.amount = 0
     @order.order_items.each do |item|
-      if item.inventory.coupon
-        @order.amount += ((item.inventory.price * (1 - item.inventory.coupon.discount)) * item.qty)
+      if item.inventory.coupon_id.present?
+        @order.amount += ((item.inventory.price * (1- Coupon.find(item.inventory.coupon_id).discount) ) * item.qty)
       else
         @order.amount += (item.inventory.price * item.qty)
       end
